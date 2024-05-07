@@ -1,2 +1,2 @@
 # ClimateMonitoring
-Un sistema di monitoraggio di parametri climatici fornito da centri di monitoraggio sul territorio italiano, in grado di rendere disponibili, ad operatori ambientali e comuni cittadini, i dati relativi alla propria zona di interesse
+A climate parameter monitoring system provided by monitoring centers that can make data on their area of interest available to environmental operators and ordinary citizens
