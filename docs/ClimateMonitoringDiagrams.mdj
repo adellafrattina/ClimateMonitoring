@@ -8031,7 +8031,7 @@
 										"$ref": "AAAAAAGQ6eldGpi987Q="
 									},
 									"edgePosition": 2,
-									"text": "+m_layers"
+									"text": "#m_layers"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -8305,7 +8305,7 @@
 										"$ref": "AAAAAAGQ6eqK0Z1Rvhc="
 									},
 									"edgePosition": 2,
-									"text": "+m_specification"
+									"text": "#m_specification"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -9159,6 +9159,7 @@
 								"reference": {
 									"$ref": "AAAAAAGQ6edlPpgdZB4="
 								},
+								"visibility": "protected",
 								"multiplicity": "1..*"
 							},
 							"end2": {
@@ -9249,6 +9250,7 @@
 								"reference": {
 									"$ref": "AAAAAAGQ6egonZhLbSY="
 								},
+								"visibility": "protected",
 								"multiplicity": "1"
 							},
 							"end2": {
