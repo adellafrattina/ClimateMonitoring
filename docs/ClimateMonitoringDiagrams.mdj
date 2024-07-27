@@ -1959,7 +1959,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGQ9LVVPrDTNas="
 					},
-					"name": "Client Diagram",
+					"name": "Client Package Diagram",
 					"ownedViews": [
 						{
 							"_type": "UMLPackageView",
@@ -2786,7 +2786,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGQ9LVVPrDTNas="
 					},
-					"name": "Core Diagram",
+					"name": "Core Package Diagram",
 					"ownedViews": [
 						{
 							"_type": "UMLPackageView",
@@ -5839,7 +5839,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGQ9LVVPrDTNas="
 					},
-					"name": "Server Diagram",
+					"name": "Server Package Diagram",
 					"ownedViews": [
 						{
 							"_type": "UMLPackageView",
@@ -6875,7 +6875,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGQ6eON9JfZHvQ="
 					},
-					"name": "Application Diagram",
+					"name": "Application Class Diagram",
 					"ownedViews": [
 						{
 							"_type": "UMLClassView",
@@ -8998,7 +8998,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGQ6eON9JfZHvQ="
 					},
-					"name": "Database Diagram"
+					"name": "Database Class Diagram"
 				},
 				{
 					"_type": "UMLClass",
