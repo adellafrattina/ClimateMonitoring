@@ -2843,9 +2843,9 @@
 											"font": "Arial;13;0",
 											"left": 1360,
 											"top": 80,
-											"width": 88.86083984375,
+											"width": 91.0126953125,
 											"height": 13,
-											"text": "(from Package)"
+											"text": "(from Structure)"
 										},
 										{
 											"_type": "LabelView",
@@ -5896,9 +5896,9 @@
 											"font": "Arial;13;0",
 											"left": 1300,
 											"top": -339,
-											"width": 88.86083984375,
+											"width": 91.0126953125,
 											"height": 13,
-											"text": "(from Package)"
+											"text": "(from Structure)"
 										},
 										{
 											"_type": "LabelView",
@@ -7228,7 +7228,7 @@
 											"top": 269,
 											"width": 149.5498046875,
 											"height": 13,
-											"text": "«abstarct»"
+											"text": "«abstract»"
 										},
 										{
 											"_type": "LabelView",
@@ -7362,7 +7362,7 @@
 											"top": 347,
 											"width": 149.5498046875,
 											"height": 13,
-											"text": "+onCmdRender()",
+											"text": "+onHeadlessRender()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7379,7 +7379,7 @@
 											"top": 362,
 											"width": 149.5498046875,
 											"height": 13,
-											"text": "+onUIRender()",
+											"text": "+onGUIRender()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -9174,7 +9174,7 @@
 							}
 						}
 					],
-					"stereotype": "abstarct",
+					"stereotype": "abstract",
 					"operations": [
 						{
 							"_type": "UMLOperation",
@@ -9201,7 +9201,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGQ6edlPpgdZB4="
 							},
-							"name": "onCmdRender",
+							"name": "onHeadlessRender",
 							"documentation": "Code that runs in headless configuration only"
 						},
 						{
@@ -9210,7 +9210,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGQ6edlPpgdZB4="
 							},
-							"name": "onUIRender",
+							"name": "onGUIRender",
 							"documentation": "Code that runs in GUI configuration only"
 						},
 						{
