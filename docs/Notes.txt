@@ -1,4 +1,8 @@
 
+--IDE notes
+
+1) For indentation, use tabs instead of spaces
+
 --Application notes
 
 1) Application.pushLayer(layer: Layer) needs to call the layer.onAttach() method
