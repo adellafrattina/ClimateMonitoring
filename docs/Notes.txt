@@ -1,0 +1,8 @@
+
+--Application notes
+
+1) Application.pushLayer(layer: Layer) needs to call the layer.onAttach() method
+2) Application.shutdown() needs to call Layer.onDeatch() for every layer the application has
+3) Application.run() needs to call Layer.onUpdate() for every layer the application has
+4) ApplicationHeadless.run() needs to call Layer.onHeadlessRender() for every layer the application has
+5) ApplicationGUI.run() needs to call Layer.onGUIRender() for every layer the application has
