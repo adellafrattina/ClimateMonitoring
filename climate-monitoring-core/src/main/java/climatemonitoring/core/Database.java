@@ -36,7 +36,7 @@ public interface Database {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	public Area[] searchAreasByName(String str) throws Exception;
 
