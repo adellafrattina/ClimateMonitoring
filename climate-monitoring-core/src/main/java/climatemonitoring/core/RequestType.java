@@ -1,5 +1,22 @@
+/*
+
+Alessandro della Frattina 753073 VA
+Cristian Capiferri 752918 VA
+Francesco Lops 753175 VA
+Dariia Sniezhko 753057 VA
+
+*/
+
 package climatemonitoring.core;
 
+/**
+ * This class contains enumeration constants that are used
+ * to send a request from the proxy (client) to the skeleton
+ * (server). Every enum corresponds to a Database class method
+ * 
+ * @author ccapiferri
+ * @version 1.0-SNAPSHOT
+ */
 public enum RequestType {
 
 	SEARCH_AREAS_BY_NAME,
