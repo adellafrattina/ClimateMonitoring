@@ -36,8 +36,9 @@ public interface Database {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
+	 * @throws Exception If anything went wrong
 	 */
-	public Area[] searchAreasByName(String str);
+	public Area[] searchAreasByName(String str) throws Exception;
 
 	/**
 	 * Returns in alphabetical order an array of areas which belong
@@ -45,8 +46,9 @@ public interface Database {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public Area[] searchAreasByCountry(String str);
+	public Area[] searchAreasByCountry(String str) throws Exception;
 
 	/**
 	 * Returns in alphabetical order an array of areas which can be
@@ -56,8 +58,9 @@ public interface Database {
 	 * @param latitude Value between -90 and 90
 	 * @param longitude Value between -180 and 180
 	 * @return The result of the search as an array of areas
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public Area[] searchAreasByCoords(double latitude, double longitude);
+	public Area[] searchAreasByCoords(double latitude, double longitude) throws Exception;
 
 
 	/**
@@ -67,15 +70,17 @@ public interface Database {
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
 	 * @return The result of the search as an array of parameters
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public Parameter[] getParameters(int geoname_id, String center_id);
+	public Parameter[] getParameters(int geoname_id, String center_id) throws Exception;
 
 	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public Category[] getCategories();
+	public Category[] getCategories() throws Exception;
 
 
 	/**
@@ -83,32 +88,36 @@ public interface Database {
 	 * 
 	 * @param area The area that needs to be added to the database
 	 * @return Success or failure of the operation
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public boolean addArea(Area area);
+	public boolean addArea(Area area) throws Exception;
 
 	/**
 	 * Adds a center to the database
 	 * 
 	 * @param center The center that needs to be added to the database
 	 * @return Success or failure of the operation
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public boolean addCenter(Center center);
+	public boolean addCenter(Center center) throws Exception;
 
 	/**
 	 * Adds an operator to the database
 	 * 
 	 * @param operator The operator that needs to be added to the database
 	 * @return Success or failure of the operation
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public boolean addOperator(Operator operator);
+	public boolean addOperator(Operator operator) throws Exception;
 
 	/**
 	 * Adds a parameter to the database
 	 * 
 	 * @param parameter The parameter that needs to be added to the database
 	 * @return Success or failure of the operation
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public boolean addParameter(Parameter parameter);
+	public boolean addParameter(Parameter parameter) throws Exception;
 
 
 	/**
@@ -117,8 +126,9 @@ public interface Database {
 	 * @param user_id The ID of the operator that will get edited
 	 * @param operator The new operator that will overwrite the previous one
 	 * @return Success or failure of the operation
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public boolean editOperator(String user_id, Operator operator);
+	public boolean editOperator(String user_id, Operator operator) throws Exception;
 
 	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
@@ -127,6 +137,7 @@ public interface Database {
 	 * @param user_id Operator's user id
 	 * @param password Operator's password
 	 * @return The operator whose credentials correspond to the ones in input
+	 * @throws Exception If anything went wrong while executing the operation
 	 */
-	public Operator validateCredentials(String user_id, String password);
+	public Operator validateCredentials(String user_id, String password) throws Exception;
 }
