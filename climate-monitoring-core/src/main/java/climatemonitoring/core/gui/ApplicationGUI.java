@@ -107,6 +107,10 @@ public class ApplicationGUI extends Application {
 	private void initImGui() {
 
 		ImGui.createContext();
+
+		// Disable imgui.ini file
+		ImGui.getIO().setIniFilename(null);
+		ImGui.getIO().setLogFilename(null);
 	}
 
 	/**
