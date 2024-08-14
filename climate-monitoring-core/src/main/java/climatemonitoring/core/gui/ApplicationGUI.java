@@ -101,6 +101,18 @@ public class ApplicationGUI extends Application {
 		m_window.shutdown();
 	}
 
+	@Override
+	protected int getWindowWidth() {
+
+		return m_window.getWidth();
+	}
+
+	@Override
+	protected int getWindowHeight() {
+
+		return m_window.getHeight();
+	}
+
 	/**
 	 * Utility function. ImGui initialization code goes here
 	 */
