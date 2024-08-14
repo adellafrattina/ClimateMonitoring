@@ -102,6 +102,7 @@ public class Window {
 	public void swap() {
 
 		GLFW.glfwSwapBuffers(m_handle);
+		GLFW.glfwPollEvents();
 	}
 
 	/**
