@@ -11,8 +11,7 @@ public abstract class Result<T> {
 
 	public boolean ready() {
 
-		// Still need to understand wtf is going on here
-		return true;
+		return !m_thread.isAlive();
 	}
 
 	public T get() {
