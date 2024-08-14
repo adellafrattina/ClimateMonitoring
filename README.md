@@ -17,7 +17,7 @@ A climate parameter monitoring system provided by monitoring centers that can ma
 This application allows registered users (**operators**), to record and add climatic parameters to the monitoring center they are employed in.
 Common users can search for a specific area and see the climatic detections submitted by operators.
 
-**As a common user** you can search for your area of interest in the search box that pops up after the application successfully connects to the server, and look for any climatic info that has been submitted by operators.
+**As a common user** you can search for your area of interest in the search box that pops up after the application successfully connects to the server, and look for any climatic info that operators have submitted.
 
 **As an operator**, including common users' functions, you can register and be employed in a monitoring center, submit climatic parameters to the database, edit your personal information, and much more.
 
@@ -31,3 +31,15 @@ Common users can search for a specific area and see the climatic detections subm
 |Edit personal information          |❌|✅
 |Create a monitoring center          |❌|✅
 |Add new geographic areas          |❌|✅
+
+## Contribute to the development
+
+1. Fork the repository
+2. Clone the fork to your computer `git clone https://github.com/("your username")/ClimateMonitoring`
+3. Create a new branch from the main one `git checkout -b ("your branch name")`
+4. Write code and commit
+5. Push commits to the remote repository `git push origin ("your branch name")`
+6. Go on your fork and create a pull request
+7. Wait for an admin to approve and merge your code
+8. If your code was not approved, improve it and start from `4`
+9. If your code was approved, you can delete your branch and repeat the process from `3`
