@@ -27,7 +27,7 @@ public class Operator {
 	 * @param password The operator's password
 	 * @param center_id The operator's center id
 	 */
-	public Operator(String user_id, char[]ssid, String surname, String name, String email, String password, String center_id) {
+	public Operator(String user_id, char[] ssid, String surname, String name, String email, String password, String center_id) {
 
 		m_userID = user_id;
 		m_ssid = ssid;
