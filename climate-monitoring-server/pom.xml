@@ -14,121 +14,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<!--Common properties-->
-	<properties>
-		<maven.compiler.release>11</maven.compiler.release>
-		<lwjgl.version>3.3.1</lwjgl.version>
-		<imgui.java.version>1.86.12</imgui.java.version>
-	</properties>
-
-	<profiles>
-
-		<!--Windows-->
-		<profile>
-			<id>Windows</id>
-			<activation>
-				<os>
-					<family>windows</family>
-				</os>
-			</activation>
-			<properties>
-				<lwjgl.natives>natives-windows</lwjgl.natives>
-				<imgui.java.natives>imgui-java-natives-windows</imgui.java.natives>
-			</properties>
-		</profile>
-
-		<!--Linux-->
-		<profile>
-			<id>Unix</id>
-			<activation>
-				<os>
-					<family>unix</family>
-				</os>
-			</activation>
-			<properties>
-				<lwjgl.natives>natives-linux</lwjgl.natives>
-				<imgui.java.natives>imgui-java-natives-linux</imgui.java.natives>
-			</properties>
-		</profile>
-
-		<!--MacOSX-->
-		<profile>
-			<id>MacOSX</id>
-			<activation>
-				<os>
-					<family>mac</family>
-				</os>
-			</activation>
-			<properties>
-				<lwjgl.natives>natives-macos</lwjgl.natives>
-				<imgui.java.natives>imgui-java-natives-macos</imgui.java.natives>
-			</properties>
-		</profile>
-	</profiles>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.lwjgl</groupId>
-				<artifactId>lwjgl-bom</artifactId>
-				<version>${lwjgl.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
-
-		<!--LWJGL GLFW OPENGL-->
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-glfw</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-opengl</artifactId>
-		</dependency>
-
-		<!--LWJGL GLFW OPENGL (natives)-->
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl</artifactId>
-			<classifier>${lwjgl.natives}</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-glfw</artifactId>
-			<classifier>${lwjgl.natives}</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-opengl</artifactId>
-			<classifier>${lwjgl.natives}</classifier>
-		</dependency>
-
-		<!--ImGui-->
-		<dependency>
-			<groupId>io.github.spair</groupId>
-			<artifactId>imgui-java-binding</artifactId>
-			<version>${imgui.java.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.spair</groupId>
-			<artifactId>imgui-java-lwjgl3</artifactId>
-			<version>${imgui.java.version}</version>
-		</dependency>
-
-		<!--ImGui (natives)-->
-		<dependency>
-			<groupId>io.github.spair</groupId>
-			<artifactId>${imgui.java.natives}</artifactId>
-			<version>${imgui.java.version}</version>
-		</dependency>
 
 		<!--Climate Monitoring Core-->
 		<dependency>
@@ -136,8 +22,10 @@
 			<artifactId>climate-monitoring-core</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+
 	</dependencies>
 
+	<!--Build jar file-->
 	<build>
 		<plugins>
 			<plugin>
@@ -146,19 +34,29 @@
 				<version>3.8.1</version>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.7.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>climatemonitoring.ServerApp</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 				<executions>
 					<execution>
+						<id>make-assebly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>java</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<mainClass>climatemonitoring.ServerApp</mainClass>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
