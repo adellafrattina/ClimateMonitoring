@@ -19,15 +19,16 @@ public class Operator {
 
 	/**
 	 * Initializes operator properties
-	 * @param user_id
-	 * @param ssid
-	 * @param surname
-	 * @param name
-	 * @param email
-	 * @param password
-	 * @param center_id
+	 * @param user_id The operator's user id
+	 * @param ssid The operator's social security identification
+	 * @param surname The operator's surname
+	 * @param name The operator's name
+	 * @param email The operator's email
+	 * @param password The operator's password
+	 * @param center_id The operator's center id
 	 */
 	public Operator(String user_id, char[]ssid, String surname, String name, String email, String password, String center_id) {
+
 		m_userID = user_id;
 		m_ssid = ssid;
 		m_surname = surname;
@@ -39,7 +40,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator user id
+	 * @return The operator's user id
 	 */
 	public String getUserID() {
 
@@ -48,7 +49,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator ssid
+	 * @return The operator's ssid
 	 */
 	public char[] getSSID() {
 
@@ -57,7 +58,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator surname
+	 * @return The operator's surname
 	 */
 	public String getSurname() {
 
@@ -66,7 +67,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator name
+	 * @return The operator's name
 	 */
 	public String getName() {
 
@@ -75,7 +76,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator email
+	 * @return The operator's email
 	 */
 	public String getEmail() {
 
@@ -84,7 +85,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator password
+	 * @return The operator's password
 	 */
 	public String getPassword() {
 
@@ -93,7 +94,7 @@ public class Operator {
 
 	/**
 	 * 
-	 * @return operator center ID
+	 * @return The operator's center ID
 	 */
 	public String getCenterID() {
 
@@ -107,5 +108,4 @@ public class Operator {
 	private String m_email;
 	private String m_password;
 	private String m_centerID;
-	
 }
