@@ -1,6 +1,7 @@
 package climatemonitoring;
 
-class ProxyMTImpl {
+
+class ProxyMTImpl{
 
 	
 }

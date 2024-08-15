@@ -1,8 +1,10 @@
 package climatemonitoring;
 
-interface Proxy {
+import climatemonitoring.core.Database;
 
-	public boolean connect(String address, int port);
+interface Proxy extends Database{
+
+	public boolean connect(String address, short port);
 	public void close();
 	
 }

@@ -1,6 +1,10 @@
 package climatemonitoring;
 
-class ClientLayer {
+import climatemonitoring.core.Layer;
 
-	
+class ClientLayer extends Layer{
+
+	public void onGUIRender(){
+		
+	}
 }
