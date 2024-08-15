@@ -19,16 +19,17 @@ public class Parameter {
 
 	/**
 	 * Initializes parameter fields
-	 * @param geoname_id
-	 * @param center_id
-	 * @param user_id
-	 * @param category
-	 * @param date
-	 * @param time
-	 * @param score
-	 * @param notes
+	 * @param geoname_id The area where the parameter was recorded
+	 * @param center_id The center that registered the parameter
+	 * @param user_id The operator's userid that registered the parameter
+	 * @param category The parameter's category
+	 * @param date The recording date of the parameter
+	 * @param time The recording time of the parameter
+	 * @param score The score given to the parameter
+	 * @param notes The operator's notes about the parameter
 	 */
 	public Parameter(int geoname_id, String center_id, String user_id, String category, String date, String time, int score, String notes) {
+
 		m_geonameID = geoname_id;
 		m_centerID = center_id;
 		m_userID = user_id;
@@ -37,12 +38,11 @@ public class Parameter {
 		m_time = time;
 		m_score = score;
 		m_notes = notes;
-
 	}
 
 	/**
 	 * 
-	 * @return The parameter geoname ID
+	 * @return The area where the parameter was recorded
 	 */
 	public int getGeonameID() {
 
@@ -51,7 +51,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter center ID
+	 * @return The center that registered the parameter
 	 */
 	public String getCenterID() {
 	
@@ -60,7 +60,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter user ID
+	 * @return The operator's userid that registered the parameter
 	 */
 	public String getUserID() {
 	
@@ -69,7 +69,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter category
+	 * @return The parameter's category
 	 */
 	public String getCategory() {
 	
@@ -78,7 +78,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter date
+	 * @return The recording date of the parameter
 	 */
 	public String getDate() {
 	
@@ -87,7 +87,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter time
+	 * @return The recording time of the parameter
 	 */
 	public String getTime() {
 	
@@ -96,7 +96,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter score
+	 * @return The score given to the parameter
 	 */
 	public int getScore() {
 	
@@ -105,7 +105,7 @@ public class Parameter {
 
 	/**
 	 * 
-	 * @return The parameter notes
+	 * @return The operator's notes about the parameter
 	 */
 	public String getNotes() {
 	
@@ -120,5 +120,4 @@ public class Parameter {
 	private String m_time;
 	private int m_score;
 	private String m_notes;
-	
 }
