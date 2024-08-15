@@ -58,7 +58,7 @@ class Command {
 	 * Parses a command line string to extract a command and its associated arguments, storing them in m_cmd and m_args
 	 * @param line
 	 */
-	public void Command(String line){
+	public Command(String line){
 		
 		StringTokenizer st = new StringTokenizer(line);
 
