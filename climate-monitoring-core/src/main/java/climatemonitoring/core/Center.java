@@ -19,12 +19,12 @@ public class Center {
 
 	/**
 	 * Initalizes center fields
-	 * @param center_id
-	 * @param street
-	 * @param house_number
-	 * @param postal_code
-	 * @param city
-	 * @param district
+	 * @param center_id The center name
+	 * @param street The center street
+	 * @param house_number The center house number
+	 * @param postal_code The center postal code
+	 * @param city The center city
+	 * @param district The center district
 	 */
 	public Center(String center_id, String street, int house_number, int postal_code, String city, String district) {
 
@@ -96,5 +96,4 @@ public class Center {
 	private int m_postalCode;
 	private String m_city;
 	private String m_district;
-	
 }
