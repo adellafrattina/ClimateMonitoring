@@ -18880,6 +18880,35 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAGRW9ZWEzfq5C0="
 							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRW901XFB1DUQ=",
+							"_parent": {
+								"$ref": "AAAAAAGQ+nGLuzpdjjs="
+							},
+							"font": "Arial;13;0",
+							"left": 448,
+							"top": 288,
+							"width": 96,
+							"height": 64,
+							"text": "The actual client application"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRW92LB1WM9TA=",
+							"_parent": {
+								"$ref": "AAAAAAGQ+nGLuzpdjjs="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGQ+nLBiTrbukU="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRW901XFB1DUQ="
+							},
+							"lineStyle": 1,
+							"points": "537:353;554:367"
 						}
 					]
 				},
@@ -32879,11 +32908,11 @@
 								"$ref": "AAAAAAGQ6eT2BJfmmtM="
 							},
 							"font": "Arial;13;0",
-							"left": 992,
+							"left": 976,
 							"top": 16,
-							"width": 352,
+							"width": 384,
 							"height": 80,
-							"text": "The database interface is responsible for communication between the application and the database. It allows you to perform specific operations, but not to execute new SQL queries. Every operation should throw an controlled exception when an error occurs "
+							"text": "The database interface is responsible for communication between the application and the database. It allows you to perform specific operations, but not to execute new SQL queries. Every operation should throw ConnectionLostException and DatabaseRequestException"
 						},
 						{
 							"_type": "UMLClassView",
@@ -41292,7 +41321,7 @@
 							"left": 896,
 							"top": 48,
 							"width": 176,
-							"height": 96,
+							"height": 100,
 							"text": "Console is used to log messages or to request input from the user through the terminal. It is mainly used for a headless application"
 						},
 						{
@@ -41309,7 +41338,7 @@
 								"$ref": "AAAAAAGRW9uA6U7Tpm0="
 							},
 							"lineStyle": 1,
-							"points": "984:145;984:175"
+							"points": "984:149;984:175"
 						}
 					]
 				},
