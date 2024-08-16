@@ -23903,7 +23903,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 197,
+											"top": 181,
 											"width": 359,
 											"height": 13,
 											"text": "«abstract»"
@@ -23916,7 +23916,7 @@
 											},
 											"font": "Arial;13;3",
 											"left": 421,
-											"top": 212,
+											"top": 196,
 											"width": 359,
 											"height": 13,
 											"text": "Application"
@@ -23951,7 +23951,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 416,
-									"top": 192,
+									"top": 176,
 									"width": 369,
 									"height": 38,
 									"stereotypeLabel": {
@@ -23988,7 +23988,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 235,
+											"top": 219,
 											"width": 359,
 											"height": 13,
 											"underline": true,
@@ -24006,7 +24006,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 250,
+											"top": 234,
 											"width": 359,
 											"height": 13,
 											"underline": true,
@@ -24024,7 +24024,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 265,
+											"top": 249,
 											"width": 359,
 											"height": 13,
 											"underline": true,
@@ -24042,7 +24042,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 280,
+											"top": 264,
 											"width": 359,
 											"height": 13,
 											"text": "#m_running: boolean = true",
@@ -24059,7 +24059,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 295,
+											"top": 279,
 											"width": 359,
 											"height": 13,
 											"text": "-m_configuration: int",
@@ -24068,7 +24068,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 416,
-									"top": 230,
+									"top": 214,
 									"width": 369,
 									"height": 83
 								},
@@ -24093,7 +24093,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 318,
+											"top": 302,
 											"width": 359,
 											"height": 13,
 											"text": "+Application(spec: ApplicationSpecification, configuration: int)",
@@ -24110,7 +24110,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 333,
+											"top": 317,
 											"width": 359,
 											"height": 13,
 											"underline": true,
@@ -24128,7 +24128,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 348,
+											"top": 332,
 											"width": 359,
 											"height": 13,
 											"underline": true,
@@ -24146,11 +24146,47 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 363,
+											"top": 347,
 											"width": 359,
 											"height": 13,
 											"underline": true,
 											"text": "+close()",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRW7b/sx9+CSw=",
+											"_parent": {
+												"$ref": "AAAAAAGQ6eV135fzsUo="
+											},
+											"model": {
+												"$ref": "AAAAAAGRW7b/rh9568E="
+											},
+											"font": "Arial;13;0",
+											"left": 421,
+											"top": 362,
+											"width": 359,
+											"height": 13,
+											"underline": true,
+											"text": "+getWidth(): int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRW7c2hCA/SyI=",
+											"_parent": {
+												"$ref": "AAAAAAGQ6eV135fzsUo="
+											},
+											"model": {
+												"$ref": "AAAAAAGRW7c2gSA6Jj0="
+											},
+											"font": "Arial;13;0",
+											"left": 421,
+											"top": 377,
+											"width": 359,
+											"height": 13,
+											"underline": true,
+											"text": "+getHeight(): int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -24164,11 +24200,27 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 378,
+											"top": 392,
 											"width": 359,
 											"height": 13,
-											"underline": true,
-											"text": "+getWindow(): Window",
+											"text": "#getWindowWidth(): int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRW7Z7wB5gzBg=",
+											"_parent": {
+												"$ref": "AAAAAAGQ6eV135fzsUo="
+											},
+											"model": {
+												"$ref": "AAAAAAGRW7Z7uh5bWLM="
+											},
+											"font": "Arial;13;0",
+											"left": 421,
+											"top": 407,
+											"width": 359,
+											"height": 13,
+											"text": "#getWindowHeight(): int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -24182,7 +24234,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 421,
-											"top": 393,
+											"top": 422,
 											"width": 359,
 											"height": 13,
 											"text": "+pushLayer(layer: Layer)",
@@ -24199,7 +24251,7 @@
 											},
 											"font": "Arial;13;2",
 											"left": 421,
-											"top": 408,
+											"top": 437,
 											"width": 359,
 											"height": 13,
 											"text": "+run()",
@@ -24216,7 +24268,7 @@
 											},
 											"font": "Arial;13;2",
 											"left": 421,
-											"top": 423,
+											"top": 452,
 											"width": 359,
 											"height": 13,
 											"text": "+shutdown()",
@@ -24225,9 +24277,9 @@
 									],
 									"font": "Arial;13;0",
 									"left": 416,
-									"top": 313,
+									"top": 297,
 									"width": 369,
-									"height": 128
+									"height": 173
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -24265,9 +24317,9 @@
 							"font": "Arial;13;0",
 							"containerChangeable": true,
 							"left": 416,
-							"top": 192,
+							"top": 176,
 							"width": 368,
-							"height": 272,
+							"height": 304,
 							"nameCompartment": {
 								"$ref": "AAAAAAGQ6eV13pftS7E="
 							},
@@ -25755,8 +25807,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 435,
-									"top": 479,
+									"left": 428,
+									"top": 487,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -25776,8 +25828,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 424,
-									"top": 469,
+									"left": 417,
+									"top": 477,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -25797,8 +25849,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 458,
-									"top": 500,
+									"left": 451,
+									"top": 508,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -25816,7 +25868,7 @@
 								"$ref": "AAAAAAGQ6ejhK5h7xZc="
 							},
 							"lineStyle": 1,
-							"points": "419:527;475:465",
+							"points": "419:527;461:481",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGQ62SeOEdX9MU="
@@ -25849,8 +25901,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 740,
-									"top": 500,
+									"left": 747,
+									"top": 508,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -25870,8 +25922,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 729,
-									"top": 510,
+									"left": 736,
+									"top": 518,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -25891,8 +25943,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 763,
-									"top": 479,
+									"left": 770,
+									"top": 487,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -25910,7 +25962,7 @@
 								"$ref": "AAAAAAGQ6jm6ceXh+CU="
 							},
 							"lineStyle": 1,
-							"points": "780:527;724:465",
+							"points": "780:527;738:481",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGQ62S1FUqJUuw="
@@ -26007,7 +26059,7 @@
 								"$ref": "AAAAAAGRPcYMN9q/n60="
 							},
 							"lineStyle": 1,
-							"points": "600:145;600:191"
+							"points": "600:145;600:175"
 						},
 						{
 							"_type": "UMLClassView",
@@ -26956,6 +27008,122 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAGRRyRrVeucIgo="
 							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRW6926N/f7FM=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"left": 480,
+							"top": 784,
+							"width": 176,
+							"height": 64,
+							"text": "The class that creates the window through the use of the GLFW library and OpenGL"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRW6+kSud/Ano=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGRRyColLuxJWQ="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRW6926N/f7FM="
+							},
+							"lineStyle": 1,
+							"points": "657:816;703:816"
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRW6++F+f33ik=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"left": 1232,
+							"top": 784,
+							"width": 176,
+							"height": 64,
+							"text": "The class that holds the window settings to use during its creation"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRW7AOnfaq7Zs=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGRW6++F+f33ik="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRRyP/6txHdYE="
+							},
+							"lineStyle": 1,
+							"points": "1185:816;1231:816"
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRW7BP2/gVinQ=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"left": 32,
+							"top": 512,
+							"width": 160,
+							"height": 129,
+							"text": "ApplicationHeadless is the application version that does not provide a Graphical User Interface (GUI). It is limited to log messages on the terminal through the use of the Console class."
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRW7JGpwS5+6U=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGQ6ejhK5h7xZc="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRW7BP2/gVinQ="
+							},
+							"lineStyle": 1,
+							"points": "193:576;239:576"
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRW7Jb3AUxD6I=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"left": 1008,
+							"top": 512,
+							"width": 224,
+							"height": 128,
+							"text": "ApplicationGUI is the application version that provides a Graphical User Interface (GUI). It creates a window through the use of the Window class. It also supports Dear ImGui commands, the GUI library used for this project"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRW7Kq6xag7TM=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eON9JfaG+U="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGQ6jm6ceXh+CU="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRW7Jb3AUxD6I="
+							},
+							"lineStyle": 1,
+							"points": "1007:576;961:576"
 						}
 					]
 				},
@@ -32955,13 +33123,59 @@
 						},
 						{
 							"_type": "UMLOperation",
+							"_id": "AAAAAAGRW7b/rh9568E=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eV13pfqzB0="
+							},
+							"name": "getWidth",
+							"documentation": "Returns the application's window width (GUI mode only)",
+							"isStatic": true,
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRW7b/rh96AF8=",
+									"_parent": {
+										"$ref": "AAAAAAGRW7b/rh9568E="
+									},
+									"name": "getWindowWidth",
+									"visibility": "protected",
+									"type": "int",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRW7c2gSA6Jj0=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eV13pfqzB0="
+							},
+							"name": "getHeight",
+							"documentation": "Returns the application's window height (GUI mode only)",
+							"isStatic": true,
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRW7c2gSA7CPA=",
+									"_parent": {
+										"$ref": "AAAAAAGRW7c2gSA6Jj0="
+									},
+									"name": "getWindowHeight",
+									"visibility": "protected",
+									"type": "int",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
 							"_id": "AAAAAAGRR9/uPiUzlU4=",
 							"_parent": {
 								"$ref": "AAAAAAGQ6eV13pfqzB0="
 							},
-							"name": "getWindow",
-							"documentation": "Returns the application window",
-							"isStatic": true,
+							"name": "getWindowWidth",
+							"documentation": "To be implemented in the subclasses.\nReturns the application's window width (GUI mode only)",
+							"visibility": "protected",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -32969,10 +33183,30 @@
 									"_parent": {
 										"$ref": "AAAAAAGRR9/uPiUzlU4="
 									},
-									"name": "m_window",
-									"type": {
-										"$ref": "AAAAAAGRRxqw0rXZ8pM="
+									"name": "window_width",
+									"type": "int",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRW7Z7uh5bWLM=",
+							"_parent": {
+								"$ref": "AAAAAAGQ6eV13pfqzB0="
+							},
+							"name": "getWindowHeight",
+							"documentation": "To be implemented in the subclasses.\nReturns the application's window height (GUI mode only)",
+							"visibility": "protected",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRW7Z7uh5cuN0=",
+									"_parent": {
+										"$ref": "AAAAAAGRW7Z7uh5bWLM="
 									},
+									"name": "window_height",
+									"type": "int",
 									"direction": "return"
 								}
 							]
