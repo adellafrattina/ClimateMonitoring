@@ -42782,6 +42782,421 @@
 							]
 						}
 					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "AAAAAAGRXBHRApOQ3b4=",
+					"_parent": {
+						"$ref": "AAAAAAGQ6eON9JfZHvQ="
+					},
+					"name": "Email",
+					"operations": [
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRXBWPIpRk39U=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "Email",
+							"documentation": "Initializes the email sender",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRXBewppR2oEs=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBWPIpRk39U="
+									},
+									"name": "sender_email",
+									"documentation": "The sender's email",
+									"type": "String"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRXB07zJSln1c=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBWPIpRk39U="
+									},
+									"name": "sender_name",
+									"documentation": "The sender's name",
+									"type": "String"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRXBPRWJRc8LE=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "setReceiver",
+							"documentation": "To set the email receiver",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRXBWcIpRqBfQ=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBPRWJRc8LE="
+									},
+									"name": "receiver",
+									"documentation": "The email receiver",
+									"type": "String"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRXBitKZSI8zM=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "setSubject",
+							"documentation": "To set the email subject",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRXBitKZSJIGQ=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBitKZSI8zM="
+									},
+									"name": "subject",
+									"documentation": "The email subject",
+									"type": "String"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRXBj+/ZSWAyo=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "setMessage",
+							"documentation": "To set the email message",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRXBj+/ZSXi8c=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBj+/ZSWAyo="
+									},
+									"name": "msg",
+									"documentation": "The email message",
+									"type": "String"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRXCR4fpSyeI8=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "send",
+							"documentation": "Sends the email from another thread"
+						}
+					]
+				},
+				{
+					"_type": "UMLClassDiagram",
+					"_id": "AAAAAAGRXBK8q5PQ36g=",
+					"_parent": {
+						"$ref": "AAAAAAGQ6eON9JfZHvQ="
+					},
+					"name": "Utility Class Diagram",
+					"ownedViews": [
+						{
+							"_type": "UMLClassView",
+							"_id": "AAAAAAGRXBL60JQyChE=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBK8q5PQ36g="
+							},
+							"model": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"subViews": [
+								{
+									"_type": "UMLNameCompartmentView",
+									"_id": "AAAAAAGRXBL60JQzhzI=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBL60JQyChE="
+									},
+									"model": {
+										"$ref": "AAAAAAGRXBHRApOQ3b4="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGRXBL60JQ0GHc=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQzhzI="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -140,
+											"top": 94,
+											"height": 13
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGRXBL60JQ1YzE=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQzhzI="
+											},
+											"font": "Arial;13;1",
+											"left": 37,
+											"top": 151,
+											"width": 311,
+											"height": 13,
+											"text": "Email"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGRXBL60JQ28F8=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQzhzI="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -140,
+											"top": 94,
+											"width": 66.447265625,
+											"height": 13,
+											"text": "(from Core)"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGRXBL60JQ3Buk=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQzhzI="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -140,
+											"top": 94,
+											"height": 13,
+											"horizontalAlignment": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 32,
+									"top": 144,
+									"width": 321,
+									"height": 25,
+									"stereotypeLabel": {
+										"$ref": "AAAAAAGRXBL60JQ0GHc="
+									},
+									"nameLabel": {
+										"$ref": "AAAAAAGRXBL60JQ1YzE="
+									},
+									"namespaceLabel": {
+										"$ref": "AAAAAAGRXBL60JQ28F8="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAGRXBL60JQ3Buk="
+									}
+								},
+								{
+									"_type": "UMLAttributeCompartmentView",
+									"_id": "AAAAAAGRXBL60JQ43R4=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBL60JQyChE="
+									},
+									"model": {
+										"$ref": "AAAAAAGRXBHRApOQ3b4="
+									},
+									"font": "Arial;13;0",
+									"left": 32,
+									"top": 169,
+									"width": 321,
+									"height": 10
+								},
+								{
+									"_type": "UMLOperationCompartmentView",
+									"_id": "AAAAAAGRXBL60JQ5bQE=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBL60JQyChE="
+									},
+									"model": {
+										"$ref": "AAAAAAGRXBHRApOQ3b4="
+									},
+									"subViews": [
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRXBWPJZRnox8=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ5bQE="
+											},
+											"model": {
+												"$ref": "AAAAAAGRXBWPIpRk39U="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 184,
+											"width": 311,
+											"height": 13,
+											"text": "+Email(sender_email: String, sender_name: String)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRXBPRXpRf1EM=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ5bQE="
+											},
+											"model": {
+												"$ref": "AAAAAAGRXBPRWJRc8LE="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 199,
+											"width": 311,
+											"height": 13,
+											"text": "+setReceiver(receiver: String)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRXBitLJSNWqY=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ5bQE="
+											},
+											"model": {
+												"$ref": "AAAAAAGRXBitKZSI8zM="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 214,
+											"width": 311,
+											"height": 13,
+											"text": "+setSubject(subject: String)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRXBj/AZSb7Vo=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ5bQE="
+											},
+											"model": {
+												"$ref": "AAAAAAGRXBj+/ZSWAyo="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 229,
+											"width": 311,
+											"height": 13,
+											"text": "+setMessage(msg: String)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRXCR4g5S1Bag=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ5bQE="
+											},
+											"model": {
+												"$ref": "AAAAAAGRXCR4fpSyeI8="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 244,
+											"width": 311,
+											"height": 13,
+											"text": "+send()",
+											"horizontalAlignment": 0
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 32,
+									"top": 179,
+									"width": 321,
+									"height": 83
+								},
+								{
+									"_type": "UMLReceptionCompartmentView",
+									"_id": "AAAAAAGRXBL60JQ65gI=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBL60JQyChE="
+									},
+									"model": {
+										"$ref": "AAAAAAGRXBHRApOQ3b4="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": -70,
+									"top": 47,
+									"width": 10,
+									"height": 10
+								},
+								{
+									"_type": "UMLTemplateParameterCompartmentView",
+									"_id": "AAAAAAGRXBL60JQ7wjM=",
+									"_parent": {
+										"$ref": "AAAAAAGRXBL60JQyChE="
+									},
+									"model": {
+										"$ref": "AAAAAAGRXBHRApOQ3b4="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": -70,
+									"top": 47,
+									"width": 10,
+									"height": 10
+								}
+							],
+							"font": "Arial;13;0",
+							"containerChangeable": true,
+							"left": 32,
+							"top": 144,
+							"width": 320,
+							"height": 192,
+							"nameCompartment": {
+								"$ref": "AAAAAAGRXBL60JQzhzI="
+							},
+							"attributeCompartment": {
+								"$ref": "AAAAAAGRXBL60JQ43R4="
+							},
+							"operationCompartment": {
+								"$ref": "AAAAAAGRXBL60JQ5bQE="
+							},
+							"receptionCompartment": {
+								"$ref": "AAAAAAGRXBL60JQ65gI="
+							},
+							"templateParameterCompartment": {
+								"$ref": "AAAAAAGRXBL60JQ7wjM="
+							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAGRXCZWQpS6M44=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBK8q5PQ36g="
+							},
+							"font": "Arial;13;0",
+							"left": 128,
+							"top": 16,
+							"width": 128,
+							"height": 80,
+							"text": "The Email class creates and sends an email through the use of a SMTP server"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGRXCcn2pTMfqA=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBK8q5PQ36g="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGRXBL60JQyChE="
+							},
+							"tail": {
+								"$ref": "AAAAAAGRXCZWQpS6M44="
+							},
+							"lineStyle": 1,
+							"points": "192:97;192:143"
+						}
+					]
 				}
 			]
 		},
