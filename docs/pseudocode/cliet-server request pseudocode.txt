@@ -1,0 +1,51 @@
+
+(receive and send functions are the one that can trigger ConnectionLostException)
+
+Request from client side: (synchronized needed)
+
+try
+
+	send: request_type [parameters]
+	receive: boolean value to check if the operation succeeded
+
+	if boolean value is true
+		receive: requested data
+		return: requested data
+	else
+		receive: error_msg
+		throw new DatabaseRequestException(error_msg)
+
+catch (IOException e)
+
+	throw new ConnectionLostException();
+
+Request from server side: (DatabaseRequestException can be thrown by "database.executeProperMethod()")
+
+try
+
+	receive: request_type
+
+	switch request_type
+		case (1) :
+			receive: [parameter]
+			try
+				return_data = database.executeProperMethod([parameter])
+				send: true
+				send: return_data
+			catch (DatabaseRequestException e)
+				send: false
+				send: e.getMessage()
+
+		case (2) :
+			try
+				return_data = database.executeProperMethod()
+				send: true
+				send: return_data
+			catch (DatabaseRequestException e)
+				send: false
+				send: e.getMessage()
+		...
+
+catch (IOException e)
+
+	throw new ConnectionLostException();

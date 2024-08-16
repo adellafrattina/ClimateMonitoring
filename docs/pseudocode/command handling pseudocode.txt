@@ -1,0 +1,79 @@
+
+Command syntax
+
+SEARCH:
+search [name, country, coords] <str, str, (latitude, longitude)>
+
+VIEW
+view [area, center] <geoname_id, center_id>
+
+LOGIN
+login user_id password
+
+REGISTER
+register [, --create-new-center] user_id email password ssid name surname <center_id, 0>
+{
+
+	if "--create-new-center" is set
+		executeCenterCreation()
+}
+
+ADD
+add [area, center, parameter] <(geoname_id, name, ascii_name, country_code, country_name, latitude, longitude), (center_id, street, house_number, postal_code, city, 'district'), (geoname_id, center_id, user_id, category, score, notes)>
+
+EDIT
+edit profile
+
+SETTINGS
+settings theme <classic, light, dark>
+
+PING
+ping
+
+HELP
+help
+
+EXIT
+exit
+
+Command handling from layer side (inside onHeadlessRender())
+
+line = input()
+cmd, args <= Command(line)
+
+switch (cmd)
+	case SEARCH:
+		viewState => Master
+	case VIEW:
+		cmd, args <= Command(args)
+		switch (cmd)
+			case "area":
+				viewState => AreaInfo
+			case "center":
+				viewState => CenterInfo
+	case LOGIN:
+		viewState => Login
+	case REGISTER:
+		viewState => Registration
+	case ADD:
+		cmd, args <= Command(args)
+		switch (cmd)
+			case "area":
+				viewState => AreaCreation
+			case "center":
+				viewState => CenterCreation
+			case "parameter":
+				viewState => ParameterCreation
+	case EDIT:
+		cmd, args <= Command(args)
+		switch (cmd)
+			case "profile":
+				viewState => EditProfile
+	case SETTINGS:
+		viewState => Settings
+	case PING:
+		proxy.requestPing()
+	case HELP:
+		printCommandSyntax()
+	case EXIT:
+		Application.close()
