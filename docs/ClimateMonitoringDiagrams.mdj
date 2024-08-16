@@ -38659,7 +38659,7 @@
 							},
 							"name": "m_showErrorMsg",
 							"visibility": "private",
-							"type": "String"
+							"type": "boolean"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -38783,16 +38783,7 @@
 										"$ref": "AAAAAAGRRyutuvr3thw="
 									},
 									"name": "width",
-									"type": "int"
-								},
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGRSARJUDAb6ug=",
-									"_parent": {
-										"$ref": "AAAAAAGRRyutuvr3thw="
-									},
-									"name": "height",
-									"type": "int"
+									"type": "float"
 								},
 								{
 									"_type": "UMLParameter",
@@ -38801,7 +38792,7 @@
 										"$ref": "AAAAAAGRRyutuvr3thw="
 									},
 									"name": "x",
-									"type": "int"
+									"type": "float"
 								},
 								{
 									"_type": "UMLParameter",
@@ -38810,7 +38801,7 @@
 										"$ref": "AAAAAAGRRyutuvr3thw="
 									},
 									"name": "y",
-									"type": "int"
+									"type": "float"
 								}
 							]
 						},
@@ -38840,16 +38831,7 @@
 										"$ref": "AAAAAAGRSASHyzAvHMA="
 									},
 									"name": "width",
-									"type": "int"
-								},
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGRSASHyzAyISo=",
-									"_parent": {
-										"$ref": "AAAAAAGRSASHyzAvHMA="
-									},
-									"name": "height",
-									"type": "int"
+									"type": "float"
 								}
 							]
 						},
@@ -40271,7 +40253,7 @@
 											"top": 251,
 											"width": 343,
 											"height": 13,
-											"text": "-m_showErrorMsg: String",
+											"text": "-m_showErrorMsg: boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -40373,7 +40355,7 @@
 											"top": 334,
 											"width": 343,
 											"height": 13,
-											"text": "+render(width: int, height: int, x: int, y: int): boolean",
+											"text": "+render(width: float, x: float, y: float): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -40390,7 +40372,7 @@
 											"top": 349,
 											"width": 343,
 											"height": 13,
-											"text": "+render(width: int, height: int): boolean",
+											"text": "+render(width: float): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -40800,7 +40782,7 @@
 											"top": 236,
 											"width": 327.25048828125,
 											"height": 13,
-											"text": "-m_currentItem: int",
+											"text": "-m_currentItem: int = -1",
 											"horizontalAlignment": 0
 										}
 									],
@@ -40936,7 +40918,24 @@
 											"top": 349,
 											"width": 327.25048828125,
 											"height": 13,
-											"text": "+getCurrentItem(m_currentItem: int)",
+											"text": "+setCurrentItem(current_item: int)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGRW+/acWQCWhM=",
+											"_parent": {
+												"$ref": "AAAAAAGRR+eEVS8/Lzw="
+											},
+											"model": {
+												"$ref": "AAAAAAGRW+/aa2P95aI="
+											},
+											"font": "Arial;13;0",
+											"left": 469,
+											"top": 364,
+											"width": 327.25048828125,
+											"height": 13,
+											"text": "+getCurrentItem(): int",
 											"horizontalAlignment": 0
 										}
 									],
@@ -40944,7 +40943,7 @@
 									"left": 464,
 									"top": 254,
 									"width": 337.25048828125,
-									"height": 113
+									"height": 128
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -41378,7 +41377,8 @@
 							},
 							"name": "m_currentItem",
 							"visibility": "private",
-							"type": "int"
+							"type": "int",
+							"defaultValue": "-1"
 						}
 					],
 					"operations": [
@@ -41389,6 +41389,7 @@
 								"$ref": "AAAAAAGRR3b51v1ZGVg="
 							},
 							"name": "ResultBox",
+							"documentation": "Initialize ResultBox fields",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -41417,6 +41418,7 @@
 								"$ref": "AAAAAAGRR3b51v1ZGVg="
 							},
 							"name": "ResultBox",
+							"documentation": "Initialize ResultBox fields",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -41575,8 +41577,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGRR3b51v1ZGVg="
 							},
-							"name": "getCurrentItem",
-							"documentation": "Returns the current selected item. -1 if no items are selected or the list index that refers to the selected item",
+							"name": "setCurrentItem",
+							"documentation": "Sets the current selected item",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -41584,9 +41586,31 @@
 									"_parent": {
 										"$ref": "AAAAAAGRR+ivAC+iuXA="
 									},
-									"name": "m_currentItem",
+									"name": "current_item",
 									"visibility": "private",
 									"type": "int"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGRW+/aa2P95aI=",
+							"_parent": {
+								"$ref": "AAAAAAGRR3b51v1ZGVg="
+							},
+							"name": "getCurrentItem",
+							"documentation": "Returns the current selected item. -1 if no items are selected or the list index that refers to the selected item",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRW+/aa2P+kvA=",
+									"_parent": {
+										"$ref": "AAAAAAGRW+/aa2P95aI="
+									},
+									"name": "m_currentItem",
+									"visibility": "private",
+									"type": "int",
+									"direction": "return"
 								}
 							]
 						}
