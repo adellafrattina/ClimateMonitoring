@@ -74,5 +74,10 @@ enum ViewType {
 	/**
 	 * Verification view. Contains a string that tells that a user should check his inbox and insert the code in the input text down below
 	 */
-	VERIFICATION
+	VERIFICATION,
+
+	/**
+	 * Connection view. While the application tires to connect to a server, this view is shown. If the Connection fails, this view tells the user if he wants to retry the connection
+	 */
+	CONNECTION
 }
