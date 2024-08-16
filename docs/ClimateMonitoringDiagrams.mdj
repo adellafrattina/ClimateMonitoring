@@ -53934,7 +53934,7 @@
 							"top": 16,
 							"width": 208,
 							"height": 96,
-							"text": "If at any point in time, a function thrown a ConnectionLostException, the view state should become CONNECTION"
+							"text": "If at any point in time, a function throws a ConnectionLostException, the view state should become CONNECTION"
 						},
 						{
 							"_type": "UMLStateView",
