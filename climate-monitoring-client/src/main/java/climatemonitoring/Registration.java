@@ -1,6 +1,18 @@
 package climatemonitoring;
 
-class Registration {
+import climatemonitoring.core.ViewState;
 
-	
+class Registration extends ViewState {
+
+	@Override
+	public void onHeadlessRender(String args) {
+
+		throw new UnsupportedOperationException("Unimplemented method 'onHeadlessRender'");
+	}
+
+	@Override
+	public void onGUIRender() {
+
+		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+	}
 }
