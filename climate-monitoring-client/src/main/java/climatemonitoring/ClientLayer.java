@@ -16,7 +16,7 @@ class ClientLayer extends Layer {
 
 		String line = Console.read(">").toLowerCase();
 		Command c = new Command(line);
-		Boolean showView = true; 
+		boolean showView = true; 
 
 		switch (c.getCmd()) {
 			case Command.SEARCH:
@@ -91,7 +91,8 @@ class ClientLayer extends Layer {
 				break;
 		}
 
-		Handler.onHeadlessRender(c.getArgs());
+		if(showView)
+			Handler.onHeadlessRender(c.getArgs());
 	}
 
 	public void onGUIRender() {
