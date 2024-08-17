@@ -17,6 +17,8 @@
 
 	<!--Build jar file-->
 	<build>
+		<directory>../bin/climate-monitoring-core</directory>
+		<outputDirectory>../bin/climate-monitoring-core</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -34,6 +36,8 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>../bin/climate-monitoring-core</outputDirectory>
+							<finalName>coreCM</finalName>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<relocations>
 								<relocation>
