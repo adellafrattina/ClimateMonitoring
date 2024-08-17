@@ -55,7 +55,24 @@ class Command {
 	public static final String SETTINGS = "settings";
 
 	/**
-	 * Parses a command line string to extract a command and its associated arguments, storing them in m_cmd and m_args
+	 * The command to show in milliseconds how long does it take for a packet sent from the client to arrive to the server
+	 */
+	public static final String PING = "ping";
+
+	/**
+	 * The command that shows all the commands
+	 */
+	public static final String HELP = "help";
+
+	/**
+	 * The command that closes the application
+	 */
+	public static final String EXIT = "exit";
+
+
+
+	/**
+	 * Parses a command line string to extract a command and its associated arguments, storing them in the command and arguments fields
 	 * @param line
 	 */
 	public Command(String line){
@@ -63,7 +80,7 @@ class Command {
 		StringTokenizer st = new StringTokenizer(line);
 
 		if(st.hasMoreTokens())
-			m_cmd = st.nextToken().trim().substring(1);
+			m_cmd = st.nextToken().trim();
 
 		if(st.hasMoreTokens())
 			m_args = st.nextToken("").trim();

@@ -1,6 +1,97 @@
 package climatemonitoring;
 
-class ClientLayer {
+import climatemonitoring.core.Application;
+import climatemonitoring.core.Layer;
+import climatemonitoring.core.headless.Console;
 
+class ClientLayer extends Layer {
 
+	public void onAttach() {
+
+		Handler.init();
+		Handler.connect();
+	}
+
+	public void onHeadlessRender() {
+
+		String line = Console.read(">");
+		Command c = new Command(line);
+		switch (c.getCmd()) {
+			case Command.SEARCH:
+				Handler.setViewState(ViewType.MASTER);
+				break;
+			case Command.VIEW:
+				c = new Command(c.getArgs());
+				switch (c.getCmd()) {
+					case "area":
+						Handler.setViewState(ViewType.AREA_INFO);
+						break;
+					case "center":
+						Handler.setViewState(ViewType.CENTER_INFO);
+						break;
+					default:
+						Console.write("Incorrent command syntax");
+						break;
+				}
+			case Command.LOGIN:
+				Handler.setViewState(ViewType.LOGIN);
+				break;
+			case Command.REGISTER:
+				Handler.setViewState(ViewType.REGISTRATION);
+				break;
+			case Command.ADD:
+				c = new Command(c.getArgs());
+				switch(c.getCmd()){
+					case "area":
+						Handler.setViewState(ViewType.AREA_CREATION);
+						break;
+					case "center":
+						Handler.setViewState(ViewType.CENTER_CREATION);
+						break;
+					case "parameter":
+						Handler.setViewState(ViewType.PARAMETER_CREATION);
+						break;
+					default:
+						Console.write("Incorrent command syntax");
+						break;
+				}
+			case Command.EDIT:
+				c = new Command(c.getArgs());
+				switch (c.getCmd()) {
+					case "profile":
+						Handler.setViewState(ViewType.EDIT_PROFILE);
+						break;
+					default:
+						Console.write("Incorrent command syntax");
+						break;
+				}
+			case Command.SETTINGS:
+				Handler.setViewState(ViewType.SETTINGS);
+				break;
+			case Command.PING:
+				//TODO: proxy.requestping()
+				break;
+			case Command.HELP:
+				//TODO: list of commands
+				break;
+			case Command.EXIT:
+				Application.close();
+				break;
+			default:
+				Console.write("Unknown command");
+				break;
+		}
+
+		Handler.onHeadlessRender(c.getArgs());
+	}
+
+	public void onGUIRender() {
+
+		Handler.onGUIRender();
+	}
+
+	public void onDetach() {
+
+		Handler.getProxyServer().close();
+	}
 }
