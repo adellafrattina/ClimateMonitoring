@@ -27,7 +27,7 @@
 
 	<!--Build jar file-->
 	<build>
-		<outputDirectory>../bin-int/client</outputDirectory>
+		<outputDirectory>../bin-int/climate-monitoring-server</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -50,7 +50,7 @@
 							<finalName>serverCM</finalName>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-								<mainClass>climatemonitoring.ClientApp</mainClass>
+								<mainClass>climatemonitoring.ServerApp</mainClass>
 								</transformer>
 							</transformers>
 							<relocations>

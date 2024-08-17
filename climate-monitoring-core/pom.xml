@@ -17,7 +17,7 @@
 
 	<!--Build jar file-->
 	<build>
-		<outputDirectory>../bin-int/client</outputDirectory>
+		<outputDirectory>../bin-int/climate-monitoring-core</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -36,8 +36,6 @@
 						</goals>
 						<configuration>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<outputDirectory>../bin</outputDirectory>
-							<finalName>coreCM</finalName>
 							<relocations>
 								<relocation>
 									<pattern>com.acme.coyote</pattern>
