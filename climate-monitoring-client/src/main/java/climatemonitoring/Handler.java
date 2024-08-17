@@ -155,7 +155,7 @@ class Handler {
 	private Handler() {
 
 		m_proxy = new ProxyImpl();
-		m_proxyMT = null;//new ProxyMTImpl(m_proxy);
+		m_proxyMT = new ProxyMTImpl(m_proxy);
 		m_view = new View();
 		m_viewStates = new HashMap<ViewType, ViewState>();
 		m_viewTypeHistory = new Stack<ViewType>();
