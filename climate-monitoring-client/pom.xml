@@ -27,7 +27,6 @@
 
 	<!--Build jar file-->
 	<build>
-		<outputDirectory>../bin-int/climate-monitoring-client</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
