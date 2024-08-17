@@ -14,8 +14,10 @@ class ClientLayer extends Layer {
 
 	public void onHeadlessRender() {
 
-		String line = Console.read(">");
+		String line = Console.read(">").toLowerCase();
 		Command c = new Command(line);
+		Boolean showView = true; 
+
 		switch (c.getCmd()) {
 			case Command.SEARCH:
 				Handler.setViewState(ViewType.MASTER);
@@ -31,8 +33,10 @@ class ClientLayer extends Layer {
 						break;
 					default:
 						Console.write("Incorrent command syntax");
+						showView = false;
 						break;
 				}
+			break;
 			case Command.LOGIN:
 				Handler.setViewState(ViewType.LOGIN);
 				break;
@@ -53,8 +57,10 @@ class ClientLayer extends Layer {
 						break;
 					default:
 						Console.write("Incorrent command syntax");
+						showView = false;
 						break;
 				}
+			break;
 			case Command.EDIT:
 				c = new Command(c.getArgs());
 				switch (c.getCmd()) {
@@ -63,8 +69,10 @@ class ClientLayer extends Layer {
 						break;
 					default:
 						Console.write("Incorrent command syntax");
+						showView = false;
 						break;
 				}
+			break;
 			case Command.SETTINGS:
 				Handler.setViewState(ViewType.SETTINGS);
 				break;
@@ -79,6 +87,7 @@ class ClientLayer extends Layer {
 				break;
 			default:
 				Console.write("Unknown command");
+				showView = false;
 				break;
 		}
 
