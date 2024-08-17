@@ -12,7 +12,7 @@
 	<!--Common properties-->
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>
-		<lwjgl.version>3.3.1</lwjgl.version>
+		<lwjgl.version>3.3.4</lwjgl.version>
 		<imgui.java.version>1.86.12</imgui.java.version>
 	</properties>
 
@@ -26,10 +26,11 @@
 
 		<!--Windows x64-->
 		<profile>
-			<id>Windows64</id>
+			<id>lwjgl-natives-windows-amd64</id>
 			<activation>
 				<os>
 					<family>windows</family>
+					<arch>amd64</arch>
 				</os>
 			</activation>
 			<properties>
@@ -40,7 +41,7 @@
 
 		<!--Windows x86-->
 		<profile>
-			<id>Windows86</id>
+			<id>lwjgl-natives-windows-x86</id>
 			<activation>
 				<os>
 					<family>windows</family>
@@ -53,12 +54,29 @@
 			</properties>
 		</profile>
 
+		<!--Windows arm64-->
+		<profile>
+			<id>lwjgl-natives-windows-aarch64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>aarch64</arch>
+				</os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-windows-arm64</lwjgl.natives>
+				<imgui.java.natives>imgui-java-natives-windows</imgui.java.natives>
+			</properties>
+		</profile>
+
 		<!--Linux x64-->
 		<profile>
-			<id>linux64</id>
+			<id>lwjgl-natives-linux-amd64</id>
 			<activation>
 				<os>
 					<family>unix</family>
+					<name>linux</name>
+					<arch>amd64</arch>
 				</os>
 			</activation>
 			<properties>
@@ -69,11 +87,12 @@
 
 		<!--Linux arm64-->
 		<profile>
-			<id>linuxarm64</id>
+			<id>lwjgl-natives-linux-aarch64</id>
 			<activation>
 				<os>
 					<family>unix</family>
-					<arch>arm64</arch>
+					<name>linux</name>
+					<arch>aarch64</arch>
 				</os>
 			</activation>
 			<properties>
@@ -84,10 +103,26 @@
 
 		<!--Linux arm32-->
 		<profile>
-			<id>linuxarm32</id>
+			<id>lwjgl-natives-linux-arm</id>
 			<activation>
 				<os>
 					<family>unix</family>
+					<name>linux</name>
+					<arch>arm</arch>
+				</os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-linux-arm</lwjgl.natives>
+				<imgui.java.natives>imgui-java-natives-linux</imgui.java.natives>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>lwjgl-natives-linux-arm32</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>linux</name>
 					<arch>arm32</arch>
 				</os>
 			</activation>
@@ -99,10 +134,11 @@
 
 		<!--MacOS x64-->
 		<profile>
-			<id>macos64</id>
+			<id>lwjgl-natives-macos-x86_64</id>
 			<activation>
 				<os>
 					<family>mac</family>
+					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<properties>
@@ -113,11 +149,11 @@
 
 		<!--MacOSX arm64-->
 		<profile>
-			<id>macosarm64</id>
+			<id>lwjgl-natives-macos-aarch64</id>
 			<activation>
 				<os>
 					<family>mac</family>
-					<arch>arm64</arch>
+					<arch>aarch64</arch>
 				</os>
 			</activation>
 			<properties>
