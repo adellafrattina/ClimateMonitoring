@@ -12,8 +12,9 @@ package climatemonitoring.core;
 /**
  * The database interface is responsible for communication between the application
  * and the database. It allows to perform specific operations, but not to execute
- * new SQL queries. Every operation should throw a controlled exception when an
- * error occurs
+ * new SQL queries. Every operation should throw ConnectionLostException if the client
+ * loses connection to the server during the operation and DatabaseRequestException if
+ * the database fails to process the given request
  * 
  * @author ccapiferri
  * @version 1.0-SNAPSHOT
@@ -36,9 +37,10 @@ public interface Database {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Area[] searchAreasByName(String str) throws Exception;
+	public Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Returns in alphabetical order an array of areas which belong
@@ -46,9 +48,10 @@ public interface Database {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Area[] searchAreasByCountry(String str) throws Exception;
+	public Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Returns in alphabetical order an array of areas which can be
@@ -58,9 +61,10 @@ public interface Database {
 	 * @param latitude Value between -90 and 90
 	 * @param longitude Value between -180 and 180
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Area[] searchAreasByCoords(double latitude, double longitude) throws Exception;
+	public Area[] searchAreasByCoords(double latitude, double longitude) throws ConnectionLostException, DatabaseRequestException;
 
 
 	/**
@@ -70,17 +74,19 @@ public interface Database {
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
 	 * @return The result of the search as an array of parameters
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Parameter[] getParameters(int geoname_id, String center_id) throws Exception;
+	public Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Category[] getCategories() throws Exception;
+	public Category[] getCategories() throws ConnectionLostException, DatabaseRequestException;
 
 
 	/**
@@ -88,36 +94,40 @@ public interface Database {
 	 * 
 	 * @param area The area that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public boolean addArea(Area area) throws Exception;
+	public boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Adds a center to the database
 	 * 
 	 * @param center The center that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public boolean addCenter(Center center) throws Exception;
+	public boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Adds an operator to the database
 	 * 
 	 * @param operator The operator that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public boolean addOperator(Operator operator) throws Exception;
+	public boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Adds a parameter to the database
 	 * 
 	 * @param parameter The parameter that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public boolean addParameter(Parameter parameter) throws Exception;
+	public boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException;
 
 
 	/**
@@ -126,9 +136,10 @@ public interface Database {
 	 * @param user_id The ID of the operator that will get edited
 	 * @param operator The new operator that will overwrite the previous one
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public boolean editOperator(String user_id, Operator operator) throws Exception;
+	public boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
@@ -137,7 +148,8 @@ public interface Database {
 	 * @param user_id Operator's user id
 	 * @param password Operator's password
 	 * @return The operator whose credentials correspond to the ones in input
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Operator validateCredentials(String user_id, String password) throws Exception;
+	public Operator validateCredentials(String user_id, String password) throws ConnectionLostException, DatabaseRequestException;
 }
