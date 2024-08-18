@@ -35,3 +35,9 @@ replay_pid*
 # Local test files
 climate-monitoring-client/**/ADFTestApp.java
 climate-monitoring-client/**/ADFTestLayer.java
+
+# Bin folder
+bin/**
+
+# Build shortcut
+**.lnk
