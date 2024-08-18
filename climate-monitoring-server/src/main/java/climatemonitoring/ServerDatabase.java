@@ -11,36 +11,27 @@ package climatemonitoring;
 
 import java.sql.ResultSet;
 
-import climatemonitoring.core.ConnectionLostException;
-import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Database;
 
 /**
  * The ServerDatabase hides the communication details
  * and the SQL queries between the server and the database.
  * 
- * Its methods must be synchronized and throw ConnectionLostException
- * and DatabaseRequestException
- * 
  * @author ccapiferri
  * @version 1.0-SNAPSHOT
  */
-interface ServerDatabase {
+interface ServerDatabase extends Database {
 
 	/**
 	 * Closes the connection between the application and the database
-	 * 
-	 * @throws ConnectionLostException If the client loses connection during the operation
-	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public void shutdown() throws ConnectionLostException, DatabaseRequestException;
+	public void shutdown();
 
 	/**
 	 * Executes an SQL statement and returns a result set
 	 * 
 	 * @param statement The statement that will get executed
 	 * @return The ResultSet given after the execution of the statement
-	 * @throws ConnectionLostException If the client loses connection during the operation
-	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public ResultSet execute(String statement) throws ConnectionLostException, DatabaseRequestException;
+	public ResultSet execute(String statement);
 }
