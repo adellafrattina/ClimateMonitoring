@@ -24,6 +24,15 @@ import climatemonitoring.core.Parameter;
 import climatemonitoring.core.RequestType;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * A thread class that gets created every time a new client
+ * connects to the server.
+ * 
+ * Handles the communication between client and server
+ * 
+ * @author ccapiferri
+ * @version 1.0-SNAPSHOT
+ */
 class Skeleton extends Thread {
 
 	public Skeleton(Socket socket, ServerDatabase database) {
@@ -42,6 +51,9 @@ class Skeleton extends Thread {
 		}
 	}
 
+	/**
+	 * The main loop of this class that manages client-server I/O.
+	 */
 	public void run() {
 
 		while (m_running) {
@@ -308,6 +320,9 @@ class Skeleton extends Thread {
 		close();
 	}
 
+	/**
+	 * Closes I/O streams after exiting the execution loop
+	 */
 	private void close() {
 
 		try {
@@ -325,6 +340,7 @@ class Skeleton extends Thread {
 
 	private ObjectOutputStream m_out;
 	private ObjectInputStream m_in;
+
 	private boolean m_running = true;
 	private ServerDatabase m_serverDatabase;
 }

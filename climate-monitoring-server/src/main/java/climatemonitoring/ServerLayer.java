@@ -24,6 +24,9 @@ import climatemonitoring.core.headless.Console;
  */
 class ServerLayer extends Layer {
 
+	/**
+	 * Code to be executed as the layer gets created
+	 */
 	public void onAttach() {
 
 		String url = Console.read();
@@ -43,6 +46,9 @@ class ServerLayer extends Layer {
 		}
 	}
 
+	/**
+	 * Code that runs on every iteration of the main loop
+	 */
 	public void onUpdate() {
 
 		try {
@@ -57,16 +63,25 @@ class ServerLayer extends Layer {
 		}
 	}
 
+	/**
+	 * Code that runs in headless configuration only
+	 */
 	public void onHeadlessRender() {
 
 
 	}
 
+	/**
+	 * Code that runs in GUI configuration only
+	 */
 	public void onGUIRender() {
 
 
 	}
 
+	/**
+	 * Code to be executed as the layer gets deleted
+	 */
 	public void onDetach() {
 
 		m_serverDatabase.shutdown();
