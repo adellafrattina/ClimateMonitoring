@@ -9,6 +9,7 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.Database;
 
 /**
@@ -21,15 +22,21 @@ interface Proxy extends Database{
 
 	/**
 	 * Allows the connection to the desired address.
-	 * Return true if the connection was succesfull, false if not
+	 * @return True if the connection was succesfull, false if not
 	 * @param address the address the user wants to connect to
 	 * @param port the port the user wants to connect to
 	 */
-	public boolean connect(String address, short port);
+	public boolean connect(String address, short port) throws ConnectionLostException;
+
+	/**
+	 * Sends a ping request. 
+	 * @return The time (in milliseconds) elapsed between sending the ping packet and receiving it from the server
+	 */
+	public long ping() throws ConnectionLostException;
 
 	/**
 	 * Close the connection between the socket and the server
 	 */
-	public void close();
+	public void close() throws ConnectionLostException;
 	
 }

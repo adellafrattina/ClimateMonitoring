@@ -17,6 +17,8 @@ import java.net.Socket;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
 import climatemonitoring.core.Center;
+import climatemonitoring.core.ConnectionLostException;
+import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Operator;
 import climatemonitoring.core.Parameter;
 import climatemonitoring.core.RequestType;
@@ -35,9 +37,10 @@ class ProxyImpl implements Proxy{
 	 * Return true if the connection was succesfull, false if not
 	 * @param address the address the user wants to connect to
 	 * @param port the port the user wants to connect to
+	 * @throws ConnectionLostException 
 	 */
 	@Override
-	public boolean connect(String address, short port) {
+	public boolean connect(String address, short port) throws ConnectionLostException {
 		
 		try {
 
@@ -47,28 +50,25 @@ class ProxyImpl implements Proxy{
 
 			return true;
 		} catch (IOException e) {
-
-			System.err.println("Error during the connection");
+			throw new ConnectionLostException();
 		}
 
-		return false;
 	}
 	
 	/**
 	 * Close the connection between the socket and the server
+	 * @throws ConnectionLostException 
 	 */
 	@Override
-	public void close() {
+	public void close() throws ConnectionLostException {
 
 		if(s != null && !s.isClosed()){
 
 			try {
-
 				s.close();
 				System.out.println("Connection closed");
 			} catch (IOException e) {
-
-				System.out.println("Error during the closure of the connection");
+				throw new ConnectionLostException();
 			}
 		}
 	}
@@ -92,7 +92,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Area[] searchAreasByName(String str) throws Exception {
+	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
 
 		Area[] areafoundbyname = null;
 
@@ -100,22 +100,20 @@ class ProxyImpl implements Proxy{
 			
 			out.writeObject(RequestType.SEARCH_AREAS_BY_NAME);
 			out.writeObject(str);
-	
-			areafoundbyname = (Area[]) in.readObject();
+			
+			boolean success = (boolean) in.readObject();
 
-			RequestType type;
-
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.SEARCH_AREAS_BY_NAME));
-
-			if(areafoundbyname == null){
+			if(success == true){
+				areafoundbyname = (Area[]) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
 
 		return areafoundbyname;
@@ -130,7 +128,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Area[] searchAreasByCountry(String str) throws Exception {
+	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
 		Area[] areafoundbycountry = null;
 
@@ -139,21 +137,19 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.SEARCH_AREAS_BY_COUNTRY);
 			out.writeObject(str);
 	
-			RequestType type;
+			boolean success = (boolean) in.readObject();
 
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.SEARCH_AREAS_BY_COUNTRY));
-
-			areafoundbycountry = (Area[]) in.readObject();
-
-			if(areafoundbycountry == null){
+			if(success == true){
+				areafoundbycountry = (Area[]) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 		
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
 
 		return areafoundbycountry;
@@ -170,7 +166,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Area[] searchAreasByCoords(double latitude, double longitude) throws Exception {
+	public synchronized Area[] searchAreasByCoords(double latitude, double longitude) throws ConnectionLostException, DatabaseRequestException {
 
 		Area[] areafoundbycoords = null;
 
@@ -180,21 +176,19 @@ class ProxyImpl implements Proxy{
 			out.writeObject(latitude);
 			out.writeObject(longitude);
 
-			RequestType type;
+			boolean success = (boolean) in.readObject();
 
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.SEARCH_AREAS_BY_COORDS));
-
-			areafoundbycoords= (Area[]) in.readObject();
-
-			if(areafoundbycoords == null){
+			if(success == true){
+				areafoundbycoords = (Area[]) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
 
 		return areafoundbycoords;
@@ -210,7 +204,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Parameter[] getParameters(int geoname_id, String center_id) throws Exception {
+	public synchronized Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
 
 		Parameter[] getparameters = null;
 
@@ -220,23 +214,21 @@ class ProxyImpl implements Proxy{
 			out.writeObject(geoname_id);
 			out.writeObject(center_id);
 
-			RequestType type;
-		
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.GET_PARAMETERS_AREA_CENTER));
+			boolean success = (boolean) in.readObject();
 
-			getparameters = (Parameter[]) in.readObject();
-
-			if(getparameters == null){
+			if(success == true){
+				getparameters = (Parameter[]) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 			
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
-		
+
 		return getparameters;
 	}
 	
@@ -247,28 +239,26 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Category[] getCategories() throws Exception {
+	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
 
 		Category[] getcategories = null;
 
 		try {
 			out.writeObject(RequestType.GET_CATEGORIES);
 	
-			RequestType type;
-		
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.GET_CATEGORIES));
-	
-			getcategories = (Category[]) in.readObject();
+			boolean success = (boolean) in.readObject();
 
-			if(getcategories == null){
+			if(success == true){
+				getcategories = (Category[]) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 			
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
 		return getcategories;
 	}
@@ -281,7 +271,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public boolean addArea(Area area) throws Exception {
+	public synchronized boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
 
 		Boolean addedArea = null;
 
@@ -290,21 +280,19 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.ADD_AREA);
 			out.writeObject(area);
 
-			RequestType type;
-	
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.ADD_AREA));
+			boolean success = (boolean) in.readObject();
 
-
-			addedArea = (Boolean) in.readObject();
-
-			if(addedArea == false){
+			if(success == true){
+				addedArea = (Boolean) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
+
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
 		
 		return addedArea;
@@ -318,7 +306,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public boolean addCenter(Center center) throws Exception {
+	public synchronized boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
 
 		Boolean addedCenter = null;
 
@@ -326,23 +314,21 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.ADD_CENTER);
 			out.writeObject(center);
 
-			RequestType type;
-	
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.ADD_CENTER));
+			boolean success = (boolean) in.readObject();
 
-			addedCenter = (Boolean) in.readObject();
-
-			if(addedCenter == false){
+			if(success == true){
+				addedCenter = (Boolean) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
-			
+
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
-		
+
 		return addedCenter;
 	}
 	
@@ -354,7 +340,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public boolean addOperator(Operator operator) throws Exception {
+	public synchronized boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
 		
 		Boolean addedOperator = null;
 
@@ -362,22 +348,21 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.ADD_OPERATOR);
 			out.writeObject(operator);
 			
-			RequestType type;
+			boolean success = (boolean) in.readObject();
 			
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.ADD_OPERATOR));
-			
-			addedOperator = (Boolean) in.readObject();
-
-			if(addedOperator == false){
+			if(success == true){
+				addedOperator = (Boolean) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
+
 		return addedOperator;
 	}
 	
@@ -389,7 +374,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public boolean addParameter(Parameter parameter) throws Exception {
+	public synchronized boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
 
 		Boolean addedParameter = null;
 
@@ -397,22 +382,21 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.ADD_PARAMETER);
 			out.writeObject(parameter);
 	
-			RequestType type;
-	
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.ADD_PARAMETER));
-	
-			addedParameter = (Boolean) in.readObject();
-
-			if(addedParameter == false){
+			boolean success = (boolean) in.readObject();
+			
+			if(success == true){
+				addedParameter = (Boolean) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
+				throw new DatabaseRequestException(msg);
 			}
 			
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
+
 		return addedParameter;
 	}
 	
@@ -425,31 +409,30 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public boolean editOperator(String user_id, Operator operator) throws Exception {
+	public synchronized boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException {
 
-		Boolean addedOperator = null;
+		Boolean editedOperator = null;
 
 		try {
 			out.writeObject(RequestType.EDIT_OPERATOR);
 			out.writeObject(user_id);
 			out.writeObject(operator);
-			RequestType type;
-
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.EDIT_OPERATOR));
-
-			addedOperator = (Boolean) in.readObject();
-
-			if(addedOperator == false){
-				String msg = (String) in.readObject();
-				throw new Exception(msg);
-			}
+			boolean success = (boolean) in.readObject();
 			
+			if(success == true){
+				editedOperator = (Boolean) in.readObject();
+			}else{
+				String msg = (String) in.readObject();
+				throw new DatabaseRequestException(msg);
+			}
+
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
-		return addedOperator;
+
+		return editedOperator;
 	}
 	
 	/**
@@ -462,7 +445,7 @@ class ProxyImpl implements Proxy{
 	 * @throws Exception If anything went wrong while executing the operation
 	 */
 	@Override
-	public Operator validateCredentials(String user_id, String password) throws Exception {
+	public synchronized Operator validateCredentials(String user_id, String password) throws ConnectionLostException, DatabaseRequestException {
 		
 		Operator op = null;
 
@@ -470,24 +453,46 @@ class ProxyImpl implements Proxy{
 			out.writeObject(RequestType.VALIDATE_CREDENTIALS);
 			out.writeObject(user_id);
 			out.writeObject(password);
-			RequestType type;
+			
+			boolean success = (boolean) in.readObject();
 
-			do{
-				type = (RequestType) in.readObject();
-			}while((type != RequestType.VALIDATE_CREDENTIALS));
-
-			op = (Operator) in.readObject();
-
-			if(op == null){
+			if(success == true){
+				op = (Operator) in.readObject();
+			}else{
 				String msg = (String) in.readObject();
-				throw new Exception(msg);
-			} 
+				throw new DatabaseRequestException(msg);
+			}
 			
 		} catch (IOException e) {
-			throw new IOException("Connection error");
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
 		}
-			
+
 		return op;
+	}
+
+	/**
+	 * Sends a ping request. 
+	 * @return The time (in milliseconds) elapsed between sending the ping packet and receiving it from the server
+	 */
+	public long ping() throws ConnectionLostException {
+
+		long servertime = -1;
+
+		try {
+
+			out.writeObject(RequestType.PING);
+			out.writeObject(System.currentTimeMillis());
+			servertime = (long) in.readObject();
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return servertime;
 	}
 	
 	private Socket s;
