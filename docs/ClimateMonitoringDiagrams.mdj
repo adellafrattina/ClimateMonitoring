@@ -43728,6 +43728,63 @@
 						"$ref": "AAAAAAGQ6eON9JfZHvQ="
 					},
 					"name": "Email",
+					"attributes": [
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGRZ3xUSG0KV6A=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "m_senderEmail",
+							"visibility": "private",
+							"type": "String",
+							"defaultValue": "\"\""
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGRZ31FLW0Wt0k=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "m_senderName",
+							"visibility": "private",
+							"type": "String",
+							"defaultValue": "\"\""
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGRZ32NuW0nuU8=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "m_receiverEmail",
+							"visibility": "private",
+							"type": "String",
+							"defaultValue": "\"\""
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGRZ39nSW0+o6U=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "m_subject",
+							"visibility": "private",
+							"type": "String",
+							"defaultValue": "\"\""
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGRZ32/E20vPnE=",
+							"_parent": {
+								"$ref": "AAAAAAGRXBHRApOQ3b4="
+							},
+							"name": "m_message",
+							"visibility": "private",
+							"type": "String",
+							"defaultValue": "\"\""
+						}
+					],
 					"operations": [
 						{
 							"_type": "UMLOperation",
@@ -43830,7 +43887,19 @@
 								"$ref": "AAAAAAGRXBHRApOQ3b4="
 							},
 							"name": "send",
-							"documentation": "Sends the email from another thread"
+							"documentation": "Sends the email from another thread. Returns true if the operation succeeded, false if not",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGRZ36AhG02c+0=",
+									"_parent": {
+										"$ref": "AAAAAAGRXCR4fpSyeI8="
+									},
+									"name": "success",
+									"type": "boolean",
+									"direction": "return"
+								}
+							]
 						}
 					]
 				},
@@ -43942,11 +44011,98 @@
 									"model": {
 										"$ref": "AAAAAAGRXBHRApOQ3b4="
 									},
+									"subViews": [
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGRZ3xUTW0NaTc=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ43R4="
+											},
+											"model": {
+												"$ref": "AAAAAAGRZ3xUSG0KV6A="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 174,
+											"width": 311,
+											"height": 13,
+											"text": "-m_senderEmail: String = \"\"",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGRZ31FMG0Z/IY=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ43R4="
+											},
+											"model": {
+												"$ref": "AAAAAAGRZ31FLW0Wt0k="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 189,
+											"width": 311,
+											"height": 13,
+											"text": "-m_senderName: String = \"\"",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGRZ32NvG0qK3E=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ43R4="
+											},
+											"model": {
+												"$ref": "AAAAAAGRZ32NuW0nuU8="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 204,
+											"width": 311,
+											"height": 13,
+											"text": "-m_receiverEmail: String = \"\"",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGRZ39nTG1BRus=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ43R4="
+											},
+											"model": {
+												"$ref": "AAAAAAGRZ39nSW0+o6U="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 219,
+											"width": 311,
+											"height": 13,
+											"text": "-m_subject: String = \"\"",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGRZ32/Fm0yNvs=",
+											"_parent": {
+												"$ref": "AAAAAAGRXBL60JQ43R4="
+											},
+											"model": {
+												"$ref": "AAAAAAGRZ32/E20vPnE="
+											},
+											"font": "Arial;13;0",
+											"left": 37,
+											"top": 234,
+											"width": 311,
+											"height": 13,
+											"text": "-m_message: String = \"\"",
+											"horizontalAlignment": 0
+										}
+									],
 									"font": "Arial;13;0",
 									"left": 32,
 									"top": 169,
 									"width": 321,
-									"height": 10
+									"height": 83
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -43969,7 +44125,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 37,
-											"top": 184,
+											"top": 257,
 											"width": 311,
 											"height": 13,
 											"text": "+Email(sender_email: String, sender_name: String)",
@@ -43986,7 +44142,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 37,
-											"top": 199,
+											"top": 272,
 											"width": 311,
 											"height": 13,
 											"text": "+setReceiver(receiver: String)",
@@ -44003,7 +44159,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 37,
-											"top": 214,
+											"top": 287,
 											"width": 311,
 											"height": 13,
 											"text": "+setSubject(subject: String)",
@@ -44020,7 +44176,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 37,
-											"top": 229,
+											"top": 302,
 											"width": 311,
 											"height": 13,
 											"text": "+setMessage(msg: String)",
@@ -44037,16 +44193,16 @@
 											},
 											"font": "Arial;13;0",
 											"left": 37,
-											"top": 244,
+											"top": 317,
 											"width": 311,
 											"height": 13,
-											"text": "+send()",
+											"text": "+send(): boolean",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 32,
-									"top": 179,
+									"top": 252,
 									"width": 321,
 									"height": 83
 								},
