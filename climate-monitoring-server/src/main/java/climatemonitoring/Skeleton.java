@@ -42,6 +42,7 @@ class Skeleton extends Thread {
 			m_out = new ObjectOutputStream(socket.getOutputStream());
 			m_in = new ObjectInputStream(socket.getInputStream());
 
+			m_client = socket;
 			m_serverDatabase = database;
 		}
 
@@ -318,6 +319,7 @@ class Skeleton extends Thread {
 		}
 
 		close();
+		Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected");
 	}
 
 	/**
@@ -330,6 +332,7 @@ class Skeleton extends Thread {
 			m_out.flush();
 			m_out.close();
 			m_in.close();
+			m_client.close();
 		}
 
 		catch (IOException e) {
@@ -340,6 +343,8 @@ class Skeleton extends Thread {
 
 	private ObjectOutputStream m_out;
 	private ObjectInputStream m_in;
+
+	private Socket m_client;
 
 	private boolean m_running = true;
 	private ServerDatabase m_serverDatabase;
