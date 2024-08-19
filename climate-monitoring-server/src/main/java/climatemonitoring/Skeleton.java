@@ -80,7 +80,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -100,7 +100,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -121,7 +121,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -142,7 +142,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -160,7 +160,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -179,7 +179,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -198,7 +198,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -217,7 +217,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -236,7 +236,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -256,7 +256,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
@@ -277,7 +277,7 @@ class Skeleton extends Thread {
 						catch (DatabaseRequestException e) {
 
 							m_out.writeObject(false);
-							m_out.writeObject(e.getMessage());
+							m_out.writeObject(e);
 						}
 
 						break;
