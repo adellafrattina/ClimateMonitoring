@@ -1,6 +1,7 @@
 package climatemonitoring;
 
 import climatemonitoring.core.Application;
+import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.Layer;
 import climatemonitoring.core.headless.Console;
 
@@ -77,7 +78,12 @@ class ClientLayer extends Layer {
 				Handler.setViewState(ViewType.SETTINGS);
 				break;
 			case Command.PING:
-				//TODO: proxy.requestping()
+				try {
+					long ping = Handler.getProxyServer().ping();
+					Console.write(ping + "ms");
+				} catch (ConnectionLostException e) {
+					e.printStackTrace();
+				}
 				break;
 			case Command.HELP:
 				//TODO: list of commands
@@ -102,6 +108,10 @@ class ClientLayer extends Layer {
 
 	public void onDetach() {
 
-		Handler.getProxyServer().close();
+		try {
+			Handler.getProxyServer().close();
+		} catch (ConnectionLostException e) {
+			e.printStackTrace();
+		}
 	}
 }
