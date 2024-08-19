@@ -12,14 +12,14 @@ try
 		receive: requested data
 		return: requested data
 	else
-		receive: error_msg
-		throw new DatabaseRequestException(error_msg)
+		receive: e // DatabaseRequestException
+		throw e
 
 catch (IOException e)
 
 	throw new ConnectionLostException();
 
-Request from server side: (DatabaseRequestException can be thrown by "database.executeProperMethod()")
+Request from server side: (ConnectionLostException and DatabaseRequestException can be thrown by "database.executeProperMethod()")
 
 try
 
@@ -34,7 +34,7 @@ try
 				send: return_data
 			catch (DatabaseRequestException e)
 				send: false
-				send: e.getMessage()
+				send: e
 
 		case (2) :
 			try
@@ -43,9 +43,14 @@ try
 				send: return_data
 			catch (DatabaseRequestException e)
 				send: false
-				send: e.getMessage()
+				send: e
 		...
 
 catch (IOException e)
+	killSkeleton();
 
-	throw new ConnectionLostException();
+catch (ClassNotFoundException e)
+	killSkeleton();
+
+catch (ConnectionLostException e)
+	killSkeleton();
