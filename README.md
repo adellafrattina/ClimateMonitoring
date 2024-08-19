@@ -4,16 +4,39 @@ A climate parameter monitoring system provided by monitoring centers that can ma
 ## Download instructions
 - To clone the repository use the following git command: `git clone https://github.com/adellafrattina/ClimateMonitoring.git`
 
+## Build instructions
 ### Windows
-- Make sure you have installed and  **available in PATH**:
-  * [JDK 11](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html) or higher
-  * [Apache Maven 3.9.8](https://maven.apache.org/download.cgi?.)	
+- Make sure you have installed and  **available in PATH** [JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or higher
+- **Build client**:
+	* execute `scripts\maven\mvnw.cmd -am --projects climate-monitoring-client clean install`
+	_or_
+	* run `scripts\build\windows\build-client.bat`
+- **Build server**:
+	* execute `scripts\maven\mvnw.cmd -am --projects climate-monitoring-server clean install`
+	_or_
+	* run `scripts\build\windows\build-server.bat`
+### Linux
+- Install dependencies: [openjdk17](https://openjdk.org/install/) or higher (package name could vary from system to system)
+- **Build client**:
+	* execute `scripts\maven\mvnw -am --projects climate-monitoring-client clean install`
+	_or_
+	* run `scripts\build\linux\build-client.bat`
+- **Build server**:
+	* execute `scripts\maven\mvnw -am --projects climate-monitoring-server clean install`
+	_or_
+	* run `scripts\build\linux\build-server.bat`
+### macOS
+- Check dependencies from **Linux** section above and make sure you have them installed
+- **Build client**:
+	* execute `scripts\maven\mvnw -am --projects climate-monitoring-client clean install`
+	_or_
+	* run `scripts\build\macos\build-client.bat`
+- **Build server**:
+	* execute `scripts\maven\mvnw -am --projects climate-monitoring-server clean install`
+	_or_
+	* run `scripts\build\macos\build-server.bat`
 
-- **Windows 10** or higher (hasn't been tested on previous versions of Windows)
-- OpenGL 3.0 compatible GPU
-- At least 800 x 600 screen resolution size
-
-## How to Use
+## Functionalities
 This application allows registered users (**operators**), to record and add climatic parameters to the monitoring center they are employed in.
 Common users can search for a specific area and see the climatic detections submitted by operators.
 
@@ -31,6 +54,22 @@ Common users can search for a specific area and see the climatic detections subm
 |Edit personal information          |❌|✅
 |Create a monitoring center          |❌|✅
 |Add new geographic areas          |❌|✅
+
+## System requirements
+|                |Minimum                          |Recommended              |
+|----------------|-------------------------------|-----------------------------|
+|OS (Windows)|32-bit Windows 10            | 64-bit Windows 10 or higher       |
+|OS (Linux)          |64-bit Linux distribution            |64-bit Ubuntu 23.04 or higher, Arch Linux 2024.08.01 (X11)            |
+|OS (macOS)          |64-bit macOS Monterey 12.01|64-bit macOS Monterey 12.01 or higher
+|OS (macOS arm64)          |64-bit macOS Sonoma 14.6 (M1 CPU)|64-bit macOS Sonoma 14.6 (M1 CPU) or higher
+|Processor          |Intel i5-7200U, AMD A8-6500|Intel i7-8750H, AMD Ryzen 5 3600
+|Memory          |500 MB RAM|1.5 GB RAM
+|Graphics          |Any integrated GPU that supports OpenGL|Discrete GPU that supports OpenGL
+|OpenGL          |Version 3.0|Version 3.0 or higher
+|Storage          |15 MB available space|30 MB available space or higher
+|Screen resolution          |800 x 600|1920 x 1080 or higher
+
+**Note:** _the specs listed above come from systems that have been used to run the application, if you don't see your system in the specs it means that it may or may not work_
 
 ## Contribute to the development
 
