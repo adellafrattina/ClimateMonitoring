@@ -44,7 +44,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	/**
 	 * Closes the connection between the application and the database
 	 */
-	public void shutdown() {
+	public synchronized void shutdown() {
 
 
 	}
@@ -53,7 +53,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * Executes an SQL statement and
 	 * @return
 	 */
-	public ResultSet execute(String statement) {
+	public synchronized ResultSet execute(String statement) {
 
 		throw new UnsupportedOperationException("Unimplemented method 'execute'");
 	}
@@ -78,7 +78,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'searchAreasByName'");
 	}
@@ -93,7 +93,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'searchAreasByCountry'");
 	}
@@ -110,7 +110,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Area[] searchAreasByCoords(double latitude, double longitude)
+	public synchronized Area[] searchAreasByCoords(double latitude, double longitude)
 			throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'searchAreasByCoords'");
@@ -127,7 +127,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Parameter[] getParameters(int geoname_id, String center_id)
+	public synchronized Parameter[] getParameters(int geoname_id, String center_id)
 			throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'getParameters'");
@@ -141,7 +141,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'getCategories'");
 	}
@@ -155,7 +155,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'addArea'");
 	}
@@ -169,7 +169,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'addCenter'");
 	}
@@ -183,7 +183,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'addOperator'");
 	}
@@ -197,7 +197,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'addParameter'");
 	}
@@ -212,7 +212,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean editOperator(String user_id, Operator operator)
+	public synchronized boolean editOperator(String user_id, Operator operator)
 			throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'editOperator'");
@@ -229,7 +229,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Operator validateCredentials(String user_id, String password)
+	public synchronized Operator validateCredentials(String user_id, String password)
 			throws ConnectionLostException, DatabaseRequestException {
 
 		throw new UnsupportedOperationException("Unimplemented method 'validateCredentials'");
