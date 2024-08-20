@@ -11,6 +11,7 @@ package climatemonitoring;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -77,7 +78,21 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 */
 	public synchronized ResultSet execute(String statement) {
 
-		throw new UnsupportedOperationException("Unimplemented method 'execute'");
+		ResultSet result = null;
+
+		try {
+
+			PreparedStatement pst = m_connection.prepareStatement(statement);
+			result = pst.executeQuery();
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
