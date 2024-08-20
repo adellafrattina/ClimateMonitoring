@@ -280,7 +280,30 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'getCategories'");
+		ResultSet query = execute("SELECT * FROM categories");
+		Category[] result = null;
+
+		try {
+
+			result = new Category[query.getFetchSize()];
+		
+			int i = 0;
+			while (query.next()) {
+
+				String categoryID = query.getString("category_id");
+				String explanation = query.getString("explanation");
+
+				result[i++] = new Category(categoryID, explanation);
+			}
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
