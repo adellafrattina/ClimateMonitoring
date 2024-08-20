@@ -48,10 +48,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			if (m_connection != null) Console.write("Connected");
 		}
 
-		catch (SQLException ex) {
+		catch (SQLException e) {
 
-			Console.write("Invalid credentials");
-			ex.printStackTrace();
+			Console.write("Invalid credentials: " + e.getMessage());
 		}
 	}
 
@@ -68,7 +67,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			catch (SQLException e) {
 
-				e.printStackTrace();
+				Console.write("Failed to close connection: " + e.getMessage());
 			}
 	}
 
@@ -129,9 +128,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -172,9 +169,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -217,8 +212,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -264,8 +258,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -298,8 +291,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -330,8 +322,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -361,8 +352,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -393,8 +383,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -427,8 +416,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -460,8 +448,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
@@ -502,8 +489,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query: " + e.getMessage());
-			throw new DatabaseRequestException(null);
+			throw new DatabaseRequestException(e.getMessage());
 		}
 	}
 
