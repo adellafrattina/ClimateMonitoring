@@ -249,16 +249,18 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				int geonameID = query.getInt("geoname_id");
 				String centerID = query.getString("center_id");
-				// Don't know how to parse timestamp (????????????)
-				// This is broken don't even attempt to run
-
+				String timestamp = query.getString("rec_timestamp");
 				String categoryID = query.getString("category_id");
 				String userID = query.getString("user_id");
 				int score = query.getInt("score");
 				String notes = query.getString("notes");
 
+				String[] parts = timestamp.split(" ");
+				String date = parts[0];
+				String time = parts[1];
+
 				// Broken constructor, setting null for unknown parameters :/
-				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, null /* (date) */, null /* (time) */, score, notes);
+				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
 			}
 		}
 
