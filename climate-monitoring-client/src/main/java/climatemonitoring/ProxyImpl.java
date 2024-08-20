@@ -14,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.xml.crypto.Data;
 
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
