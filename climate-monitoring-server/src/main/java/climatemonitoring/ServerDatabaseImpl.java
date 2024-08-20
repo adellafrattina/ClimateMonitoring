@@ -79,7 +79,13 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized ResultSet execute(String statement) throws SQLException {
 
 		PreparedStatement pst = m_connection.prepareStatement(statement);
-		return pst.executeQuery();
+		boolean isQuery = pst.execute();
+
+		if (isQuery)
+			return pst.getResultSet();
+
+		else
+			return null;
 	}
 
 	/**
