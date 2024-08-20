@@ -117,10 +117,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String areaAsciiName = query.getString("area_ascii_name");
 				String countryCode = query.getString("country_code");
 				String countryName = query.getString("country_name");
-				double latitude = query.getDouble("latitude");
-				double longitude = query.getDouble("longitude");
+				double coordsLatitude = query.getDouble("latitude");
+				double coordsLongitude = query.getDouble("longitude");
 
-				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, latitude, longitude);
+				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
 		}
 
@@ -145,7 +145,35 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'searchAreasByCountry'");
+		ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name");
+		Area[] result = null;
+
+		try {
+
+			result = new Area[query.getFetchSize()];
+
+			int i = 0;
+			while (query.next()) {
+
+				int geonameID = query.getInt("geoname_id");
+				String areaName = query.getString("area_name");
+				String areaAsciiName = query.getString("area_ascii_name");
+				String countryCode = query.getString("country_code");
+				String countryName = query.getString("country_name");
+				double coordsLatitude = query.getDouble("latitude");
+				double coordsLongitude = query.getDouble("longitude");
+
+				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+			}
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
@@ -163,7 +191,35 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Area[] searchAreasByCoords(double latitude, double longitude)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'searchAreasByCoords'");
+				ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name");
+				Area[] result = null;
+		
+				try {
+		
+					result = new Area[query.getFetchSize()];
+		
+					int i = 0;
+					while (query.next()) {
+		
+						int geonameID = query.getInt("geoname_id");
+						String areaName = query.getString("area_name");
+						String areaAsciiName = query.getString("area_ascii_name");
+						String countryCode = query.getString("country_code");
+						String countryName = query.getString("country_name");
+						double coordsLatitude = query.getDouble("latitude");
+						double coordsLongitude = query.getDouble("longitude");
+		
+						result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+					}
+				}
+		
+				catch (SQLException e) {
+		
+					Console.write("Failed while executing query");
+					e.printStackTrace();
+				}
+		
+				return result;
 	}
 
 	/**
