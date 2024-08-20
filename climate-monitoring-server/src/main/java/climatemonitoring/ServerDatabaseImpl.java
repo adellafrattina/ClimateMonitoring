@@ -76,23 +76,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * Executes an SQL statement and
 	 * @return
 	 */
-	public synchronized ResultSet execute(String statement) {
+	public synchronized ResultSet execute(String statement) throws SQLException {
 
-		ResultSet result = null;
-
-		try {
-
-			PreparedStatement pst = m_connection.prepareStatement(statement);
-			result = pst.executeQuery();
-		}
-
-		catch (SQLException e) {
-
-			Console.write("Failed while executing query");
-			e.printStackTrace();
-		}
-
-		return result;
+		PreparedStatement pst = m_connection.prepareStatement(statement);
+		return pst.executeQuery();
 	}
 
 	/**
@@ -117,12 +104,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
-		Area[] result = null;
-
 		try {
-
-			result = new Area[query.getFetchSize()];
+			
+			ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
+			Area[] result = new Area[query.getFetchSize()]; 
 
 			int i = 0;
 			while (query.next()) {
@@ -137,6 +122,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -145,8 +132,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
@@ -161,12 +146,11 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
-		Area[] result = null;
-
+		
 		try {
-
-			result = new Area[query.getFetchSize()];
+			
+			ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
+			Area[] result = new Area[query.getFetchSize()];
 
 			int i = 0;
 			while (query.next()) {
@@ -181,6 +165,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -189,8 +175,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
@@ -208,13 +192,11 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Area[] searchAreasByCoords(double latitude, double longitude)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
-		Area[] result = null;
-
 		try {
 
-			result = new Area[query.getFetchSize()];
-		
+			ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
+			Area[] result = new Area[query.getFetchSize()];
+
 			int i = 0;
 			while (query.next()) {
 		
@@ -228,6 +210,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -236,8 +220,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
@@ -254,13 +236,11 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Parameter[] getParameters(int geoname_id, String center_id)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
-		Parameter[] result = null;
-
 		try {
 
-			result = new Parameter[query.getFetchSize()];
-		
+			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
+			Parameter[] result = new Parameter[query.getFetchSize()];
+
 			int i = 0;
 			while (query.next()) {
 
@@ -278,6 +258,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -286,8 +268,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
@@ -300,12 +280,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM categories;");
-		Category[] result = null;
-
 		try {
 
-			result = new Category[query.getFetchSize()];
+			ResultSet query = execute("SELECT * FROM categories;");
+			Category[] result = new Category[query.getFetchSize()];
 		
 			int i = 0;
 			while (query.next()) {
@@ -315,6 +293,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result[i++] = new Category(categoryID, explanation);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -323,8 +303,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
@@ -508,10 +486,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Operator validateCredentials(String user_id, String password)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "'");
-		Operator result = null;
-
 		try {
+
+			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "'");
+			Operator result = null;
 
 			if (query.next()) {
 
@@ -525,6 +503,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				result = new Operator(userID, SSID, operatorSurname, operatorName, email, pwd, centerID);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -533,8 +513,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			e.printStackTrace();
 			throw new DatabaseRequestException(null);
 		}
-
-		return result;
 	}
 
 	/**
