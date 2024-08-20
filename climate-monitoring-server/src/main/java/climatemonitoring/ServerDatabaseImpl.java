@@ -103,7 +103,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name");
+		ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
 		Area[] result = null;
 
 		try {
@@ -146,7 +146,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name");
+		ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
 		Area[] result = null;
 
 		try {
@@ -192,7 +192,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Area[] searchAreasByCoords(double latitude, double longitude)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name");
+		ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
 		Area[] result = null;
 
 		try {
@@ -237,7 +237,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Parameter[] getParameters(int geoname_id, String center_id)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "'");
+		ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
 		Parameter[] result = null;
 
 		try {
@@ -282,7 +282,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
 
-		ResultSet query = execute("SELECT * FROM categories");
+		ResultSet query = execute("SELECT * FROM categories;");
 		Category[] result = null;
 
 		try {
@@ -329,7 +329,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			double latitude = area.getLatitude();
 			double longitude = area.getLongitude();
 
-			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", " + areaName + ", " + areaAsciiName + ", " + countryCode + ", " + countryName + ", " + latitude + ", " + longitude + ")");
+			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", " + areaName + ", " + areaAsciiName + ", " + countryCode + ", " + countryName + ", " + latitude + ", " + longitude + ");");
 			return true;
 		}
 
@@ -362,7 +362,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int postalCode = center.getPostalCode();
 			String district = center.getDistrict();
 
-			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (" + centerID + ", " + city + ", " + street + ", " + houseNumber + ", " + postalCode + ", " + district + ")");
+			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (" + centerID + ", " + city + ", " + street + ", " + houseNumber + ", " + postalCode + ", " + district + ");");
 			return true;
 		}
 
@@ -396,7 +396,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES (" + userID + ", " + SSID + ", " + operatorSurname + ", " + operatorName + ", " + email + ", " + password + ", " + centerID + ")");
+			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES (" + userID + ", " + SSID + ", " + operatorSurname + ", " + operatorName + ", " + email + ", " + password + ", " + centerID + ");");
 			return true;
 		}
 
@@ -432,7 +432,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int score = parameter.getScore();
 			String notes = parameter.getNotes();
 
-			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", " + centerID + ", " + timestamp + ", " + categoryID + ", " + userID + ", " + score + ", " + notes + ")");
+			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", " + centerID + ", " + timestamp + ", " + categoryID + ", " + userID + ", " + score + ", " + notes + ");");
 			return true;
 		}
 
