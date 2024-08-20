@@ -143,6 +143,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
@@ -186,6 +187,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
@@ -232,6 +234,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
@@ -281,6 +284,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
@@ -317,6 +321,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
@@ -351,8 +356,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
-
-			return false;
+			throw new DatabaseRequestException(null);
 		}
 	}
 
@@ -384,8 +388,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
-
-			return false;
+			throw new DatabaseRequestException(null);
 		}
 	}
 
@@ -418,8 +421,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
-
-			return false;
+			throw new DatabaseRequestException(null);
 		}
 	}
 
@@ -454,8 +456,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
-
-			return false;
+			throw new DatabaseRequestException(null);
 		}
 	}
 
@@ -489,8 +490,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
-
-			return false;
+			throw new DatabaseRequestException(null);
 		}
 	}
 
@@ -531,6 +531,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			Console.write("Failed while executing query");
 			e.printStackTrace();
+			throw new DatabaseRequestException(null);
 		}
 
 		return result;
