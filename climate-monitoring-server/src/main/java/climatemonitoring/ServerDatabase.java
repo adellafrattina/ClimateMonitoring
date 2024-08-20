@@ -10,6 +10,7 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import climatemonitoring.core.Database;
 
@@ -33,5 +34,5 @@ interface ServerDatabase extends Database {
 	 * @param statement The statement that will get executed
 	 * @return The ResultSet given after the execution of the statement
 	 */
-	public ResultSet execute(String statement);
+	public ResultSet execute(String statement) throws SQLException;
 }
