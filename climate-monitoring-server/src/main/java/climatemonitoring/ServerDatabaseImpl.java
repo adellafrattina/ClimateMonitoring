@@ -10,7 +10,9 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
@@ -19,6 +21,7 @@ import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Operator;
 import climatemonitoring.core.Parameter;
+import climatemonitoring.core.headless.Console;
 
 /**
  * The actual ServerDatabase implementation
@@ -38,7 +41,17 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 */
 	public ServerDatabaseImpl(String url, String username, String password) {
 
+		try {
 
+			m_connection = DriverManager.getConnection(url, username, password);
+			if (m_connection != null) Console.write("Connected");
+		}
+
+		catch (SQLException ex) {
+
+			Console.write("Invalid credentials");
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -46,7 +59,16 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 */
 	public synchronized void shutdown() {
 
+		if (m_connection != null)
+			try {
 
+				m_connection.close();
+			}
+
+			catch (SQLException e) {
+
+				e.printStackTrace();
+			}
 	}
 
 	/**
