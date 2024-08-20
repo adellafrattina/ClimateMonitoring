@@ -475,7 +475,32 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Operator validateCredentials(String user_id, String password)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'validateCredentials'");
+		ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "'");
+		Operator result = null;
+
+		try {
+
+			if (query.next()) {
+
+				String userID = query.getString("user_id");
+				char[] SSID = query.getString("ssid").toCharArray();
+				String operatorSurname = query.getString("operator_surname");
+				String operatorName = query.getString("operator_name");
+				String email = query.getString("email");
+				String pwd = query.getString("password");
+				String centerID = query.getString("center_id");
+
+				result = new Operator(userID, SSID, operatorSurname, operatorName, email, pwd, centerID);
+			}
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
