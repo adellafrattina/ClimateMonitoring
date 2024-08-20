@@ -14,6 +14,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.xml.crypto.Data;
+
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
 import climatemonitoring.core.Center;
@@ -106,8 +108,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				areafoundbyname = (Area[]) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -142,8 +144,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				areafoundbycountry = (Area[]) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 		
 		} catch (IOException e) {
@@ -181,8 +183,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				areafoundbycoords = (Area[]) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -219,8 +221,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				getparameters = (Parameter[]) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 			
 		} catch (IOException e) {
@@ -251,8 +253,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				getcategories = (Category[]) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 			
 		} catch (IOException e) {
@@ -285,8 +287,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				addedArea = (Boolean) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -319,8 +321,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				addedCenter = (Boolean) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -353,8 +355,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				addedOperator = (Boolean) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -387,8 +389,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				addedParameter = (Boolean) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 			
 		} catch (IOException e) {
@@ -422,8 +424,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				editedOperator = (Boolean) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 
 		} catch (IOException e) {
@@ -459,8 +461,8 @@ class ProxyImpl implements Proxy{
 			if(success == true){
 				op = (Operator) in.readObject();
 			}else{
-				String msg = (String) in.readObject();
-				throw new DatabaseRequestException(msg);
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
 			}
 			
 		} catch (IOException e) {
