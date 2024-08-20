@@ -191,35 +191,35 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Area[] searchAreasByCoords(double latitude, double longitude)
 			throws ConnectionLostException, DatabaseRequestException {
 
-				ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name");
-				Area[] result = null;
+		ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name");
+		Area[] result = null;
+
+		try {
+
+			result = new Area[query.getFetchSize()];
 		
-				try {
+			int i = 0;
+			while (query.next()) {
 		
-					result = new Area[query.getFetchSize()];
-		
-					int i = 0;
-					while (query.next()) {
-		
-						int geonameID = query.getInt("geoname_id");
-						String areaName = query.getString("area_name");
-						String areaAsciiName = query.getString("area_ascii_name");
-						String countryCode = query.getString("country_code");
-						String countryName = query.getString("country_name");
-						double coordsLatitude = query.getDouble("latitude");
-						double coordsLongitude = query.getDouble("longitude");
-		
-						result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
-					}
-				}
-		
-				catch (SQLException e) {
-		
-					Console.write("Failed while executing query");
-					e.printStackTrace();
-				}
-		
-				return result;
+				int geonameID = query.getInt("geoname_id");
+				String areaName = query.getString("area_name");
+				String areaAsciiName = query.getString("area_ascii_name");
+				String countryCode = query.getString("country_code");
+				String countryName = query.getString("country_name");
+				double coordsLatitude = query.getDouble("latitude");
+				double coordsLongitude = query.getDouble("longitude");
+
+				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+			}
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
@@ -236,7 +236,38 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Parameter[] getParameters(int geoname_id, String center_id)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'getParameters'");
+		ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "'");
+		Parameter[] result = null;
+
+		try {
+
+			result = new Parameter[query.getFetchSize()];
+		
+			int i = 0;
+			while (query.next()) {
+
+				int geonameID = query.getInt("geoname_id");
+				String centerID = query.getString("center_id");
+				// Don't know how to parse timestamp (????????????)
+				// This is broken don't even attempt to run
+
+				String categoryID = query.getString("category_id");
+				String userID = query.getString("user_id");
+				int score = query.getInt("score");
+				String notes = query.getString("notes");
+
+				// Broken constructor, setting null for unknown parameters :/
+				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, null /* (date) */, null /* (time) */, score, notes);
+			}
+		}
+
+		catch (SQLException e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/**
