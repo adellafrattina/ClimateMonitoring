@@ -74,6 +74,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 	/**
 	 * Executes an SQL statement and
+	 * @throws SQLException If the query fails to execute
 	 * @return
 	 */
 	public synchronized ResultSet execute(String statement) throws SQLException {
@@ -98,7 +99,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -140,7 +141,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -185,7 +186,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @param latitude Value between -90 and 90
 	 * @param longitude Value between -180 and 180
 	 * @return The result of the search as an array of areas
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -216,8 +217,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -229,7 +229,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
 	 * @return The result of the search as an array of parameters
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -264,8 +264,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -274,7 +273,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -299,8 +298,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -310,7 +308,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param area The area that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -330,10 +328,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			return true;
 		}
 
-		catch (Exception e) {
+		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -343,7 +340,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param center The center that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -362,10 +359,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			return true;
 		}
 
-		catch (Exception e) {
+		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -375,7 +371,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param operator The operator that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -395,10 +391,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			return true;
 		}
 
-		catch (Exception e) {
+		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -408,7 +403,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * 
 	 * @param parameter The parameter that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -430,10 +425,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			return true;
 		}
 
-		catch (Exception e) {
+		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -444,7 +438,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @param user_id The ID of the operator that will get edited
 	 * @param operator The new operator that will overwrite the previous one
 	 * @return Success or failure of the operation
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -464,10 +458,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 			return true;
 		}
 
-		catch (Exception e) {
+		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
@@ -479,7 +472,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 * @param user_id Operator's user id
 	 * @param password Operator's password
 	 * @return The operator whose credentials correspond to the ones in input
-	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
@@ -509,8 +502,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		catch (SQLException e) {
 
-			Console.write("Failed while executing query");
-			e.printStackTrace();
+			Console.write("Failed while executing query: " + e.getMessage());
 			throw new DatabaseRequestException(null);
 		}
 	}
