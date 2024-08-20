@@ -259,7 +259,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String date = parts[0];
 				String time = parts[1];
 
-				// Broken constructor, setting null for unknown parameters :/
 				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
 			}
 		}
