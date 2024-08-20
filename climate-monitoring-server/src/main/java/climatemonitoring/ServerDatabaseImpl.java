@@ -458,7 +458,26 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized boolean editOperator(String user_id, Operator operator)
 			throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'editOperator'");
+		try {
+
+			String SSID = operator.getSSID().toString();
+			String operatorSurname = operator.getSurname();
+			String operatorName = operator.getName();
+			String email = operator.getEmail();
+			String password = operator.getPassword();
+			String centerID = operator.getCenterID();
+
+			execute("IF EXISTS (SELECT user_id FROM operator WHERE user_id = " + user_id + ") THEN UPDATE OPERATOR SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = '" + centerID + "' END IF;");
+			return true;
+		}
+
+		catch (Exception e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+
+			return false;
+		}
 	}
 
 	/**
