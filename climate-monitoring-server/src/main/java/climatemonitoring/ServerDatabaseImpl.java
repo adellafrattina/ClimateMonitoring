@@ -11,6 +11,7 @@ package climatemonitoring;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -317,7 +318,27 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'addArea'");
+		try {
+
+			int geonameID = area.getGeonameID();
+			String areaName = area.getName();
+			String areaAsciiName = area.getAsciiName();
+			String countryCode = area.getCountryCode();
+			String countryName = area.getCountryName();
+			double latitude = area.getLatitude();
+			double longitude = area.getLongitude();
+
+			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", " + areaName + ", " + areaAsciiName + ", " + countryCode + ", " + countryName + ", " + latitude + ", " + longitude + ")");
+			return true;
+		}
+
+		catch (Exception e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+
+			return false;
+		}
 	}
 
 	/**
@@ -331,7 +352,26 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'addCenter'");
+		try {
+
+			String centerID = center.getCenterID();
+			String city = center.getCity();
+			String street = center.getStreet();
+			int houseNumber = center.getHouseNumber();
+			int postalCode = center.getPostalCode();
+			String district = center.getDistrict();
+
+			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (" + centerID + ", " + city + ", " + street + ", " + houseNumber + ", " + postalCode + ", " + district + ")");
+			return true;
+		}
+
+		catch (Exception e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+
+			return false;
+		}
 	}
 
 	/**
@@ -345,7 +385,27 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'addOperator'");
+		try {
+
+			String userID = operator.getUserID();
+			String SSID = operator.getSSID().toString();
+			String operatorSurname = operator.getSurname();
+			String operatorName = operator.getName();
+			String email = operator.getEmail();
+			String password = operator.getPassword();
+			String centerID = operator.getCenterID();
+
+			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES (" + userID + ", " + SSID + ", " + operatorSurname + ", " + operatorName + ", " + email + ", " + password + ", " + centerID + ")");
+			return true;
+		}
+
+		catch (Exception e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+
+			return false;
+		}
 	}
 
 	/**
@@ -359,7 +419,29 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'addParameter'");
+		try {
+
+			int geonameID = parameter.getGeonameID();
+			String centerID = parameter.getCenterID();
+			String time = parameter.getTime();
+			String date = parameter.getDate();
+			String timestamp = time + " " + date;
+			String categoryID = parameter.getCategory();
+			String userID = parameter.getUserID();
+			int score = parameter.getScore();
+			String notes = parameter.getNotes();
+
+			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", " + centerID + ", " + timestamp + ", " + categoryID + ", " + userID + ", " + score + ", " + notes + ")");
+			return true;
+		}
+
+		catch (Exception e) {
+
+			Console.write("Failed while executing query");
+			e.printStackTrace();
+
+			return false;
+		}
 	}
 
 	/**
