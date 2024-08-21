@@ -15,6 +15,8 @@ import java.util.Stack;
 import climatemonitoring.core.Result;
 import climatemonitoring.core.View;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.Area;
+import climatemonitoring.core.Center;
 import climatemonitoring.core.Operator;
 
 /**
@@ -102,6 +104,42 @@ class Handler {
 	public synchronized static Operator getLoggedOperator() {
 
 		return get().m_loggedOperator;
+	}
+
+	/**
+	 * Keeps in memory the areas returned by the {@code Proxy.searchAreas...(String)}
+	 * @param areas The searched areas
+	 */
+	public synchronized static void setFoundAreas(Area[] areas) {
+
+		get().m_foundAreas = areas;
+	}
+
+	/**
+	 * 
+	 * @return The recently searched areas
+	 */
+	public synchronized static Area[] getFoundAreas() {
+
+		return get().m_foundAreas;
+	}
+
+	/**
+	 * Keeps in memory the areas returned by the {@code Proxy.searchCenters...(String)}
+	 * @param centers The searched centers
+	 */
+	public synchronized static void setFoundCenters(Center[] centers) {
+
+		get().m_foundCenters = centers;
+	}
+
+	/**
+	 * 
+	 * @return The recently searched centers
+	 */
+	public synchronized static Center[] getFoundCenters() {
+
+		return get().m_foundCenters;
 	}
 
 	/**
@@ -201,4 +239,6 @@ class Handler {
 	private HashMap<ViewType, ViewState> m_viewStates;
 	private Stack<ViewType> m_viewTypeHistory;
 	private Operator m_loggedOperator;
+	private Area[] m_foundAreas;
+	private Center[] m_foundCenters;
 }
