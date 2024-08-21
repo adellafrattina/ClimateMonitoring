@@ -1,9 +1,17 @@
+/*
+
+Alessandro della Frattina 753073 VA
+Cristian Capiferri 752918 VA
+Francesco Lops 753175 VA
+Dariia Sniezhko 753057 VA
+
+*/
+
 package climatemonitoring;
 
 import climatemonitoring.core.Area;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
-import climatemonitoring.core.ErrorType;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
@@ -27,17 +35,22 @@ class Master extends ViewState {
 					break;
 				case "coords":
 					String[] coords = c.getArgs().split(" ");
+					if (coords.length < 2)
+						throw new NumberFormatException();
 					double latitude = Double.parseDouble(coords[0]);
 					double longitude = Double.parseDouble(coords[1]);
 					foundAreas = Handler.getProxyServer().searchAreasByCoords(latitude, longitude);
 					break;
 				default:
-					Console.write("Incorrent command syntax -->'" + c.getCmd() + "', expected [name, country, coords]");
+					Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [name, country, coords]");
 					return;
 			}
 
-			for (Area area : foundAreas)
-				Console.write(area.getGeonameID() + " - " + area.getName() + "(" + area.getAsciiName() + "), " + area.getCountryCode());
+			if (foundAreas != null)
+				for (Area area : foundAreas)
+					Console.write(area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
+			else
+				Console.write("No matching areas");
 		}
 
 		catch (NumberFormatException e) {
@@ -47,12 +60,13 @@ class Master extends ViewState {
 
 		catch (DatabaseRequestException e) {
 
-			Console.write(e.getErrorMsg(ErrorType.GEONAME_ID));
+			Console.write("Error message from database: " + e.getMessage());
 		}
 
 		catch (ConnectionLostException e) {
 
-			e.printStackTrace();
+			Console.write("Connection lost");
+			Handler.setViewState(ViewType.CONNECTION);
 		}
 	}
 
