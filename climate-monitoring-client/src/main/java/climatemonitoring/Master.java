@@ -46,6 +46,8 @@ class Master extends ViewState {
 					return;
 			}
 
+			Handler.setFoundAreas(foundAreas);
+
 			if (foundAreas != null)
 				for (Area area : foundAreas)
 					Console.write(area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
