@@ -2,30 +2,41 @@
 Command syntax
 
 SEARCH:
-search [name, country, coords] <str, str, (latitude, longitude)>
+search <what> <by> <args>
+<what>: [area, center]
+<by>: <[name, country, coords], [name]>
+<args>: <str, str, (latitude, longitude)>
 
 VIEW
-view [area, center] <geoname_id, center_id>
+view <what> <by> <args>
+<what>: [area, center]
+<by>: [id, index]
+<args>: <geoname_id, center_id>
 
 LOGIN
-login user_id password
+login <user_id> <password>
 
 REGISTER
-register [, --create-new-center] user_id email password ssid name surname <center_id, 0>
+register <user_id> <email> <password> <ssid> <name> <surname> <'center_id'>
+(if 'center_id' is not specified, then after the registration it will be required to create a new center)
 {
 
-	if "--create-new-center" is set
+	if registration has no center id
 		executeCenterCreation()
 }
 
 ADD
-add [area, center, parameter] <(geoname_id, name, ascii_name, country_code, country_name, latitude, longitude), (center_id, street, house_number, postal_code, city, 'district'), (geoname_id, center_id, user_id, category, score, notes)>
+add <what> <args>
+<what>: [area, center, parameter]
+<args>: <(geoname_id, name, ascii_name, country_code, country_name, latitude, longitude), (center_id, street, house_number, postal_code, city, 'district'), (geoname_id, center_id, user_id, category, score, notes)>
 
 EDIT
-edit profile
+edit <profile>
 
 SETTINGS
-settings theme <classic, light, dark>
+settings <setting> <args>
+<setting>: [theme]
+<args>: <classic, light, dark>
 
 PING
 ping
