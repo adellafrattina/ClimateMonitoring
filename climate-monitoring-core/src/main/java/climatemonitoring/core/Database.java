@@ -22,6 +22,23 @@ package climatemonitoring.core;
 public interface Database {
 
 	/**
+	 * To start a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public void begin() throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To end a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public void end() throws ConnectionLostException, DatabaseRequestException;
+
+
+	/**
 	 * Returns in alphabetical order an array of areas which have a name that
 	 * contains the input string.
 	 * 
@@ -66,6 +83,47 @@ public interface Database {
 	 */
 	public Area[] searchAreasByCoords(double latitude, double longitude) throws ConnectionLostException, DatabaseRequestException;
 
+	/**
+	 * Returns in alphabetical order an array of centers which have
+	 * a name that contains the input string
+	 * 
+	 * For example, if the given string is "var" then the output
+	 * would be an array like this:
+	 * 
+	 * {
+	 * 	"Centro di Varese",
+	 * 	"Centro di Novarese",
+	 * 	"Centro di Isola Dovarese",
+	 * 	...
+	 * }
+	 * 
+	 * @param str The input string the search is based on
+	 * @return The result of the search as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center[] searchCentersByName(String str) throws ConnectionLostException, DatabaseRequestException;
+
+
+	/**
+	 * To get an area by its geoname id
+	 * 
+	 * @param geoname_id The geoname id of the area to be searched
+	 * @return The area that corresponds to the given geoname id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Area getArea(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get a center by its center id
+	 * 
+	 * @param center_id The center id of the center to be searched
+	 * @return The center that corresponds to the given center id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center getCenter(String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Returns an array containing parameters about a specified area that
