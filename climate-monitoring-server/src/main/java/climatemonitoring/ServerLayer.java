@@ -54,6 +54,7 @@ class ServerLayer extends Layer {
 		try {
 
 			Socket client = m_server.accept();
+			Console.write("New client connected: " + client.getInetAddress());
 			new Skeleton(client, m_serverDatabase);
 		}
 

@@ -78,7 +78,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	 */
 	public synchronized ResultSet execute(String statement) throws SQLException {
 
-		PreparedStatement pst = m_connection.prepareStatement(statement);
+		PreparedStatement pst = m_connection.prepareStatement(statement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		boolean isQuery = pst.execute();
 
 		if (isQuery)
@@ -113,7 +113,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 			
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
-			Area[] result = new Area[query.getFetchSize()]; 
+			Area[] result = new Area[getQueryRows(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -150,11 +150,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 	@Override
 	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
 
-		
 		try {
 			
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
-			Area[] result = new Area[query.getFetchSize()];
+			Area[] result = new Area[getQueryRows(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -197,7 +196,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
-			Area[] result = new Area[query.getFetchSize()];
+			Area[] result = new Area[getQueryRows(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -239,7 +238,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
-			Parameter[] result = new Parameter[query.getFetchSize()];
+			Parameter[] result = new Parameter[getQueryRows(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -281,7 +280,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM categories;");
-			Category[] result = new Category[query.getFetchSize()];
+			Category[] result = new Category[getQueryRows(query)];
 		
 			int i = 0;
 			while (query.next()) {
@@ -497,6 +496,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			throw new DatabaseRequestException(e.getMessage());
 		}
+	}
+
+	private int getQueryRows(ResultSet query) throws SQLException {
+
+		int rows = -1;
+
+		if (query.last()) {
+
+			rows = query.getRow();
+			query.beforeFirst();
+		}
+
+		return rows;
 	}
 
 	/**
