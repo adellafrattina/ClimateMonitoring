@@ -23,10 +23,10 @@ public class Center {
 	 * @param street The center street
 	 * @param house_number The center house number
 	 * @param postal_code The center postal code
-	 * @param city The center city
+	 * @param city The center city id
 	 * @param district The center district
 	 */
-	public Center(String center_id, String street, int house_number, int postal_code, String city, String district) {
+	public Center(String center_id, String street, int house_number, int postal_code, int city, String district) {
 
 		m_centerID = center_id;
 		m_street = street;
@@ -74,9 +74,9 @@ public class Center {
 
 	/**
 	 * 
-	 * @return The monitoring center's city
+	 * @return The monitoring center's city id
 	 */
-	public String getCity() {
+	public int getCity() {
 
 		return m_city;
 	}
@@ -94,6 +94,6 @@ public class Center {
 	private String m_street;
 	private int m_houseNumber;
 	private int m_postalCode;
-	private String m_city;
+	private int m_city;
 	private String m_district;
 }
