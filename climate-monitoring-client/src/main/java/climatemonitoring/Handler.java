@@ -9,12 +9,8 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
-import java.util.HashMap;
-import java.util.Stack;
-
 import climatemonitoring.core.Result;
 import climatemonitoring.core.View;
-import climatemonitoring.core.ViewState;
 import climatemonitoring.core.Operator;
 
 /**
@@ -43,6 +39,32 @@ class Handler {
 	}
 
 	/**
+	 * Starts connecting to a server. The operation result can be retrieved with the {@link #getConnectionResult()} method
+	 */
+	public synchronized static void connect() {
+
+		get().m_connectionResult = get().m_proxyMT.connect("localhost", (short)25565);
+	}
+
+	/**
+	 * 
+	 * @return The connection result
+	 */
+	public synchronized static Result<Boolean> getConnectionResult() {
+
+		return get().m_connectionResult;
+	}
+
+	/**
+	 * 
+	 * @return The view
+	 */
+	public synchronized static View getView() {
+
+		return get().m_view;
+	}
+
+	/**
 	 * 
 	 * @return The single-threaded proxy server
 	 */
@@ -58,23 +80,6 @@ class Handler {
 	public synchronized static ProxyMT getProxyServerMT() {
 
 		return get().m_proxyMT;
-	}
-
-	/**
-	 * Starts connecting to a server. The operation result can be retrieved with the {@link #getConnectionResult()} method
-	 */
-	public synchronized static void connect() {
-
-		get().m_connectionResult = get().m_proxyMT.connect("localhost", (short)25565);
-	}
-
-	/**
-	 * 
-	 * @return The connection result
-	 */
-	public synchronized static Result<Boolean> getConnectionResult() {
-
-		return get().m_connectionResult;
 	}
 
 	/**
@@ -105,34 +110,6 @@ class Handler {
 	}
 
 	/**
-	 * Sets the new view state to be rendered
-	 * @param state The new state
-	 */
-	public synchronized static void setViewState(ViewType type) {
-
-		get().m_view.setState(getViewState(type));
-		get().m_viewTypeHistory.add(type);
-	}
-
-	/**
-	 * Returns back to the previous view state
-	 */
-	public synchronized static void returnToPreviousViewState() {
-
-		get().m_viewTypeHistory.pop();
-		get().m_view.setState(getViewState(get().m_viewTypeHistory.peek()));
-	}
-
-	/**
-	 * Deletes all the data about the specified view state
-	 * @param type The desired view state'stype
-	 */
-	public synchronized static void resetViewStateData(ViewType type) {
-
-		get().m_viewStates.put(type, convertViewFromStateToType(type));
-	}
-
-	/**
 	 * Code that runs in Headless configuration only
 	 * @param args The command arguments
 	 */
@@ -157,40 +134,23 @@ class Handler {
 		m_proxy = new ProxyImpl();
 		m_proxyMT = new ProxyMTImpl(m_proxy);
 		m_view = new View();
-		m_viewStates = new HashMap<ViewType, ViewState>();
-		m_viewTypeHistory = new Stack<ViewType>();
 
-		for (ViewType type : ViewType.values())
-			m_viewStates.put(type, convertViewFromStateToType(type));
+		m_view.addState(new Master());
+		m_view.addState(new Settings());
+		m_view.addState(new Login());
+		m_view.addState(new Registration());
+		m_view.addState(new EditProfile());
+		m_view.addState(new CenterCreation());
+		m_view.addState(new AreaCreation());
+		m_view.addState(new ParameterCreation());
+		m_view.addState(new CenterInfo());
+		m_view.addState(new AreaInfo());
+		m_view.addState(new Connection());
 
-		m_view.setState(m_viewStates.get(ViewType.CONNECTION));
-		m_viewTypeHistory.push(ViewType.CONNECTION);
-	}
-
-	private static ViewState getViewState(ViewType type) {
-
-		return get().m_viewStates.get(type);
-	}
-
-	private static ViewState convertViewFromStateToType(ViewType type) {
-
-		switch (type) {
-
-			case MASTER: return new Master();
-			case SETTINGS: return new Settings();
-			case LOGIN: return new Login();
-			case REGISTRATION: return new Registration();
-			case EDIT_PROFILE: return new EditProfile();
-			case CENTER_CREATION: return new CenterCreation();
-			case AREA_CREATION: return new AreaCreation();
-			case PARAMETER_CREATION: return new ParameterCreation();
-			case CENTER_INFO: return new CenterInfo();
-			case AREA_INFO: return new AreaInfo();
-			case VERIFICATION: return new Verification();
-			case CONNECTION: return new Connection();
-			default:
-				throw new RuntimeException("'" + type.toString() + "'' is not handled");
-		}
+		// adellafrattina: MASTER gets set before CONNECTION, so when we call "returnToPreviousState" inside the Connection view state,
+		// it goes back to Master view state, instead of throwing NullPointerException
+		m_view.setCurrentState(ViewType.MASTER);
+		m_view.setCurrentState(ViewType.CONNECTION);
 	}
 
 	private static Handler s_instance;
@@ -198,7 +158,5 @@ class Handler {
 	private ProxyMT m_proxyMT;
 	private Result<Boolean> m_connectionResult;
 	private View m_view;
-	private HashMap<ViewType, ViewState> m_viewStates;
-	private Stack<ViewType> m_viewTypeHistory;
 	private Operator m_loggedOperator;
 }

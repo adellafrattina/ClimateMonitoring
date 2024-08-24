@@ -7,12 +7,14 @@ Dariia Sniezhko 753057 VA
 
 */
 
-package climatemonitoring.core;
+package climatemonitoring.core.utility;
 
 import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
+
+import climatemonitoring.core.Result;
 
 /**
  * The Email class creates and sends an email through the use of a SMTP server
@@ -68,7 +70,7 @@ public class Email {
 			}
 		};
 	}
-	
+
 	/**
 	 * To set the receiver's email
 	 * @param receiver_email The receiver's email
