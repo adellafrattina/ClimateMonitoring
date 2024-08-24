@@ -74,7 +74,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	/**
 	 * Executes an SQL statement and
 	 * @throws SQLException If the query fails to execute
-	 * @return
+	 * @return The query's rows as a ResultSet
 	 */
 	public synchronized ResultSet execute(String statement) throws SQLException {
 
@@ -86,6 +86,68 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		else
 			return null;
+	}
+
+	/**
+	 * To start a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized void begin() throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			m_connection.setAutoCommit(false);
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To end a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized void end() throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			m_connection.commit();
+			m_connection.setAutoCommit(true);
+		}
+
+		catch (SQLException e) {
+
+			try {
+
+				m_connection.rollback();
+				m_connection.setAutoCommit(true);
+			}
+
+			catch (SQLException ex) {
+
+				try {
+
+					m_connection.setAutoCommit(true);
+				}
+
+				catch (SQLException exc) {
+
+					throw new DatabaseRequestException(exc.getMessage());
+				}
+
+				throw new DatabaseRequestException(e.getMessage());
+			}
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
 	}
 
 	/**
@@ -222,6 +284,128 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * Returns in alphabetical order an array of centers which have
+	 * a name that contains the input string
+	 * 
+	 * For example, if the given string is "var" then the output
+	 * would be an array like this:
+	 * 
+	 * {
+	 * 	"Centro di Varese",
+	 * 	"Centro di Novarese",
+	 * 	"Centro di Isola Dovarese",
+	 * 	...
+	 * }
+	 * 
+	 * @param str The input string the search is based on
+	 * @return The result of the search as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Center[] searchCentersByName(String str) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_name)), center_name;");
+			Center[] result = new Center[getQueryRows(query)];
+
+			int i = 0;
+			while (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int city = query.getInt("city");
+				String street = query.getString("street");
+				String houseNumber = query.getString("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result[i++] = new Center(centerID, street, houseNumber, postalCode, city, district);
+			}
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get an area by its geoname id
+	 * 
+	 * @param geoname_id The geoname id of the area to be searched
+	 * @return The area that corresponds to the given geoname id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Area getArea(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM area WHERE geoname_id = " + geoname_id + ";");
+			Area result = null;
+
+			if (query.next()) {
+
+				int geonameID = query.getInt("geoname_id");
+				String areaName = query.getString("area_name");
+				String areaAsciiName = query.getString("area_ascii_name");
+				String countryCode = query.getString("country_code");
+				String countryName = query.getString("country_name");
+				double coordsLatitude = query.getDouble("latitude");
+				double coordsLongitude = query.getDouble("longitude");
+
+				result = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get a center by its center id
+	 * 
+	 * @param center_id The center id of the center to be searched
+	 * @return The center that corresponds to the given center id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Center getCenter(String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center WHERE center_id = " + center_id + ";");
+			Center result = null;
+
+			if (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int city = query.getInt("city");
+				String street = query.getString("street");
+				String houseNumber = query.getString("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result = new Center(centerID, street, houseNumber, postalCode, city, district);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
 	 * 
@@ -345,7 +529,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			String centerID = center.getCenterID();
-			String city = center.getCity();
+			int city = center.getCity();
 			String street = center.getStreet();
 			int houseNumber = center.getHouseNumber();
 			int postalCode = center.getPostalCode();
