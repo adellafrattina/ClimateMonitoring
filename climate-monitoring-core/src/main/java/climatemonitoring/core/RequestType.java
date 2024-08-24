@@ -20,6 +20,17 @@ package climatemonitoring.core;
 public enum RequestType {
 
 	/**
+	 * To begin a transaction
+	 */
+	BEGIN,
+
+	/**
+	 * To end a transaction
+	 */
+	END,
+
+
+	/**
 	 * To search areas by name
 	 */
 	SEARCH_AREAS_BY_NAME,
