@@ -12,7 +12,6 @@ package climatemonitoring;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import java.net.Socket;
 
 import climatemonitoring.core.Area;
@@ -45,8 +44,6 @@ class Skeleton extends Thread {
 
 			m_client = socket;
 			m_serverDatabase = database;
-
-			start();
 		}
 
 		catch (IOException e) {
@@ -110,8 +107,8 @@ class Skeleton extends Thread {
 
 					case SEARCH_AREAS_BY_COORDS:
 
-						double latitude = (Double) m_in.readObject();
-						double longitude = (Double) m_in.readObject();
+						double latitude = m_in.readDouble();
+						double longitude = m_in.readDouble();
 
 						try {
 
@@ -131,7 +128,7 @@ class Skeleton extends Thread {
 
 					case GET_PARAMETERS_AREA_CENTER:
 
-						int geonameID = (Integer) m_in.readObject();
+						int geonameID = m_in.readInt();
 						String centerID = (String) m_in.readObject();
 
 						try {
@@ -287,7 +284,10 @@ class Skeleton extends Thread {
 
 					case PING:
 
-						m_out.writeObject(request);
+						long userTime = m_in.readLong();
+
+						Long result = System.currentTimeMillis() - userTime;
+						m_out.writeObject(result);
 
 						break;
 
@@ -333,6 +333,7 @@ class Skeleton extends Thread {
 			m_out.close();
 			m_in.close();
 			m_client.close();
+			m_serverDatabase.shutdown();
 		}
 
 		catch (IOException e) {
