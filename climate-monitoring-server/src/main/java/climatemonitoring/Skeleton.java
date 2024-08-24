@@ -294,6 +294,7 @@ class Skeleton extends Thread {
 					case DISCONNECT:
 
 						m_running = false;
+						m_out.writeObject(request);
 
 						break;
 
@@ -307,7 +308,7 @@ class Skeleton extends Thread {
 
 			catch (IOException | ConnectionLostException e) {
 
-				Console.write("Client disconnected unexpectedly");
+				Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected unexpectedly");
 				m_running = false;
 			}
 
