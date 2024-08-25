@@ -316,12 +316,14 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String centerID = query.getString("center_id");
 				int city = query.getInt("city");
 				String street = query.getString("street");
-				String houseNumber = query.getString("house_number");
+				int houseNumber = query.getInt("house_number");
 				int postalCode = query.getInt("postal_code");
 				String district = query.getString("district");
 
 				result[i++] = new Center(centerID, street, houseNumber, postalCode, city, district);
 			}
+
+			return result;
 		}
 
 		catch (SQLException e) {
@@ -389,7 +391,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String centerID = query.getString("center_id");
 				int city = query.getInt("city");
 				String street = query.getString("street");
-				String houseNumber = query.getString("house_number");
+				int houseNumber = query.getInt("house_number");
 				int postalCode = query.getInt("postal_code");
 				String district = query.getString("district");
 
