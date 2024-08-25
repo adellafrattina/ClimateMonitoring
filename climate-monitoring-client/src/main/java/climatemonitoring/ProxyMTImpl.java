@@ -54,6 +54,34 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * To start a transaction
+	 */
+	@Override
+	public Result<Boolean> begin() {
+
+		return new Result<Boolean>() {
+			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
+				m_proxy.begin();
+				return null;
+			}
+		};
+	}
+
+	/**
+	 * To end a transaction
+	 */
+	@Override
+	public Result<Boolean> end() {
+
+		return new Result<Boolean>() {
+			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
+				m_proxy.end();
+				return null;
+			}
+		};
+	}
+
+	/**
 	 * Returns in alphabetical order an array of areas which have a name that
 	 * contains the input string.
 	 * 
@@ -117,6 +145,62 @@ class ProxyMTImpl implements ProxyMT {
 		return new Result<Area[]>() {
 			public Area[] exec() throws ConnectionLostException, DatabaseRequestException{
 				return m_proxy.searchAreasByCoords(latitude, longitude);
+			}
+		};
+	}
+
+	/**
+	 * Returns in alphabetical order an array of centers which have
+	 * a name that contains the input string
+	 * 
+	 * For example, if the given string is "var" then the output
+	 * would be an array like this:
+	 * 
+	 * {
+	 * 	"Centro di Varese",
+	 * 	"Centro di Novarese",
+	 * 	"Centro di Isola Dovarese",
+	 * 	...
+	 * }
+	 * 
+	 * @param str The input string the search is based on
+	 * @return The result of the search as an array of centers
+	 */
+	public Result<Center[]> searchCentersByName(String str) {
+
+		return new Result<Center[]>() {
+			public Center[] exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.searchCentersByName(str);
+			}
+		};
+	}
+
+	/**
+	 * To get an area by its geoname id
+	 * 
+	 * @param geoname_id The geoname id of the area to be searched
+	 * @return The area that corresponds to the given geoname id
+	 */
+	public Result<Area> getArea(int geoname_id) {
+
+		return new Result<Area>() {
+			public Area exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getArea(geoname_id);
+			}
+		};
+	}
+
+	/**
+	 * To get a center by its center id
+	 * 
+	 * @param center_id The center id of the center to be searched
+	 * @return The center that corresponds to the given center id
+	 */
+	public Result<Center> getCenter(String center_id) {
+
+		return new Result<Center>() {
+			public Center exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getCenter(center_id);
 			}
 		};
 	}
