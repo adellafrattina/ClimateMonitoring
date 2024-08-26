@@ -12,7 +12,7 @@ class EditProfile extends ViewState {
 	public void onHeadlessRender(String args) {
 
 		Console.write("User ID > " + m_userID);
-		Console.write("SSID " + m_ssid);
+		Console.write("SSID > " + m_ssid);
 		Console.write("Surname > " + m_surname);
 		Console.write("Name > " + m_name);
 		Console.write("Email > " + m_email);
@@ -24,7 +24,7 @@ class EditProfile extends ViewState {
 		do {
 
 			m_ssid = Console.read("New SSID > ");
-			errorMsg = Check.userID(m_ssid);
+			errorMsg = Check.ssid(m_ssid);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
