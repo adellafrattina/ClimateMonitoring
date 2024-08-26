@@ -23,13 +23,13 @@ class ClientLayer extends Layer {
 	public void onAttach() {
 
 		Handler.init();
-		Handler.connect();
-
-		if (Application.getConfiguration() == Application.HEADLESS)
-			Handler.getView().onHeadlessRender("");
 	}
 
 	public void onHeadlessRender() {
+
+		// If the view type is connection, execute the view without waiting for commands
+		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION)
+			Handler.getView().onHeadlessRender("");
 
 		String line = Console.read(">").toLowerCase();
 		Command c = new Command(line);
