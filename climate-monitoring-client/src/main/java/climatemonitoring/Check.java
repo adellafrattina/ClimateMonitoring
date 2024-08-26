@@ -372,7 +372,7 @@ class Check {
 	 * @param str The desired string
 	 * @return Null if the parameter is valid, a error message as a string if the parameter is null/empty/blank
 	 */
-	private static String isEmpty(String str) {
+	public static String isEmpty(String str) {
 
 		return str == null || str.isEmpty() || str.isBlank() ? "This box must not be left blank" : null;
 	}
@@ -382,7 +382,7 @@ class Check {
 	 * @param str The desired string
 	 * @return Null if the parameter is valid, a error message as a string if the parameter has "--"
 	 */
-	private static String noDashes(String str) {
+	public static String noDashes(String str) {
 
 		return str.contains("--") ? "Contiguous dashes are not allowed" : null;
 	}
