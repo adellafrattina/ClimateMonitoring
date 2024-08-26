@@ -126,6 +126,48 @@ public interface Database {
 	public Center getCenter(String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
+	 * To get a center based on its address
+	 * 
+	 * @param city The city the center is located in
+	 * @param street The street the center is located in
+	 * @param house_number The house number the center is located in
+	 * @return The center that corresponds to the given address
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get an operator based on their user id
+	 * 
+	 * @param user_id The operator's ID
+	 * @return The operator whose ID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperator(String user_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get an operator based on their SSID
+	 * 
+	 * @param ssid The operator's SSID
+	 * @return The operator whose SSID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperatorBySSID(String ssid) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get an operator based on their email address
+	 * 
+	 * @param email The operator's email address
+	 * @return The operator whose email address corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperatorByEmail(String email) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
 	 * 
@@ -198,6 +240,29 @@ public interface Database {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	public boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To check if a monitoring center is monitoring an area
+	 * 
+	 * @param center_id The ID of the center
+	 * @param geoname_id The ID of the area
+	 * @return True if the area is being monitored by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 * 
+	 * @param center_id The ID of the center
+	 * @param user_id The ID of the operator
+	 * @return True if an operator is being employed by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException;
+
 
 	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
