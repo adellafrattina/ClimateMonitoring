@@ -13,10 +13,11 @@ class Login extends ViewState {
 
 		String[] parts = args.split(" ");
 		
-		if(parts.length < 2)
-			Console.write("Enter username and password.");
-		else
+		if(parts.length < 2) {
+
+			Console.write("Enter username and password");
 			return;
+		}
 
 		String userid = parts[0];
 		String password = parts[1];
