@@ -29,14 +29,13 @@ class ServerLayer extends Layer {
 	 */
 	public void onAttach() {
 
-		String url = Console.read();
-		String username = Console.read();
-		String password = Console.read();
+		m_url = Console.read("Database URL > ");
+		m_username = Console.read("Username > ");
+		m_password = Console.read("Password > ");
 
 		try {
 
 			m_server = new ServerSocket(25565);
-			m_serverDatabase = new ServerDatabaseImpl(url, username, password);
 		}
 
 		catch (IOException e) {
@@ -54,7 +53,8 @@ class ServerLayer extends Layer {
 		try {
 
 			Socket client = m_server.accept();
-			new Skeleton(client, m_serverDatabase);
+			Console.write("New client connected: " + client.getInetAddress());
+			new Skeleton(client, new ServerDatabaseImpl(m_url, m_username, m_password));
 		}
 
 		catch (IOException ex) {
@@ -84,9 +84,12 @@ class ServerLayer extends Layer {
 	 */
 	public void onDetach() {
 
-		m_serverDatabase.shutdown();
+
 	}
 
 	private ServerSocket m_server;
-	private ServerDatabase m_serverDatabase;
+
+	private String m_url;
+	private String m_username;
+	private String m_password;
 }

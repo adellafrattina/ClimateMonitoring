@@ -73,6 +73,62 @@ class ProxyImpl implements Proxy{
 			}
 		}
 	}
+
+	/**
+	 * To start a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized void begin() throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+			
+			out.writeObject(RequestType.BEGIN);
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+
+				return;
+			}else{
+
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * To end a transaction
+	 * 
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized void end() throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+			
+			out.writeObject(RequestType.END);
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+
+				return;
+			}else{
+
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Returns in alphabetical order an array of areas which have a name that
@@ -90,7 +146,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
@@ -126,7 +183,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param str The input string the search is based on
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Area[] searchAreasByCountry(String str) throws ConnectionLostException, DatabaseRequestException {
@@ -164,7 +222,8 @@ class ProxyImpl implements Proxy{
 	 * @param latitude Value between -90 and 90
 	 * @param longitude Value between -180 and 180
 	 * @return The result of the search as an array of areas
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Area[] searchAreasByCoords(double latitude, double longitude) throws ConnectionLostException, DatabaseRequestException {
@@ -194,6 +253,122 @@ class ProxyImpl implements Proxy{
 
 		return areafoundbycoords;
 	}
+
+	/**
+	 * Returns in alphabetical order an array of centers which have
+	 * a name that contains the input string
+	 * 
+	 * For example, if the given string is "var" then the output
+	 * would be an array like this:
+	 * 
+	 * {
+	 * 	"Centro di Varese",
+	 * 	"Centro di Novarese",
+	 * 	"Centro di Isola Dovarese",
+	 * 	...
+	 * }
+	 * 
+	 * @param str The input string the search is based on
+	 * @return The result of the search as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Center[] searchCentersByName(String str) throws ConnectionLostException, DatabaseRequestException {
+
+		Center[] searchCentersByName = null;
+
+		try {
+
+			out.writeObject(RequestType.SEARCH_CENTERS_BY_NAME);
+			out.writeObject(str);
+
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				searchCentersByName = (Center[]) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return searchCentersByName;
+	}
+
+	/**
+	 * To get an area by its geoname id
+	 * 
+	 * @param geoname_id The geoname id of the area to be searched
+	 * @return The area that corresponds to the given geoname id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Area getArea (int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		Area getarea = null;
+
+		try {
+
+			out.writeObject(RequestType.GET_AREA);
+			out.writeObject(geoname_id);
+
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				getarea = (Area) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return getarea;
+	}
+
+	/**
+	 * To get a center by its center id
+	 * 
+	 * @param center_id The center id of the center to be searched
+	 * @return The center that corresponds to the given center id
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Center getCenter (String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		Center getcenter = null;
+
+		try {
+
+			out.writeObject(RequestType.GET_AREA);
+			out.writeObject(center_id);
+
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				getcenter = (Center) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return getcenter;
+	}
 	
 	/**
 	 * Returns an array containing parameters about a specified area that
@@ -202,7 +377,8 @@ class ProxyImpl implements Proxy{
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
 	 * @return The result of the search as an array of parameters
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
@@ -237,7 +413,8 @@ class ProxyImpl implements Proxy{
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Category[] getCategories() throws ConnectionLostException, DatabaseRequestException {
@@ -269,7 +446,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param area The area that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
@@ -304,7 +482,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param center The center that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
@@ -338,7 +517,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param operator The operator that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
@@ -372,7 +552,8 @@ class ProxyImpl implements Proxy{
 	 * 
 	 * @param parameter The parameter that needs to be added to the database
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
@@ -407,7 +588,8 @@ class ProxyImpl implements Proxy{
 	 * @param user_id The ID of the operator that will get edited
 	 * @param operator The new operator that will overwrite the previous one
 	 * @return Success or failure of the operation
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException {
@@ -443,7 +625,8 @@ class ProxyImpl implements Proxy{
 	 * @param user_id Operator's user id
 	 * @param password Operator's password
 	 * @return The operator whose credentials correspond to the ones in input
-	 * @throws Exception If anything went wrong while executing the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
 	public synchronized Operator validateCredentials(String user_id, String password) throws ConnectionLostException, DatabaseRequestException {
@@ -484,8 +667,13 @@ class ProxyImpl implements Proxy{
 		try {
 
 			out.writeObject(RequestType.PING);
-			out.writeObject(System.currentTimeMillis());
-			servertime = (long) in.readObject();
+			long start_time = System.nanoTime();
+			in.readObject();
+			long end_time = System.nanoTime();
+
+			long final_time = (end_time - start_time) * 1000000;
+
+			return final_time;
 			
 		} catch (IOException e) {
 			throw new ConnectionLostException();
@@ -499,4 +687,5 @@ class ProxyImpl implements Proxy{
 	private Socket s;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+
 }

@@ -85,6 +85,6 @@ switch (cmd)
 	case PING:
 		proxy.requestPing()
 	case HELP:
-		printCommandSyntax()
+		viewState => Help
 	case EXIT:
 		Application.close()

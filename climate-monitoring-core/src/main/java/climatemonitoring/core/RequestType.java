@@ -20,6 +20,17 @@ package climatemonitoring.core;
 public enum RequestType {
 
 	/**
+	 * To begin a transaction
+	 */
+	BEGIN,
+
+	/**
+	 * To end a transaction
+	 */
+	END,
+
+
+	/**
 	 * To search areas by name
 	 */
 	SEARCH_AREAS_BY_NAME,
@@ -34,6 +45,21 @@ public enum RequestType {
 	 */
 	SEARCH_AREAS_BY_COORDS,
 
+	/**
+	 * To search centers by name
+	 */
+	SEARCH_CENTERS_BY_NAME,
+
+
+	/**
+	 * To get an area based on its geoname id
+	 */
+	GET_AREA,
+
+	/**
+	 * To get a center based on its center id
+	 */
+	GET_CENTER,
 
 	/**
 	 * To get the parameters based on an area and a center
