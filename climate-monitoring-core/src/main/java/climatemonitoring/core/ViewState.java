@@ -54,6 +54,24 @@ public abstract class ViewState {
 
 	/**
 	 * 
+	 * @return The previous view state
+	 */
+	public synchronized ViewState getPreviousState() {
+
+		return m_view.getPreviousState();
+	}
+
+	/**
+	 * 
+	 * @return The current state's index as a String
+	 */
+	public synchronized String getCurrentStateIndex() {
+
+		return m_view.getCurrentStateIndex();
+	}
+
+	/**
+	 * 
 	 * @return The previous state's index as a String
 	 */
 	protected synchronized String getPreviousStateIndex() {

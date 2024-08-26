@@ -73,6 +73,24 @@ public class View {
 
 	/**
 	 * 
+	 * @return The previous view state
+	 */
+	public synchronized ViewState getPreviousState() {
+
+		return m_states.get(getPreviousStateIndex());
+	}
+
+	/**
+	 * 
+	 * @return The current state's index as a String
+	 */
+	public synchronized String getCurrentStateIndex() {
+
+		return m_currentStateIndex;
+	}
+
+	/**
+	 * 
 	 * @return The previous state's index as a String
 	 */
 	public synchronized String getPreviousStateIndex() {
