@@ -1,13 +1,143 @@
 package climatemonitoring;
 
+import climatemonitoring.core.ConnectionLostException;
+import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Operator;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.headless.Console;
+import climatemonitoring.core.utility.Email;
+
+import java.util.Random;
 
 class Registration extends ViewState {
 
 	@Override
 	public void onHeadlessRender(String args) {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onHeadlessRender'");
+		String errorMsg = null;
+
+		do {
+
+			m_userID = Console.read("User ID > ");
+			errorMsg = Check.userID(m_userID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_email = Console.read("Email > ");
+			errorMsg = Check.email(m_email);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_password = Console.read("Password > ");
+			errorMsg = Check.password(m_password);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_SSID = Console.read("SSID > ");
+			errorMsg = Check.ssid(m_SSID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_name = Console.read("Name > ");
+			errorMsg = Check.name(m_name);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_surname = Console.read("Surname > ");
+			errorMsg = Check.surname(m_surname);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_centerID = Console.read("Center ID > ");
+			errorMsg = Check.centerID(m_centerID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		try {
+
+			CenterCreation cc = null;
+
+			if (m_centerID == null) {
+
+				cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
+				cc.onHeadlessRender("");
+				m_centerID = cc.newCenter.getCenterID();
+			}
+	
+			Operator operator = new Operator(m_userID, m_SSID.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
+
+			Email email = new Email("climatemonitoringappservice@mail.com", "Climate Monitoring");
+			email.setReceiverEmail(m_email);
+			email.setReceiverName(m_name + " " + m_surname);
+			email.setSubject("Climate Monitoring verification code");
+
+			Random r = new Random();
+			int codeGiven = r.nextInt();
+			email.setMessage("Your verification code is: " + codeGiven + "\nIt will expire in 2 minutes");
+
+			Result<Boolean> result = email.send();
+			result.join();
+
+			long start = System.nanoTime();
+			int codeReceived = Integer.parseInt(Console.read("Your verification code > "));
+			long end = System.nanoTime();
+
+			if (end - start >= 120000000000L)
+				throw new DatabaseRequestException("Time to enter verification code expired");
+
+			if (codeReceived != codeGiven)
+				throw new DatabaseRequestException("The verification code entered is incorrect");
+
+			if (Check.centerID(m_centerID) == null)
+				Handler.getProxyServer().addCenter(cc.newCenter);
+
+			Handler.getProxyServer().addOperator(operator);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			Console.write(e.getMessage());
+			onHeadlessRender("");
+		}
+
+		catch (ConnectionLostException e) {
+
+			setCurrentState(ViewType.CONNECTION);
+		}
 	}
 
 	@Override
@@ -15,4 +145,13 @@ class Registration extends ViewState {
 
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
+
+	private String m_userID;
+	private String m_email;
+	private String m_password;
+	private String m_SSID;
+	private String m_name;
+	private String m_surname;
+	private String m_centerID;
 }
+
