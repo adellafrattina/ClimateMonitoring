@@ -1,7 +1,5 @@
 package climatemonitoring;
 
-import java.util.function.Consumer;
-
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Operator;
@@ -16,13 +14,77 @@ class Registration extends ViewState {
 	@Override
 	public void onHeadlessRender(String args) {
 
-		m_userID = input("User ID > ", (n) -> { Check.userID(result); });
-		m_email = input("Email > ", "EMAIL");
-		m_password = input("Password > ", "PASSWORD");
-		m_SSID = input("SSID > ", "SSID").toCharArray();
-		m_name = input("Name > ", "NAME");
-		m_surname = input("Surname > ", "SURNAME");
-		m_centerID = input("Center ID > ", "CENTER_ID");
+		String errorMsg = null;
+
+		do {
+
+			m_userID = Console.read("User ID > ");
+			errorMsg = Check.userID(m_userID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_email = Console.read("Email > ");
+			errorMsg = Check.email(m_email);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_password = Console.read("Password > ");
+			errorMsg = Check.password(m_password);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_SSID = Console.read("SSID > ");
+			errorMsg = Check.ssid(m_SSID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_name = Console.read("Name > ");
+			errorMsg = Check.name(m_name);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_surname = Console.read("Surname > ");
+			errorMsg = Check.surname(m_surname);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
+
+		do {
+
+			m_centerID = Console.read("Center ID > ");
+			errorMsg = Check.centerID(m_centerID);
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while (errorMsg != null);
 
 		try {
 
@@ -32,10 +94,10 @@ class Registration extends ViewState {
 
 				CenterCreation cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
 				cc.onHeadlessRender("");
-				m_centerID = cc.centerID;
+				m_centerID = cc.getCenterID();
 			}
 	
-			Operator operator = new Operator(m_userID, m_SSID, m_surname, m_name, m_email, m_password, m_centerID);
+			Operator operator = new Operator(m_userID, m_SSID.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 
 			Handler.getProxyServer().addOperator(operator);
 
@@ -80,44 +142,10 @@ class Registration extends ViewState {
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
 
-	private String input(String msg, Function<String, String> method) {
-
-		String result = null;
-		String errorMsg = null;
-
-		do {
-
-			result = Console.read(msg);
-			errorMsg = method.exec(result);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		return result;
-	}
-
-	private String validate(String result, String type) {
-
-		switch (type) {
-
-			case "USER_ID": return Check.userID(result);
-			case "EMAIL": return Check.email(result);
-			case "PASSWORD": return Check.password(result);
-			case "SSID": return Check.ssid(result);
-			case "NAME": return Check.name(result);
-			case "SURNAME": return Check.surname(result);
-			case "CENTER_ID": return Check.centerID(result);
-
-			default: return null;
-		}
-	}
-
 	private String m_userID;
 	private String m_email;
 	private String m_password;
-	private char[] m_SSID;
+	private String m_SSID;
 	private String m_name;
 	private String m_surname;
 	private String m_centerID;
