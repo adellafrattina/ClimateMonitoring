@@ -62,6 +62,26 @@ public enum RequestType {
 	GET_CENTER,
 
 	/**
+	 * To get a center based on its address
+	 */
+	GET_CENTER_BY_ADDRESS,
+
+	/**
+	 * To get an operator based on their user id
+	 */
+	GET_OPERATOR,
+
+	/**
+	 * To get an operator based on their ssid
+	 */
+	GET_OPERATOR_BY_SSID,
+
+	/**
+	 * To get an operator based on their email address
+	 */
+	GET_OPERATOR_BY_EMAIL,
+
+	/**
 	 * To get the parameters based on an area and a center
 	 */
 	GET_PARAMETERS_AREA_CENTER,
@@ -97,6 +117,16 @@ public enum RequestType {
 	 * To edit an existing operator
 	 */
 	EDIT_OPERATOR,
+
+	/**
+	 * To check if a monitoring center is monitoring an area
+	*/
+	MONITORS,
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 */
+	EMPLOYS,
 
 	/**
 	 * To check for operator credentials during login
