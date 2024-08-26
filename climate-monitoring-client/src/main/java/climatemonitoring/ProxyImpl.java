@@ -814,7 +814,7 @@ class ProxyImpl implements Proxy{
 
 		try {
 			
-			out.writeObject(RequestType.MONITORS);
+			out.writeObject(RequestType.EMPLOYS);
 			out.writeObject(center_id);
 			out.writeObject(user_id);
 			boolean success = (boolean) in.readObject();

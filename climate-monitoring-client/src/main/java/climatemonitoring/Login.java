@@ -13,7 +13,7 @@ class Login extends ViewState {
 
 		String[] parts = args.split(" ");
 		
-		if(parts[0] == null || parts[1] == null)
+		if(parts.length < 2)
 			Console.write("inserire username o password");
 
 		String userid = parts[0];
@@ -29,7 +29,7 @@ class Login extends ViewState {
 			Handler.setLoggedOperator(op);
 		} catch (ConnectionLostException e) {
 			
-			getView().setCurrentState("ViewType.CONNECTION");
+			getView().setCurrentState(ViewType.CONNECTION);
 		} catch (DatabaseRequestException e) {
 
 			e.printStackTrace();

@@ -5,6 +5,7 @@ import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
+import climatemonitoring.core.utility.Command;
 
 class CenterInfo extends ViewState {
 
@@ -13,25 +14,30 @@ class CenterInfo extends ViewState {
 
 		try {
 
-			String[] splitargs = args.split(" ");
+			Command c = new Command(args);
 			
-			String by = splitargs[0];
+			String by = c.getCmd();
 			
 			if (by.equals("id")) {
 
-				String id = splitargs[1];
+				String id = c.getArgs();
 				Center center = Handler.getProxyServer().getCenter(id);
 				
 				if (center != null) {
 
-					Console.write(center.toString());
+					Console.write(center.getCenterID());
+					Console.write(center.getStreet());
+					Console.write(String.valueOf(center.getHouseNumber()));
+					Console.write(String.valueOf(center.getPostalCode()));
+					Console.write(String.valueOf(center.getCity()));
+					Console.write(center.getDistrict());
 				} else {
 
-					Console.write("centro non trovato");
+					Console.write("Center not found.");
 				}
 			} else if (by.equals("index")) {
 
-				int index = Integer.parseInt(splitargs[1]);
+				int index = Integer.parseInt(c.getArgs());
 				
 				Master m = (Master) Handler.getView().getState(ViewType.MASTER); 
 				Center[] centers = m.foundCenters; 
@@ -39,10 +45,15 @@ class CenterInfo extends ViewState {
 				
 				if (center != null) {
 
-					Console.write(center.toString());  
+					Console.write(center.getCenterID());
+					Console.write(center.getStreet());
+					Console.write(String.valueOf(center.getHouseNumber()));
+					Console.write(String.valueOf(center.getPostalCode()));
+					Console.write(String.valueOf(center.getCity()));
+					Console.write(center.getDistrict());  
 				} else {
 					
-					Console.write("centro non trovato");
+					Console.write("Center not found.");
 				}
 			} 
 		} catch (DatabaseRequestException e) {
@@ -50,10 +61,10 @@ class CenterInfo extends ViewState {
 			Console.write(e.getMessage());
 		} catch (ConnectionLostException e) {
 
-			getView().setCurrentState("ViewType.CONNECTION");
+			getView().setCurrentState(ViewType.CONNECTION);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			
-			Console.write("errore indexoutofbounds");
+			Console.write("Invalid index provided. Please ensure the index is within the valid range.");
 		}
 	}
 
