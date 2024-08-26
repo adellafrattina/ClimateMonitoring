@@ -25,10 +25,19 @@ class CenterCreation extends ViewState {
 
 		do {
 
-			m_city = Integer.parseInt(Console.read("City > "));
-			m_street = Console.read("Street > ");
-			m_houseNumber = Integer.parseInt(Console.read("House number > "));
-			errorMsg = Check.address(m_city, m_street, m_houseNumber);
+			try {
+
+				m_city = Integer.parseInt(Console.read("City > "));
+				m_street = Console.read("Street > ");
+				m_houseNumber = Integer.parseInt(Console.read("House number > "));
+
+				errorMsg = Check.address(m_city, m_street, m_houseNumber);
+			}
+
+			catch (NumberFormatException e) {
+
+				errorMsg = "City and house number must be numbers";
+			}
 
 			if (errorMsg != null)
 				Console.write(errorMsg);

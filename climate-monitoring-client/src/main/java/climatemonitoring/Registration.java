@@ -3,6 +3,7 @@ package climatemonitoring;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Operator;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Email;
@@ -29,7 +30,7 @@ class Registration extends ViewState {
 		do {
 
 			m_email = Console.read("Email > ");
-			errorMsg = Check.emailUnique(m_email);
+			errorMsg = Check.email(m_email);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
@@ -49,7 +50,7 @@ class Registration extends ViewState {
 		do {
 
 			m_SSID = Console.read("SSID > ");
-			errorMsg = Check.ssidUnique(m_SSID);
+			errorMsg = Check.ssid(m_SSID);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
@@ -99,7 +100,6 @@ class Registration extends ViewState {
 	
 			Operator operator = new Operator(m_userID, m_SSID.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 
-			// Verification
 			Email email = new Email("climatemonitoringappservice@mail.com", "Climate Monitoring");
 			email.setReceiverEmail(m_email);
 			email.setReceiverName(m_name + " " + m_surname);
@@ -108,6 +108,9 @@ class Registration extends ViewState {
 			Random r = new Random();
 			int codeGiven = r.nextInt();
 			email.setMessage("Your verification code is: " + codeGiven + "\nIt will expire in 2 minutes");
+
+			Result<Boolean> result = email.send();
+			result.join();
 
 			long start = System.nanoTime();
 			int codeReceived = Integer.parseInt(Console.read("Your verification code > "));

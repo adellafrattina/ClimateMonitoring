@@ -27,7 +27,7 @@ class EditProfile extends ViewState {
 
 			if (newSSID != m_ssid) {
 
-				errorMsg = Check.ssidUnique(m_ssid);
+				errorMsg = Check.ssid(m_ssid);
 				m_ssid = newSSID;
 	
 				if (errorMsg != null)
@@ -62,7 +62,7 @@ class EditProfile extends ViewState {
 
 			if (newEmail != m_email) {
 
-				errorMsg = Check.emailUnique(m_email);
+				errorMsg = Check.email(m_email);
 				m_email = newEmail;
 	
 				if (errorMsg != null)
@@ -95,6 +95,8 @@ class EditProfile extends ViewState {
 
 			Operator operator = new Operator(m_userID, m_ssid.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 			Handler.getProxyServer().editOperator(m_userID, operator);
+
+			Console.write("Operator info edited succesfully");
 		}
 
 		catch (DatabaseRequestException e) {
