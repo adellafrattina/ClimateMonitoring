@@ -29,7 +29,7 @@ class Registration extends ViewState {
 		do {
 
 			m_email = Console.read("Email > ");
-			errorMsg = Check.email(m_email);
+			errorMsg = Check.emailUnique(m_email);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
@@ -49,7 +49,7 @@ class Registration extends ViewState {
 		do {
 
 			m_SSID = Console.read("SSID > ");
-			errorMsg = Check.ssid(m_SSID);
+			errorMsg = Check.ssidUnique(m_SSID);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);

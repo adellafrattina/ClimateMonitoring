@@ -23,11 +23,16 @@ class EditProfile extends ViewState {
 
 		do {
 
-			m_ssid = Console.read("New SSID > ");
-			errorMsg = Check.ssid(m_ssid);
+			String newSSID = Console.read("New SSID > ");
 
-			if (errorMsg != null)
-				Console.write(errorMsg);
+			if (newSSID != m_ssid) {
+
+				errorMsg = Check.ssidUnique(m_ssid);
+				m_ssid = newSSID;
+	
+				if (errorMsg != null)
+					Console.write(errorMsg);
+			}
 
 		} while (errorMsg != null);
 
@@ -53,11 +58,16 @@ class EditProfile extends ViewState {
 
 		do {
 
-			m_email = Console.read("New Email > ");
-			errorMsg = Check.email(m_email);
+			String newEmail = Console.read("New Email > ");
 
-			if (errorMsg != null)
-				Console.write(errorMsg);
+			if (newEmail != m_email) {
+
+				errorMsg = Check.emailUnique(m_email);
+				m_email = newEmail;
+	
+				if (errorMsg != null)
+					Console.write(errorMsg);
+			}
 
 		} while (errorMsg != null);
 
