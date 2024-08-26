@@ -12,6 +12,7 @@ class Login extends ViewState {
 	public void onHeadlessRender(String args) {
 
 		String[] parts = args.split(" ");
+		
 		if(parts[0] == null || parts[1] == null)
 			Console.write("inserire username o password");
 

@@ -15,13 +15,9 @@ class CenterInfo extends ViewState {
 
 			String[] splitargs = args.split(" ");
 			
-			if (splitargs.length < 2) {
-				throw new IllegalArgumentException("non ci sono abbastanza argomenti");
-			}
-			
 			String by = splitargs[0];
 			
-			if ("id".equals(by)) {
+			if (by.equals("id")) {
 
 				String id = splitargs[1];
 				Center center = Handler.getProxyServer().getCenter(id);
@@ -33,7 +29,7 @@ class CenterInfo extends ViewState {
 
 					Console.write("centro non trovato");
 				}
-			} else if ("index".equals(by)) {
+			} else if (by.equals("index")) {
 
 				int index = Integer.parseInt(splitargs[1]);
 				
@@ -55,12 +51,9 @@ class CenterInfo extends ViewState {
 		} catch (ConnectionLostException e) {
 
 			getView().setCurrentState("ViewType.CONNECTION");
-		} catch (NumberFormatException e) {
-
-			Console.write("Error: Invalid number format.");
 		} catch (ArrayIndexOutOfBoundsException e) {
 			
-			Console.write("Error: Index out of bounds.");
+			Console.write("errore indexoutofbounds");
 		}
 	}
 

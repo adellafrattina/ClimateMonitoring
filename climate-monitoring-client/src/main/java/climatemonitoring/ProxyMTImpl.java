@@ -206,6 +206,72 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * To get a center based on its address
+	 * 
+	 * @param city The city the center is located in
+	 * @param street The street the center is located in
+	 * @param house_number The house number the center is located in
+	 * @return The center that corresponds to the given address
+	 */
+	@Override
+	public Result<Center> getCenterByAddress(int city, String street, int house_number) {
+
+		return new Result<Center>() {
+			public Center exec() throws ConnectionLostException, DatabaseRequestException {
+				return m_proxy.getCenterByAddress(city, street, house_number);
+			}
+		};
+	}
+
+	/**
+	 * To get an operator based on their user id
+	 * 
+	 * @param user_id The operator's ID
+	 * @return The operator whose ID corresponds with the given one
+	 */
+	@Override
+	public Result<Operator> getOperator(String user_id) {
+
+		return new Result<Operator>() {
+			public Operator exec() throws ConnectionLostException, DatabaseRequestException {
+				return m_proxy.getOperator(user_id);
+			}
+		};
+	}
+
+	/**
+	 * To get an operator based on their SSID
+	 * 
+	 * @param ssid The operator's SSID
+	 * @return The operator whose SSID corresponds with the given one
+	 */
+	@Override
+	public Result<Operator> getOperatorBySSID(String ssid) {
+
+		return new Result<Operator>() {
+			public Operator exec() throws ConnectionLostException, DatabaseRequestException {
+				return m_proxy.getOperatorBySSID(ssid);
+			}
+		};
+	}
+
+	/**
+	 * To get an operator based on their email address
+	 * 
+	 * @param email The operator's email address
+	 * @return The operator whose email address corresponds with the given one
+	 */
+	@Override
+	public Result<Operator> getOperatorByEmail(String email) {
+
+		return new Result<Operator>() {
+			public Operator exec() throws ConnectionLostException, DatabaseRequestException {
+				return m_proxy.getOperatorByEmail(email);
+			}
+		};
+	}
+	
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center.
 	 * This method will be executed in another thread, so the method is non-blocking.
@@ -322,6 +388,38 @@ class ProxyMTImpl implements ProxyMT {
 		return new Result<Boolean>() {
 			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
 				return m_proxy.editOperator(user_id, operator);
+			}
+		};
+	}
+
+	/**
+	 * To check if a monitoring center is monitoring an area
+	 * 
+	 * @param center_id The ID of the center
+	 * @param geoname_id The ID of the area
+	 * @return True if the area is being monitored by a center, false otherwise
+	 */
+	public Result<Boolean> monitors (String center_id, int geoname_id){
+
+		return new Result<Boolean>() {
+			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.monitors(center_id, geoname_id);
+			}
+		};
+	}
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 * 
+	 * @param center_id The ID of the center
+	 * @param user_id The ID of the operator
+	 * @return True if an operator is being employed by a center, false otherwise
+	 */
+	public Result<Boolean> employs (String center_id, String user_id){
+
+		return new Result<Boolean>() {
+			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.employs(center_id, user_id);
 			}
 		};
 	}
