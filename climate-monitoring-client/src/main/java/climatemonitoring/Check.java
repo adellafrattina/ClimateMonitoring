@@ -203,7 +203,21 @@ class Check {
 		if ((msg = noDashes(street)) != null)
 			return msg;
 
-		//TODO: Create a method in Database interface to return a center based on the address
+		try {
+
+			if (Handler.getProxyServer().getCenterByAddress(city, street, house_number) != null)
+				msg = "There is already another center in the same place";
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			msg = e.getMessage();
+		}
 
 		return msg;
 	}
@@ -233,10 +247,6 @@ class Check {
 		if ((msg = noDashes(user_id)) != null)
 			return msg;
 
-		/*TODO:
-
-		String msg = null;
-
 		try {
 
 			if (Handler.getProxyServer().getOperator(user_id) != null)
@@ -254,14 +264,10 @@ class Check {
 		}
 
 		return msg;
-
-		 */
-
-		return msg;
 	}
 
 	/**
-	 * Checks if the name is empty or has contiguous dashes or does not have 16 characters
+	 * Checks if the ssid is empty or has contiguous dashes or does not have 16 characters
 	 * @param s The SSID
 	 * @return Null if the parameter is valid, an error message as string if not
 	 */
@@ -279,6 +285,37 @@ class Check {
 			return "The SSID must be 16 characters (" + s.length() + "/16)";
 
 		return null;
+	}
+
+	/**
+	 * Checks if the SSID is already present in the database or is empty or has contiguous dashes or does not have 16 characters
+	 * @param s The SSID
+	 * @return Null if the parameter is valid, an error message as string if not
+	 */
+	public static String ssidUnique(String s) {
+
+		String msg = null;
+
+		if ((msg = ssid(s)) != null)
+			return msg;
+
+		try {
+
+			if (Handler.getProxyServer().getOperatorBySSID(s) != null)
+				msg = "There is already another operator with this SSID";
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			msg = e.getMessage();
+		}
+
+		return msg;
 	}
 
 	/**
@@ -313,6 +350,37 @@ class Check {
 	}
 
 	/**
+	 * Checks if the email is already taken or is empty or has contiguous dashes or is not a valid email
+	 * @param e The email
+	 * @return Null if the parameter is valid, an error message as string if not
+	 */
+	public static String emailUnique(String e) {
+
+		String msg = null;
+
+		if ((msg = email(e)) != null)
+			return msg;
+
+		try {
+
+			if (Handler.getProxyServer().getOperatorByEmail(e) != null)
+				msg = "This email is already used by another operator";
+		}
+
+		catch (ConnectionLostException ex) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException ex) {
+
+			msg = ex.getMessage();
+		}
+
+		return msg;
+	}
+
+	/**
 	 * Checks if the password is empty or has contiguous dashes or has spaces
 	 * @param p The password
 	 * @return Null if the parameter is valid, an error message as string if not
@@ -331,6 +399,120 @@ class Check {
 			return "The value must not have spaces";
 
 		return null;
+	}
+
+	/**
+	 * Checks if the operator's credentials
+	 * @param user_id The user id
+	 * @param password The user's password
+	 * @return Null if the parameter is valid, an error message as string if not
+	 */
+	public static String login(String user_id, String password) {
+
+		String msg = null;
+
+		if ((msg = isEmpty(user_id)) != null)
+			return msg;
+
+		if ((msg = noDashes(user_id)) != null)
+			return msg;
+
+		if ((msg = password(password)) != null)
+			return msg;
+
+		try {
+
+			if (Handler.getProxyServer().validateCredentials(user_id, password) == null)
+				msg = "User ID or password are incorrect";
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			msg = e.getMessage();
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Checks if the specified center monitors the specified area
+	 * @param center_id The center id
+	 * @param geoname_id The area's geoname id
+	 * @return Null if the parameter is valid, an error message as string if not
+	 */
+	public static String monitors(String center_id, int geoname_id) {
+
+		String msg = null;
+
+		if ((msg = isEmpty(center_id)) != null)
+			return msg;
+
+		if ((msg = noDashes(center_id)) != null)
+			return msg;
+
+		try {
+
+			if (!Handler.getProxyServer().monitors(center_id, geoname_id))
+				msg = "The center does not monitor the specified area";
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			msg = e.getMessage();
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Checks if the specified center employs the specified operator
+	 * @param center_id The center id
+	 * @param user_id The operator's user id
+	 * @return Null if the parameter is valid, an error message as string if not
+	 */
+	public static String employs(String center_id, String user_id) {
+
+		String msg = null;
+
+		if ((msg = isEmpty(center_id)) != null)
+			return msg;
+
+		if ((msg = noDashes(center_id)) != null)
+			return msg;
+
+		if ((msg = isEmpty(user_id)) != null)
+			return msg;
+
+		if ((msg = noDashes(user_id)) != null)
+			return msg;
+
+		try {
+
+			if (!Handler.getProxyServer().employs(center_id, user_id))
+				msg = "The center does not employ the specified operator";
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			msg = e.getMessage();
+		}
+
+		return msg;
 	}
 
 	/**
