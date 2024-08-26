@@ -188,12 +188,12 @@ class Check {
 
 	/**
 	 * Checks if the address is already taken or is empty or has contiguous dashes
+	 * @param city The geoname id of the center's city
 	 * @param street The address' street
 	 * @param house_number The address' house number
-	 * @param postal_code The address' postal code
 	 * @return Null if the parameter is valid, an error message as string if not
 	 */
-	public static String address(String street, int house_number, int postal_code) {
+	public static String address(int city, String street, int house_number) {
 
 		String msg = null;
 
