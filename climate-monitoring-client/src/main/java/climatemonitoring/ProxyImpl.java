@@ -370,6 +370,31 @@ class ProxyImpl implements Proxy{
 		return getcenter;
 	}
 	
+	public synchronized Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException {
+		Center center = null;
+	
+		try {
+			out.writeObject(RequestType.);
+			out.writeObject(city);
+			out.writeObject(street);
+			out.writeObject(house_number);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success) {
+				center = (Center) in.readObject();
+			} else {
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	
+		return center;
+	}
 	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
