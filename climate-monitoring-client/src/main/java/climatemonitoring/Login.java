@@ -14,7 +14,9 @@ class Login extends ViewState {
 		String[] parts = args.split(" ");
 		
 		if(parts.length < 2)
-			Console.write("inserire username o password");
+			Console.write("Enter username and password.");
+		else
+			return;
 
 		String userid = parts[0];
 		String password = parts[1];
@@ -24,7 +26,7 @@ class Login extends ViewState {
 			Operator op = Handler.getProxyServer().validateCredentials(userid, password);
 
 			if(op == null)
-				Console.write("credenziali errate");
+				Console.write("Wrong username or password");
 			
 			Handler.setLoggedOperator(op);
 		} catch (ConnectionLostException e) {

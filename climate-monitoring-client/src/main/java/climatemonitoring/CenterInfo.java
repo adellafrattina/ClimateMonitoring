@@ -55,6 +55,9 @@ class CenterInfo extends ViewState {
 					
 					Console.write("Center not found.");
 				}
+			}else{
+
+				Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [id, index]");
 			} 
 		} catch (DatabaseRequestException e) {
 
