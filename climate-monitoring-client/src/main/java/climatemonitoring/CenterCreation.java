@@ -1,5 +1,8 @@
 package climatemonitoring;
 
+import climatemonitoring.core.Center;
+import climatemonitoring.core.ConnectionLostException;
+import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
@@ -22,10 +25,10 @@ class CenterCreation extends ViewState {
 
 		do {
 
+			m_city = Integer.parseInt(Console.read("City > "));
 			m_street = Console.read("Street > ");
 			m_houseNumber = Integer.parseInt(Console.read("House number > "));
-			m_postalCode = Integer.parseInt(Console.read("Postal code > "));
-			errorMsg = Check.address(m_street, m_houseNumber, m_postalCode);
+			errorMsg = Check.address(m_city, m_street, m_houseNumber);
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
@@ -34,11 +37,14 @@ class CenterCreation extends ViewState {
 
 		do {
 
-			m_city = Integer.parseInt(Console.read("City > "));
-			errorMsg = Check.geonameID(m_city);
+			errorMsg = null;
 
-			if (errorMsg != null)
+			try {
+				m_postalCode = Integer.parseInt(Console.read("Postal code > "));
+			} catch (NumberFormatException e) {
+				errorMsg = "Postal code must be a number";
 				Console.write(errorMsg);
+			}
 
 		} while (errorMsg != null);
 
@@ -51,6 +57,26 @@ class CenterCreation extends ViewState {
 				Console.write(errorMsg);
 
 		} while (errorMsg != null);
+
+		newCenter = new Center(m_centerID, m_street, m_houseNumber, m_postalCode, m_city, m_district);
+
+		if (getView().getPreviousStateIndex() == ViewType.REGISTRATION) return;
+
+		try {
+
+			Handler.getProxyServer().addCenter(newCenter);
+		}
+
+		catch (DatabaseRequestException e) {
+
+			Console.write(e.getMessage());
+			onHeadlessRender("");
+		}
+
+		catch (ConnectionLostException e) {
+
+			setCurrentState(ViewType.CONNECTION);
+		}
 	}
 
 	@Override
@@ -59,10 +85,7 @@ class CenterCreation extends ViewState {
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
 
-	public String getCenterID() {
-
-		return m_centerID;
-	}
+	Center newCenter;
 
 	private String m_centerID;
 	private String m_street;

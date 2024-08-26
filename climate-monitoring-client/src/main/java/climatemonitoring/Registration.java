@@ -88,18 +88,16 @@ class Registration extends ViewState {
 
 		try {
 
-			Handler.getProxyServer().begin();
+			CenterCreation cc = null;
 
 			if (m_centerID == null) {
 
-				CenterCreation cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
+				cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
 				cc.onHeadlessRender("");
-				m_centerID = cc.getCenterID();
+				m_centerID = cc.newCenter.getCenterID();
 			}
 	
 			Operator operator = new Operator(m_userID, m_SSID.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
-
-			Handler.getProxyServer().addOperator(operator);
 
 			// Verification
 			Email email = new Email("climatemonitoringappservice@mail.com", "Climate Monitoring");
@@ -121,7 +119,10 @@ class Registration extends ViewState {
 			if (codeReceived != codeGiven)
 				throw new DatabaseRequestException("The verification code entered is incorrect");
 
-			Handler.getProxyServer().end();
+			if (Check.centerID(m_centerID) == null)
+				Handler.getProxyServer().addCenter(cc.newCenter);
+
+			Handler.getProxyServer().addOperator(operator);
 		}
 
 		catch (DatabaseRequestException e) {
