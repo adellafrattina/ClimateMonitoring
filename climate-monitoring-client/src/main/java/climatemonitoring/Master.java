@@ -10,10 +10,12 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import climatemonitoring.core.Area;
+import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
+import climatemonitoring.core.utility.Command;
 
 class Master extends ViewState {
 
@@ -24,9 +26,47 @@ class Master extends ViewState {
 
 		try {
 
-			Area[] foundAreas = null;
+			// <what>
 			switch (c.getCmd()) {
 
+				case "area":
+					c = new Command(c.getArgs());
+					searchArea(c);
+					break;
+				case "center":
+					c = new Command(c.getArgs());
+					searchCenter(c);
+					break;
+			}
+		}
+
+		catch (DatabaseRequestException e) {
+
+			Console.write("Error message from database: " + e.getMessage());
+		}
+
+		catch (ConnectionLostException e) {
+
+			Console.write("Connection lost");
+			setCurrentState(ViewType.CONNECTION);
+		}
+	}
+
+	@Override
+	public void onGUIRender() {
+
+		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+	}
+
+	private void searchArea(Command c) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			foundAreas = null;
+
+			// <by>
+			switch (c.getCmd()) {
+	
 				case "name":
 					foundAreas = Handler.getProxyServer().searchAreasByName(c.getArgs());
 					break;
@@ -45,9 +85,7 @@ class Master extends ViewState {
 					Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [name, country, coords]");
 					return;
 			}
-
-			Handler.setFoundAreas(foundAreas);
-
+	
 			if (foundAreas != null)
 				for (Area area : foundAreas)
 					Console.write(area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
@@ -59,22 +97,32 @@ class Master extends ViewState {
 
 			Console.write("The <latitude, longitude> field must be a couple of floating point numbers");
 		}
-
-		catch (DatabaseRequestException e) {
-
-			Console.write("Error message from database: " + e.getMessage());
-		}
-
-		catch (ConnectionLostException e) {
-
-			Console.write("Connection lost");
-			Handler.setViewState(ViewType.CONNECTION);
-		}
 	}
 
-	@Override
-	public void onGUIRender() {
+	private void searchCenter(Command c) throws ConnectionLostException, DatabaseRequestException {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+		foundCenters = null;
+
+		// <by>
+		switch (c.getCmd()) {
+
+			case "name":
+				foundCenters = Handler.getProxyServer().searchCentersByName(c.getArgs());
+				break;
+			default:
+				Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [name]");
+				return;
+		}
+
+		if (foundCenters != null)
+			for (Center center : foundCenters)
+				Console.write(center.getCenterID() + " - " + Handler.getProxyServer().getArea(center.getCity()) + " " + center.getStreet() + ", " + center.getHouseNumber());
+		else
+			Console.write("No matching centers");
 	}
+
+	Area[] foundAreas;
+	Area[] selectedArea;
+	Center[] foundCenters;
+	Center[] selectedCenter;
 }
