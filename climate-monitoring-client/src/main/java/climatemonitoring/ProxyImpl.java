@@ -371,6 +371,149 @@ class ProxyImpl implements Proxy{
 	}
 	
 	/**
+	 * To get a center based on its address
+	 * 
+	 * @param city The city the center is located in
+	 * @param street The street the center is located in
+	 * @param house_number The house number the center is located in
+	 * @return The center that corresponds to the given address
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException {
+
+		Center center = null;
+	
+		try {
+
+			out.writeObject(RequestType.GET_CENTER_BY_ADDRESS);
+			out.writeObject(city);
+			out.writeObject(street);
+			out.writeObject(house_number);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success == true) {
+
+				center = (Center) in.readObject();
+			} else {
+
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+	
+		return center;
+	}
+
+	/**
+	 * To get an operator based on their user id
+	 * 
+	 * @param user_id The operator's ID
+	 * @return The operator whose ID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Operator getOperator(String user_id) throws ConnectionLostException, DatabaseRequestException {
+		Operator operator = null;
+	
+		try {
+			out.writeObject(RequestType.GET_OPERATOR);
+			out.writeObject(user_id);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success == true) {
+				operator = (Operator) in.readObject();
+			} else {
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	
+		return operator;
+	}
+
+	/**
+	 * To get an operator based on their SSID
+	 * 
+	 * @param ssid The operator's SSID
+	 * @return The operator whose SSID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Operator getOperatorBySSID(String ssid) throws ConnectionLostException, DatabaseRequestException {
+
+		Operator operator = null;
+	
+		try {
+
+			out.writeObject(RequestType.GET_OPERATOR_BY_SSID);
+			out.writeObject(ssid);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success == true) {
+
+				operator = (Operator) in.readObject();
+			} else {
+
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+	
+		return operator;
+	}
+
+	
+	public synchronized Operator getOperatorByEmail(String email) throws ConnectionLostException, DatabaseRequestException {
+
+		Operator operator = null;
+	
+		try {
+
+			out.writeObject(RequestType.GET_OPERATOR_BY_EMAIL);
+			out.writeObject(email);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success == true) {
+
+				operator = (Operator) in.readObject();
+			} else {
+			
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+	
+		return operator;
+	}
+
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
 	 * 
@@ -618,6 +761,80 @@ class ProxyImpl implements Proxy{
 		return editedOperator;
 	}
 	
+	/**
+	 * To check if a monitoring center is monitoring an area
+	 * 
+	 * @param center_id The ID of the center
+	 * @param geoname_id The ID of the area
+	 * @return True if the area is being monitored by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+		
+		Boolean monitor = null;
+
+		try {
+			
+			out.writeObject(RequestType.MONITORS);
+			out.writeObject(center_id);
+			out.writeObject(geoname_id);
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				monitor = (Boolean) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return monitor;
+	}
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 * 
+	 * @param center_id The ID of the center
+	 * @param user_id The ID of the operator
+	 * @return True if an operator is being employed by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException {
+		
+		Boolean employ = null;
+
+		try {
+			
+			out.writeObject(RequestType.EMPLOYS);
+			out.writeObject(center_id);
+			out.writeObject(user_id);
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				employ = (Boolean) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+		
+		return employ;
+	}
+
 	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
 	 * operator will be returned, null otherwise
