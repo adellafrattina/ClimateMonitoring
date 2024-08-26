@@ -408,6 +408,155 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * To get a center based on its address
+	 * 
+	 * @param city The city the center is located in
+	 * @param street The street the center is located in
+	 * @param house_number The house number the center is located in
+	 * @return The center that corresponds to the given address
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND street = " + street + " AND house_number = " + house_number + ";");
+			Center result = null;
+
+			if (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int centerCity = query.getInt("city");
+				String centerStreet = query.getString("street");
+				int houseNumber = query.getInt("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result = new Center(centerID, centerStreet, houseNumber, postalCode, centerCity, district);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get an operator based on their user id
+	 * 
+	 * @param user_id The operator's ID
+	 * @return The operator whose ID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperator(String user_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + ";");
+			Operator result = null;
+
+			if (query.next()) {
+
+				String userID = query.getString("user_id");
+				char[] SSID = query.getString("ssid").toCharArray();
+				String operatorSurname = query.getString("operator_surname");
+				String operatorName = query.getString("operator_name");
+				String email = query.getString("email");
+				String pwd = query.getString("password");
+				String centerID = query.getString("center_id");
+
+				result = new Operator(userID, SSID, operatorSurname, operatorName, email, pwd, centerID);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get an operator based on their SSID
+	 * 
+	 * @param ssid The operator's SSID
+	 * @return The operator whose SSID corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperatorBySSID(String ssid) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM operator WHERE ssid = " + ssid + ";");
+			Operator result = null;
+
+			if (query.next()) {
+
+				String userID = query.getString("user_id");
+				char[] SSID = query.getString("ssid").toCharArray();
+				String operatorSurname = query.getString("operator_surname");
+				String operatorName = query.getString("operator_name");
+				String email = query.getString("email");
+				String pwd = query.getString("password");
+				String centerID = query.getString("center_id");
+
+				result = new Operator(userID, SSID, operatorSurname, operatorName, email, pwd, centerID);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get an operator based on their email address
+	 * 
+	 * @param email The operator's email address
+	 * @return The operator whose email address corresponds with the given one
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Operator getOperatorByEmail(String email) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM operator WHERE email = " + email + ";");
+			Operator result = null;
+
+			if (query.next()) {
+
+				String userID = query.getString("user_id");
+				char[] SSID = query.getString("ssid").toCharArray();
+				String operatorSurname = query.getString("operator_surname");
+				String operatorName = query.getString("operator_name");
+				String operatorEmail = query.getString("email");
+				String pwd = query.getString("password");
+				String centerID = query.getString("center_id");
+
+				result = new Operator(userID, SSID, operatorSurname, operatorName, operatorEmail, pwd, centerID);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
 	 * 
@@ -644,6 +793,56 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * To check if a monitoring center is monitoring an area
+	 * 
+	 * @param center_id The ID of the center
+	 * @param geoname_id The ID of the area
+	 * @return True if the area is being monitored by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center C JOIN area A ON C.city = A.geoname_id WHERE C.center_id = " + center_id + " AND A.geoname_id = " + geoname_id + ";");
+
+			if (query.next()) return true;
+			else return false;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 * 
+	 * @param center_id The ID of the center
+	 * @param user_id The ID of the operator
+	 * @return True if an operator is being employed by a center, false otherwise
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE C.center_id = " + center_id + " AND O.user_id = " + user_id + ";");
+
+			if (query.next()) return true;
+			else return false;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
 	 * operator will be returned, null otherwise
 	 * 
@@ -659,7 +858,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "'");
+			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "';");
 			Operator result = null;
 
 			if (query.next()) {
