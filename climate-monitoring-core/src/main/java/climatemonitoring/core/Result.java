@@ -68,6 +68,22 @@ public abstract class Result<T> {
 	}
 
 	/**
+	 * Waits for the thread to die. This makes the operation single-threaded
+	 */
+	public void join() {
+
+		try {
+
+			m_thread.join();
+		}
+
+		catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Keeps track of the returned data after the working thread has finished
 	 * its execution
 	 * 
