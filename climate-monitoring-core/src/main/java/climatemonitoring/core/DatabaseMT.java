@@ -110,6 +110,40 @@ public interface DatabaseMT {
 	public Result<Center> getCenter(String center_id);
 
 	/**
+	 * To get a center based on its address
+	 * 
+	 * @param city The city the center is located in
+	 * @param street The street the center is located in
+	 * @param house_number The house number the center is located in
+	 * @return The center that corresponds to the given address
+	 */
+	public Result<Center> getCenterByAddress(int city, String street, int house_number);
+
+	/**
+	 * To get an operator based on their user id
+	 * 
+	 * @param user_id The operator's ID
+	 * @return The operator whose ID corresponds with the given one
+	 */
+	public Result<Operator> getOperator(String user_id);
+
+	/**
+	 * To get an operator based on their SSID
+	 * 
+	 * @param ssid The operator's SSID
+	 * @return The operator whose SSID corresponds with the given one
+	 */
+	public Result<Operator> getOperatorBySSID(String ssid);
+
+	/**
+	 * To get an operator based on their email address
+	 * 
+	 * @param email The operator's email address
+	 * @return The operator whose email address corresponds with the given one
+	 */
+	public Result<Operator> getOperatorByEmail(String email);
+
+	/**
 	 * Returns an array containing parameters about a specified area that
 	 * were recorded by the desired center
 	 * 
@@ -168,6 +202,24 @@ public interface DatabaseMT {
 	 * @return Success or failure of the operation
 	 */
 	public Result<Boolean> editOperator(String user_id, Operator operator);
+
+	/**
+	 * To check if a monitoring center is monitoring an area
+	 * 
+	 * @param center_id The ID of the center
+	 * @param geoname_id The ID of the area
+	 * @return True if the area is being monitored by a center, false otherwise
+	 */
+	public Result<Boolean> monitors(String center_id, int geoname_id);
+
+	/**
+	 * To check if a monitoring center is employing an operator
+	 * 
+	 * @param center_id The ID of the center
+	 * @param user_id The ID of the operator
+	 * @return True if an operator is being employed by a center, false otherwise
+	 */
+	public Result<Boolean> employs(String center_id, String user_id);
 
 	/**
 	 * Checks whether the userid and password are valid. If so, the corresponding
