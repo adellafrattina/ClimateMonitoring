@@ -1,4 +1,4 @@
 @echo off
-cd ..\..\..\bin\climate-monitoring-client
+cd ..\..\..\bin\
 java -jar clientCM.jar
 pause

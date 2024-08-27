@@ -349,7 +349,7 @@ class ProxyImpl implements Proxy{
 
 		try {
 
-			out.writeObject(RequestType.GET_AREA);
+			out.writeObject(RequestType.GET_CENTER);
 			out.writeObject(center_id);
 
 			boolean success = (boolean) in.readObject();
@@ -888,7 +888,7 @@ class ProxyImpl implements Proxy{
 			in.readObject();
 			long end_time = System.nanoTime();
 
-			long final_time = (end_time - start_time) * 1000000;
+			long final_time = (end_time - start_time) / 1000000;
 
 			return final_time;
 			
