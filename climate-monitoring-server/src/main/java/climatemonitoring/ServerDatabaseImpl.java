@@ -710,14 +710,14 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			String userID = operator.getUserID();
-			String SSID = operator.getSSID().toString();
+			String SSID = new String(operator.getSSID());
 			String operatorSurname = operator.getSurname();
 			String operatorName = operator.getName();
 			String email = operator.getEmail();
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES (" + userID + ", " + SSID + ", " + operatorSurname + ", " + operatorName + ", " + email + ", " + password + ", " + centerID + ");");
+			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES ('"+ userID + "', '" + SSID + "', '" + operatorSurname + "', '" + operatorName + "', '" + email + "', '" + password + "', '" + centerID + "');");
 			return true;
 		}
 
@@ -750,7 +750,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int score = parameter.getScore();
 			String notes = parameter.getNotes();
 
-			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", " + centerID + ", " + timestamp + ", " + categoryID + ", " + userID + ", " + score + ", " + notes + ");");
+			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", '" + centerID + "', '" + timestamp + "', '" + categoryID + "', '" + userID + "', " + score + ", '" + notes + "');");
 			return true;
 		}
 
