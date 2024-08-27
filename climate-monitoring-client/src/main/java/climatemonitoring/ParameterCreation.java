@@ -1,13 +1,149 @@
+/*
+
+Alessandro della Frattina 753073 VA
+Cristian Capiferri 752918 VA
+Francesco Lops 753175 VA
+Dariia Sniezhko 753057 VA
+
+*/
+
 package climatemonitoring;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import climatemonitoring.core.Category;
+import climatemonitoring.core.ConnectionLostException;
+import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Parameter;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.headless.Console;
 
 class ParameterCreation extends ViewState {
 
 	@Override
 	public void onHeadlessRender(String args) {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onHeadlessRender'");
+		if (!Handler.isOperatorLoggedIn()) {
+
+			Console.write("You must be a logged operator to add a new parameter");
+			return;
+		}
+
+		try {
+
+			//TODO: print all the monitored areas by the operator's center
+
+			String errorMsg = null;
+
+			// Geoname ID
+			do {
+
+				errorMsg = null;
+
+				try {
+
+					m_geonameID = Integer.parseInt(Console.read("Area's geoname ID > ").trim());
+					errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID);
+				}
+
+				catch (NumberFormatException e) {
+
+					errorMsg ="The value must be a number";
+				}
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			// Print all categories
+			Category[] categories = null;
+
+			categories = Handler.getProxyServer().getCategories();
+			Console.write("--- Category list ---");
+			for (Category category : categories)
+				Console.write(category.getCategory() + " - " + category.getExplanation());
+
+			// Category
+			do {
+
+				errorMsg = null;
+
+				m_category = Console.read("Category > ").trim().toLowerCase();
+				for (Category category : categories) {
+
+					if (!category.getCategory().trim().toLowerCase().equals(m_category)) {
+
+						errorMsg = "The value must be a valid category";
+						break;
+					}
+				}
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			// Score
+			do {
+
+				errorMsg = null;
+
+				try {
+
+					m_score = Integer.parseInt(Console.read("Score (between 1 and 5) > ").trim());
+					errorMsg = Check.score(m_score);
+				}
+
+				catch (NumberFormatException e) {
+
+					errorMsg ="The value must be a number";
+				}
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			// Notes
+			do {
+
+				errorMsg = null;
+
+				m_notes = Console.read("Notes (max 256 characters) > ").trim();
+				errorMsg = Check.notes(m_notes);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			Parameter parameter = new Parameter(
+				m_geonameID,
+				Handler.getLoggedOperator().getCenterID(),
+				Handler.getLoggedOperator().getUserID(),
+				m_category,
+				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+				new SimpleDateFormat("hh-mm-ss").format(new Date()),
+				m_score,
+				m_notes);
+
+			Handler.getProxyServer().addParameter(parameter);
+
+			Console.write("The parameter was registered succesfully");
+		}
+
+		catch (DatabaseRequestException e) {
+
+			Console.write("Error message from database: " + e.getMessage());
+		}
+
+		catch (ConnectionLostException e) {
+
+			Console.write("Connection lost");
+			setCurrentState(ViewType.CONNECTION);
+		}
 	}
 
 	@Override
@@ -15,4 +151,9 @@ class ParameterCreation extends ViewState {
 
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
+
+	private int m_geonameID;
+	private String m_category;
+	private int m_score;
+	private String m_notes;
 }
