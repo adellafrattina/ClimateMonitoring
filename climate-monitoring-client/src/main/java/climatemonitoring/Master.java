@@ -37,6 +37,9 @@ class Master extends ViewState {
 					c = new Command(c.getArgs());
 					searchCenter(c);
 					break;
+				default:
+					Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [area, center]");
+					break;
 			}
 		}
 
