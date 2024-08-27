@@ -26,10 +26,11 @@ public class View {
 	 */
 	public synchronized boolean addState(ViewState state) {
 
-		if (m_states.get(state.getClass().getSimpleName().toUpperCase()) != null)
+		if (m_states.get(state.getClass().getSimpleName()) != null)
 			return false;
 
-		m_states.put(state.getClass().getSimpleName().toUpperCase(), state);
+		m_states.put(state.getClass().getSimpleName(), state);
+		state.setView(this);
 
 		return true;
 	}
@@ -144,5 +145,5 @@ public class View {
 
 	private HashMap<String, ViewState> m_states = new HashMap<String, ViewState>();
 	private String m_currentStateIndex;
-	private Stack<String> m_stateHistory;
+	private Stack<String> m_stateHistory = new Stack<String>();
 }
