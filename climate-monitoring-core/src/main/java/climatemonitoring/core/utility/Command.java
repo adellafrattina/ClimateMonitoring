@@ -28,10 +28,10 @@ public class Command {
 		StringTokenizer st = new StringTokenizer(line.toLowerCase().trim());
 
 		if(st.hasMoreTokens())
-			m_cmd = st.nextToken();
+			m_cmd = st.nextToken().trim();
 
 		if(st.hasMoreTokens())
-			m_args = st.nextToken("");
+			m_args = st.nextToken("").trim();
 	}
 
 	/**
