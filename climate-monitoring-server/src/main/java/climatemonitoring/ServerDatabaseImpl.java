@@ -383,7 +383,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE center_id = " + center_id + ";");
+			ResultSet query = execute("SELECT * FROM center WHERE center_id = '" + center_id + "';");
 			Center result = null;
 
 			if (query.next()) {
@@ -421,7 +421,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND street = " + street + " AND house_number = " + house_number + ";");
+			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND street = '" + street + "' AND house_number = " + house_number + ";");
 			Center result = null;
 
 			if (query.next()) {
@@ -457,7 +457,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + ";");
+			ResultSet query = execute("SELECT * FROM operator WHERE user_id = '" + user_id + "';");
 			Operator result = null;
 
 			if (query.next()) {
@@ -494,7 +494,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE ssid = " + ssid + ";");
+			ResultSet query = execute("SELECT * FROM operator WHERE ssid = '" + ssid + "';");
 			Operator result = null;
 
 			if (query.next()) {
@@ -531,7 +531,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE email = " + email + ";");
+			ResultSet query = execute("SELECT * FROM operator WHERE email = '" + email + "';");
 			Operator result = null;
 
 			if (query.next()) {
@@ -656,7 +656,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			double latitude = area.getLatitude();
 			double longitude = area.getLongitude();
 
-			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", " + areaName + ", " + areaAsciiName + ", " + countryCode + ", " + countryName + ", " + latitude + ", " + longitude + ");");
+			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", '" + areaName + "', '" + areaAsciiName + "', '" + countryCode + "', '" + countryName + "', " + latitude + ", " + longitude + ");");
 			return true;
 		}
 
@@ -686,7 +686,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int postalCode = center.getPostalCode();
 			String district = center.getDistrict();
 
-			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (" + centerID + ", " + city + ", " + street + ", " + houseNumber + ", " + postalCode + ", " + district + ");");
+			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES ('" + centerID + "', " + city + ", '" + street + "', " + houseNumber + ", " + postalCode + ", " + (district == null ? "null" : "'" + district + "'") + ");");
 			return true;
 		}
 
@@ -782,7 +782,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("IF EXISTS (SELECT user_id FROM operator WHERE user_id = " + user_id + ") THEN UPDATE OPERATOR SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = '" + centerID + "' END IF;");
+			execute("IF EXISTS (SELECT user_id FROM operator WHERE user_id = '" + user_id + "') THEN UPDATE OPERATOR SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = '" + centerID + "' END IF;");
 			return true;
 		}
 
@@ -805,7 +805,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center C JOIN area A ON C.city = A.geoname_id WHERE C.center_id = " + center_id + " AND A.geoname_id = " + geoname_id + ";");
+			ResultSet query = execute("SELECT * FROM center C JOIN area A ON C.city = A.geoname_id WHERE C.center_id = '" + center_id + "' AND A.geoname_id = " + geoname_id + ";");
 
 			if (query.next()) return true;
 			else return false;
@@ -830,7 +830,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE C.center_id = " + center_id + " AND O.user_id = " + user_id + ";");
+			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE C.center_id = '" + center_id + " AND O.user_id = " + user_id + ";");
 
 			if (query.next()) return true;
 			else return false;
@@ -858,7 +858,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE user_id = " + user_id + " AND password = '" + password + "';");
+			ResultSet query = execute("SELECT * FROM operator WHERE user_id = '" + user_id + "' AND password = '" + password + "';");
 			Operator result = null;
 
 			if (query.next()) {
