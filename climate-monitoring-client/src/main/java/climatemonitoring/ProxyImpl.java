@@ -38,7 +38,7 @@ class ProxyImpl implements Proxy{
 	 * Return true if the connection was succesfull, false if not
 	 * @param address the address the user wants to connect to
 	 * @param port the port the user wants to connect to
-	 * @throws ConnectionLostException 
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 */
 	@Override
 	public boolean connect(String address, short port) throws ConnectionLostException {
@@ -58,7 +58,7 @@ class ProxyImpl implements Proxy{
 	
 	/**
 	 * Close the connection between the socket and the server
-	 * @throws ConnectionLostException 
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 */
 	@Override
 	public void close() throws ConnectionLostException {
@@ -66,10 +66,16 @@ class ProxyImpl implements Proxy{
 		if(s != null && !s.isClosed()){
 
 			try {
+
+				out.writeObject(RequestType.DISCONNECT);
+				out.flush();
+				in.readObject();
 				s.close();
 				System.out.println("Connection closed");
 			} catch (IOException e) {
 				throw new ConnectionLostException();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -595,8 +601,6 @@ class ProxyImpl implements Proxy{
 	@Override
 	public synchronized boolean addArea(Area area) throws ConnectionLostException, DatabaseRequestException {
 
-		Boolean addedArea = null;
-
 		try {
 			
 			out.writeObject(RequestType.ADD_AREA);
@@ -605,7 +609,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				addedArea = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -617,7 +621,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 		
-		return addedArea;
+		return false;
 	}
 	
 	/**
@@ -631,8 +635,6 @@ class ProxyImpl implements Proxy{
 	@Override
 	public synchronized boolean addCenter(Center center) throws ConnectionLostException, DatabaseRequestException {
 
-		Boolean addedCenter = null;
-
 		try {
 			out.writeObject(RequestType.ADD_CENTER);
 			out.writeObject(center);
@@ -640,7 +642,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				addedCenter = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -652,7 +654,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return addedCenter;
+		return false;
 	}
 	
 	/**
@@ -665,8 +667,6 @@ class ProxyImpl implements Proxy{
 	 */
 	@Override
 	public synchronized boolean addOperator(Operator operator) throws ConnectionLostException, DatabaseRequestException {
-		
-		Boolean addedOperator = null;
 
 		try {
 			out.writeObject(RequestType.ADD_OPERATOR);
@@ -675,7 +675,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 			
 			if(success == true){
-				addedOperator = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -687,7 +687,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return addedOperator;
+		return false;
 	}
 	
 	/**
@@ -701,8 +701,6 @@ class ProxyImpl implements Proxy{
 	@Override
 	public synchronized boolean addParameter(Parameter parameter) throws ConnectionLostException, DatabaseRequestException {
 
-		Boolean addedParameter = null;
-
 		try {
 			out.writeObject(RequestType.ADD_PARAMETER);
 			out.writeObject(parameter);
@@ -710,7 +708,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 			
 			if(success == true){
-				addedParameter = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -722,7 +720,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return addedParameter;
+		return false;
 	}
 	
 	/**
@@ -737,8 +735,6 @@ class ProxyImpl implements Proxy{
 	@Override
 	public synchronized boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException {
 
-		Boolean editedOperator = null;
-
 		try {
 			out.writeObject(RequestType.EDIT_OPERATOR);
 			out.writeObject(user_id);
@@ -746,7 +742,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 			
 			if(success == true){
-				editedOperator = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -758,7 +754,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return editedOperator;
+		return false;
 	}
 	
 	/**
@@ -772,8 +768,6 @@ class ProxyImpl implements Proxy{
 	 */
 	@Override
 	public boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException {
-		
-		Boolean monitor = null;
 
 		try {
 			
@@ -783,7 +777,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				monitor = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -795,7 +789,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return monitor;
+		return false;
 	}
 
 	/**
@@ -809,8 +803,6 @@ class ProxyImpl implements Proxy{
 	 */
 	@Override
 	public boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException {
-		
-		Boolean employ = null;
 
 		try {
 			
@@ -820,7 +812,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				employ = (Boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -832,7 +824,7 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 		
-		return employ;
+		return false;
 	}
 
 	/**
@@ -879,8 +871,6 @@ class ProxyImpl implements Proxy{
 	 */
 	public long ping() throws ConnectionLostException {
 
-		long servertime = -1;
-
 		try {
 
 			out.writeObject(RequestType.PING);
@@ -898,11 +888,10 @@ class ProxyImpl implements Proxy{
 			e.printStackTrace();
 		}
 
-		return servertime;
+		return -1;
 	}
 	
 	private Socket s;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-
 }
