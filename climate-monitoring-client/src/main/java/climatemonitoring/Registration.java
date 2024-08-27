@@ -94,8 +94,12 @@ class Registration extends ViewState {
 
 			if (m_centerID == null) {
 
+				Console.write("Center ID is missing, redirecting to Center Creation");
+
 				cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
+				setCurrentState(ViewType.CENTER_CREATION);
 				cc.onHeadlessRender("");
+
 				m_centerID = cc.newCenter.getCenterID();
 			}
 	
@@ -107,13 +111,14 @@ class Registration extends ViewState {
 			email.setSubject("Climate Monitoring verification code");
 
 			Random r = new Random();
-			int codeGiven = r.nextInt();
+			int codeGiven = r.nextInt(10000, 100000);
 			email.setMessage("Your verification code is: " + codeGiven + "\nIt will expire in 2 minutes");
 
 			Result<Boolean> result = email.send();
 			result.join();
 
 			long start = System.nanoTime();
+			Console.write("An email with the verification code has been sent to " + m_email + "\nIt will expire in 2 minutes");
 			int codeReceived = Integer.parseInt(Console.read("Your verification code > "));
 			long end = System.nanoTime();
 
@@ -127,6 +132,7 @@ class Registration extends ViewState {
 				Handler.getProxyServer().addCenter(cc.newCenter);
 
 			Handler.getProxyServer().addOperator(operator);
+			Console.write("Registration succesful!");
 		}
 
 		catch (DatabaseRequestException e) {
