@@ -9,13 +9,17 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring.core;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates all the properties of a parameter
  * 
  * @author dariiasniezhkoinsubria
  * @version 1.0-SNAPSHOT
  */
-public class Parameter {
+public class Parameter implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Initializes parameter fields
