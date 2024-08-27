@@ -111,7 +111,7 @@ class Registration extends ViewState {
 			email.setSubject("Climate Monitoring verification code");
 
 			Random r = new Random();
-			int codeGiven = Math.abs(r.nextInt());
+			int codeGiven = r.nextInt(10000, 100000);
 			email.setMessage("Your verification code is: " + codeGiven + "\nIt will expire in 2 minutes");
 
 			Result<Boolean> result = email.send();
