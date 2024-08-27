@@ -9,13 +9,17 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring.core;
 
+import java.io.Serializable;
+
 /**
  * Represents all the properties of a monitoring center
  * 
  * @author dariiasniezhkoinsubria
  * @version 1.0-SNAPSHOT
  */
-public class Center {
+public class Center implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Initalizes center fields

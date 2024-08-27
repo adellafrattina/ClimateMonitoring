@@ -9,13 +9,15 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring.core;
 
+import java.io.Serializable;
+
 /**
  * Represents a category type with its explanation
  * 
  * @author dariiasniezhkoinsubria
  * @version 1.0-SNAPSHOT
  */
-public class Category {
+public class Category implements Serializable {
 
 	/**
 	 * Initializes category fields
