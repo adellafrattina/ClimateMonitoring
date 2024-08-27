@@ -21,77 +21,82 @@ class EditProfile extends ViewState {
 
 		String errorMsg = null;
 
-		do {
-
-			String newSSID = Console.read("New SSID > ");
-
-			if (newSSID != m_ssid) {
-
-				errorMsg = Check.ssid(m_ssid);
-				m_ssid = newSSID;
-	
-				if (errorMsg != null)
-					Console.write(errorMsg);
-			}
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_surname = Console.read("New Surname > ");
-			errorMsg = Check.surname(m_surname);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_name = Console.read("New Name > ");
-			errorMsg = Check.name(m_name);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			String newEmail = Console.read("New Email > ");
-
-			if (newEmail != m_email) {
-
-				errorMsg = Check.email(m_email);
-				m_email = newEmail;
-	
-				if (errorMsg != null)
-					Console.write(errorMsg);
-			}
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_password = Console.read("New Password > ");
-			errorMsg = Check.password(m_password);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_centerID = Console.read("New Center ID > ");
-			errorMsg = Check.centerID(m_centerID);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
 		try {
+
+			do {
+
+				String newSSID = Console.read("New SSID > ");
+
+				if (newSSID != m_ssid) {
+
+					errorMsg = Check.ssid(m_ssid);
+					m_ssid = newSSID;
+		
+					if (errorMsg != null)
+						Console.write(errorMsg);
+				}
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_surname = Console.read("New Surname > ");
+				errorMsg = Check.surname(m_surname);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_name = Console.read("New Name > ");
+				errorMsg = Check.name(m_name);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				String newEmail = Console.read("New Email > ");
+
+				if (newEmail != m_email) {
+
+					errorMsg = Check.email(m_email);
+					m_email = newEmail;
+		
+					if (errorMsg != null)
+						Console.write(errorMsg);
+				}
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_password = Console.read("New Password > ");
+				errorMsg = Check.password(m_password);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				String newCenterID = Console.read("New Center ID > ");
+
+				if (newCenterID != m_centerID) {
+
+					errorMsg = Check.registrationCenterID(m_centerID);
+					m_centerID = newCenterID;
+
+					if (errorMsg != null)
+						Console.write(errorMsg);
+				}
+
+			} while (errorMsg != null);
 
 			Operator operator = new Operator(m_userID, m_ssid.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 			Handler.getProxyServer().editOperator(m_userID, operator);
