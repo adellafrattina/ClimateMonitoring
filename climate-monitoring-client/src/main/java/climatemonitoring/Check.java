@@ -387,8 +387,9 @@ class Check {
 	 * @param user_id The user id
 	 * @param password The user's password
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String login(String user_id, String password) {
+	public static String login(String user_id, String password) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -407,11 +408,6 @@ class Check {
 				msg = "User ID or password are incorrect";
 		}
 
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
-		}
-
 		catch (DatabaseRequestException e) {
 
 			msg = e.getMessage();
@@ -425,8 +421,9 @@ class Check {
 	 * @param center_id The center id
 	 * @param geoname_id The area's geoname id
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String monitors(String center_id, int geoname_id) {
+	public static String monitors(String center_id, int geoname_id) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -442,11 +439,6 @@ class Check {
 				msg = "The center does not monitor the specified area";
 		}
 
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
-		}
-
 		catch (DatabaseRequestException e) {
 
 			msg = e.getMessage();
@@ -460,8 +452,9 @@ class Check {
 	 * @param center_id The center id
 	 * @param user_id The operator's user id
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String employs(String center_id, String user_id) {
+	public static String employs(String center_id, String user_id) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -481,11 +474,6 @@ class Check {
 
 			if (!Handler.getProxyServer().employs(center_id, user_id))
 				msg = "The center does not employ the specified operator";
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException e) {
