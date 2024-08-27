@@ -13,65 +13,65 @@ class CenterCreation extends ViewState {
 
 		String errorMsg = null;
 
-		do {
-
-			m_centerID = Console.read("Center ID > ");
-			errorMsg = Check.centerID(m_centerID);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			try {
-
-				m_city = Integer.parseInt(Console.read("City > "));
-				m_street = Console.read("Street > ");
-				m_houseNumber = Integer.parseInt(Console.read("House number > "));
-
-				errorMsg = Check.address(m_city, m_street, m_houseNumber);
-			}
-
-			catch (NumberFormatException e) {
-
-				errorMsg = "City and house number must be numbers";
-			}
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			errorMsg = null;
-
-			try {
-				m_postalCode = Integer.parseInt(Console.read("Postal code > "));
-			} catch (NumberFormatException e) {
-				errorMsg = "Postal code must be a number";
-				Console.write(errorMsg);
-			}
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_district = Console.read("District > ");
-			errorMsg = Check.district(m_district);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		newCenter = new Center(m_centerID, m_street, m_houseNumber, m_postalCode, m_city, m_district);
-
-		if (getView().getPreviousStateIndex() == ViewType.REGISTRATION) return;
-
 		try {
+
+			do {
+
+				m_centerID = Console.read("Center ID > ");
+				errorMsg = Check.creationCenterID(m_centerID);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				try {
+
+					m_city = Integer.parseInt(Console.read("City > "));
+					m_street = Console.read("Street > ");
+					m_houseNumber = Integer.parseInt(Console.read("House number > "));
+
+					errorMsg = Check.address(m_city, m_street, m_houseNumber);
+				}
+
+				catch (NumberFormatException e) {
+
+					errorMsg = "City and house number must be numbers";
+				}
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				errorMsg = null;
+
+				try {
+					m_postalCode = Integer.parseInt(Console.read("Postal code > "));
+				} catch (NumberFormatException e) {
+					errorMsg = "Postal code must be a number";
+					Console.write(errorMsg);
+				}
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_district = Console.read("District > ");
+				errorMsg = Check.district(m_district);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			newCenter = new Center(m_centerID, m_street, m_houseNumber, m_postalCode, m_city, m_district);
+
+			if (getView().getPreviousStateIndex() == ViewType.REGISTRATION) return;
 
 			Handler.getProxyServer().addCenter(newCenter);
 		}

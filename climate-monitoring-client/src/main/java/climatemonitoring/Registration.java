@@ -17,77 +17,78 @@ class Registration extends ViewState {
 
 		String errorMsg = null;
 
-		do {
-
-			m_userID = Console.read("User ID > ");
-			errorMsg = Check.userID(m_userID);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_email = Console.read("Email > ");
-			errorMsg = Check.email(m_email);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_password = Console.read("Password > ");
-			errorMsg = Check.password(m_password);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_SSID = Console.read("SSID > ");
-			errorMsg = Check.ssid(m_SSID);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_name = Console.read("Name > ");
-			errorMsg = Check.name(m_name);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_surname = Console.read("Surname > ");
-			errorMsg = Check.surname(m_surname);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
-		do {
-
-			m_centerID = Console.read("Center ID > ");
-			errorMsg = Check.centerID(m_centerID);
-
-			if (errorMsg != null)
-				Console.write(errorMsg);
-
-		} while (errorMsg != null);
-
 		try {
+
+			do {
+
+				m_userID = Console.read("User ID > ");
+				errorMsg = Check.userID(m_userID);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_email = Console.read("Email > ");
+				errorMsg = Check.email(m_email);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_password = Console.read("Password > ");
+				errorMsg = Check.password(m_password);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_SSID = Console.read("SSID > ");
+				errorMsg = Check.ssid(m_SSID);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_name = Console.read("Name > ");
+				errorMsg = Check.name(m_name);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_surname = Console.read("Surname > ");
+				errorMsg = Check.surname(m_surname);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				m_centerID = Console.read("Center ID > ");
+				errorMsg = Check.registrationCenterID(m_centerID);
+
+				if (errorMsg != null)
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
 
 			CenterCreation cc = null;
 
@@ -122,7 +123,7 @@ class Registration extends ViewState {
 			if (codeReceived != codeGiven)
 				throw new DatabaseRequestException("The verification code entered is incorrect");
 
-			if (Check.centerID(m_centerID) == null)
+			if (Check.creationCenterID(m_centerID) == null)
 				Handler.getProxyServer().addCenter(cc.newCenter);
 
 			Handler.getProxyServer().addOperator(operator);
