@@ -12,6 +12,7 @@ package climatemonitoring;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
+import climatemonitoring.core.Category;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 
@@ -28,8 +29,9 @@ class Check {
 	 * Checks if the geoname id is already taken
 	 * @param geoname_id The geoname id
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String geonameID(int geoname_id) {
+	public static String geonameID(int geoname_id) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -37,11 +39,6 @@ class Check {
 
 			if (Handler.getProxyServer().getArea(geoname_id) != null)
 				msg = "There is already another area with the same geoname id";
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException e) {
@@ -156,8 +153,9 @@ class Check {
 	 * Checks if the center id is already taken or is empty or has contiguous dashes
 	 * @param center_id The center id
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String centerID(String center_id) {
+	public static String creationCenterID(String center_id) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -173,9 +171,34 @@ class Check {
 				msg = "There is already another center with the same name";
 		}
 
-		catch (ConnectionLostException e) {
+		catch (DatabaseRequestException e) {
 
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
+			msg = e.getMessage();
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Checks if the center id is present or is empty or has contiguous dashes
+	 * @param center_id The center id
+	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
+	 */
+	public static String registrationCenterID(String center_id) throws ConnectionLostException {
+
+		String msg = null;
+
+		if (isEmpty(center_id) != null)
+			return null;
+
+		if ((msg = noDashes(center_id)) != null)
+			return msg;
+
+		try {
+
+			if (Handler.getProxyServer().getCenter(center_id) == null)
+				msg = "This center does not exist";
 		}
 
 		catch (DatabaseRequestException e) {
@@ -236,8 +259,9 @@ class Check {
 	 * Checks if the user id is already taken or is empty or has contiguous dashes
 	 * @param user_id The user id
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String userID(String user_id) {
+	public static String userID(String user_id)  throws ConnectionLostException {
 
 		String msg = null;
 
@@ -253,11 +277,6 @@ class Check {
 				msg = "There is already another operator with the same user id";
 		}
 
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
-		}
-
 		catch (DatabaseRequestException e) {
 
 			msg = e.getMessage();
@@ -267,11 +286,12 @@ class Check {
 	}
 
 	/**
-	 * Checks if the ssid is empty or has contiguous dashes or does not have 16 characters
+	 * Checks if the SSID is already present in the database or is empty or has contiguous dashes or does not have 16 characters
 	 * @param s The SSID
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String ssid(String s) {
+	public static String ssid(String s) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -284,30 +304,10 @@ class Check {
 		if (s.length() != 16)
 			return "The SSID must be 16 characters (" + s.length() + "/16)";
 
-		return null;
-	}
-
-	/**
-	 * Checks if the SSID is already present in the database or is empty or has contiguous dashes or does not have 16 characters
-	 * @param s The SSID
-	 * @return Null if the parameter is valid, an error message as string if not
-	 */
-	public static String ssidUnique(String s) {
-
-		String msg = null;
-
-		if ((msg = ssid(s)) != null)
-			return msg;
-
 		try {
 
 			if (Handler.getProxyServer().getOperatorBySSID(s) != null)
 				msg = "There is already another operator with this SSID";
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException e) {
@@ -329,11 +329,12 @@ class Check {
 	}
 
 	/**
-	 * Checks if the email is empty or has contiguous dashes or is not a valid email
+	 * Checks if the email is already taken or is empty or has contiguous dashes or is not a valid email
 	 * @param e The email
 	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String email(String e) {
+	public static String email(String e) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -346,30 +347,10 @@ class Check {
 		if (!Pattern.compile("^(.+)@(.+)$").matcher(e).matches())
 			return "The value is not a valid e-mail";
 
-		return null;
-	}
-
-	/**
-	 * Checks if the email is already taken or is empty or has contiguous dashes or is not a valid email
-	 * @param e The email
-	 * @return Null if the parameter is valid, an error message as string if not
-	 */
-	public static String emailUnique(String e) {
-
-		String msg = null;
-
-		if ((msg = email(e)) != null)
-			return msg;
-
 		try {
 
 			if (Handler.getProxyServer().getOperatorByEmail(e) != null)
 				msg = "This email is already used by another operator";
-		}
-
-		catch (ConnectionLostException ex) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException ex) {
@@ -513,6 +494,43 @@ class Check {
 		}
 
 		return msg;
+	}
+
+	/**
+	 * Checks if the category exists
+	 * @param c The category to be checked
+	 * @return Null if the parameter is valid, an error message as string if not
+	 * @throws ConnectionLostException When the connection is lost
+	 */
+	public static String category(String c) throws ConnectionLostException {
+
+		String msg = null;
+
+		if ((msg = isEmpty(c)) != null)
+			return msg;
+
+		if ((msg = noDashes(c)) != null)
+			return msg;
+
+			try {
+
+				Category[] categories = Handler.getProxyServer().getCategories();
+				for (Category category : categories) {
+
+					if (!category.getCategory().trim().toLowerCase().equals(c.trim().toLowerCase())) {
+
+						msg = "The value must be a valid category";
+						break;
+					}
+				}
+			}
+	
+			catch (DatabaseRequestException e) {
+	
+				msg = e.getMessage();
+			}
+	
+			return msg;
 	}
 
 	/**
