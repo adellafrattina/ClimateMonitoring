@@ -95,8 +95,11 @@ class Registration extends ViewState {
 			if (m_centerID == null) {
 
 				Console.write("Center ID is missing, redirecting to Center Creation");
+
 				cc = (CenterCreation) Handler.getView().getState(ViewType.CENTER_CREATION);
+				setCurrentState(ViewType.CENTER_CREATION);
 				cc.onHeadlessRender("");
+
 				m_centerID = cc.newCenter.getCenterID();
 			}
 	
@@ -129,6 +132,7 @@ class Registration extends ViewState {
 				Handler.getProxyServer().addCenter(cc.newCenter);
 
 			Handler.getProxyServer().addOperator(operator);
+			Console.write("Registration succesful!");
 		}
 
 		catch (DatabaseRequestException e) {
