@@ -131,7 +131,7 @@ class ParameterCreation extends ViewState {
 
 			Handler.getProxyServer().addParameter(parameter);
 
-			Console.write("The parameter was registered succesfully");
+			Console.write("The parameter was registered successfully");
 		}
 
 		catch (DatabaseRequestException e) {
