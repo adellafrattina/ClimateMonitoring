@@ -12,6 +12,7 @@ package climatemonitoring;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
@@ -32,7 +33,13 @@ class ParameterCreation extends ViewState {
 
 		try {
 
-			//TODO: print all the monitored areas by the operator's center
+			Area[] monitoredAreas = Handler.getProxyServer().getMonitoredAreas(Handler.getLoggedOperator().getCenterID());
+
+			Console.write("\n--- Available areas ---");
+			for (Area area : monitoredAreas)
+				Console.write(area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
+
+			Console.write("\n");
 
 			String errorMsg = null;
 
@@ -61,7 +68,7 @@ class ParameterCreation extends ViewState {
 			Category[] categories = null;
 
 			categories = Handler.getProxyServer().getCategories();
-			Console.write("\n--- Category list ---");
+			Console.write("\n--- Available categories ---");
 			for (Category category : categories)
 				Console.write(category.getCategory() + " - " + category.getExplanation());
 
