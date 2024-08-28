@@ -177,7 +177,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
 			Area[] result = new Area[getRowCount(query)];
 
-			int i = 0;
 			while (query.next()) {
 
 				int geonameID = query.getInt("geoname_id");
@@ -188,7 +187,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				double coordsLatitude = query.getDouble("latitude");
 				double coordsLongitude = query.getDouble("longitude");
 
-				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+				result[query.getRow() - 1] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
 
 			return result;
@@ -217,7 +216,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
 			Area[] result = new Area[getRowCount(query)];
 
-			int i = 0;
 			while (query.next()) {
 
 				int geonameID = query.getInt("geoname_id");
@@ -228,7 +226,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				double coordsLatitude = query.getDouble("latitude");
 				double coordsLongitude = query.getDouble("longitude");
 
-				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+				result[query.getRow() - 1] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
 
 			return result;
@@ -260,7 +258,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
 			Area[] result = new Area[getRowCount(query)];
 
-			int i = 0;
 			while (query.next()) {
 		
 				int geonameID = query.getInt("geoname_id");
@@ -271,7 +268,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				double coordsLatitude = query.getDouble("latitude");
 				double coordsLongitude = query.getDouble("longitude");
 
-				result[i++] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+				result[query.getRow() - 1] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
 
 			return result;
@@ -310,7 +307,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_name)), center_name;");
 			Center[] result = new Center[getRowCount(query)];
 
-			int i = 0;
 			while (query.next()) {
 
 				String centerID = query.getString("center_id");
@@ -320,7 +316,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				int postalCode = query.getInt("postal_code");
 				String district = query.getString("district");
 
-				result[i++] = new Center(centerID, street, houseNumber, postalCode, city, district);
+				result[query.getRow() - 1] = new Center(centerID, street, houseNumber, postalCode, city, district);
 			}
 
 			return result;
@@ -359,6 +355,44 @@ class ServerDatabaseImpl implements ServerDatabase {
 				double coordsLongitude = query.getDouble("longitude");
 
 				result = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get all the areas monitored by a specified center
+	 * 
+	 * @param center_id The id of the center the search is based on
+	 * @return The areas monitored as an array of areas
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Area[] getMonitoredAreas(String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT A.* FROM area A JOIN monitors M on A.geoname_id = M.geoname_id WHERE center_id = '" + center_id + "';");
+			Area[] result = new Area[getRowCount(query)];
+
+			if (query.next()) {
+
+				int geonameID = query.getInt("geoname_id");
+				String areaName = query.getString("area_name");
+				String areaAsciiName = query.getString("area_ascii_name");
+				String countryCode = query.getString("country_code");
+				String countryName = query.getString("country_name");
+				double coordsLatitude = query.getDouble("latitude");
+				double coordsLongitude = query.getDouble("longitude");
+
+				result[query.getRow() - 1] = new Area(geonameID, areaName, areaAsciiName, countryCode, countryName, coordsLatitude, coordsLongitude);
 			}
 
 			return result;
@@ -434,6 +468,42 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String district = query.getString("district");
 
 				result = new Center(centerID, centerStreet, houseNumber, postalCode, centerCity, district);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get all the centers that monitor a specified area
+	 * 
+	 * @param geoname_id The id of the area the search is based on
+	 * @return The centers associated as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center[] getAssociatedCenters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT C.* FROM monitors M JOIN center C on M.center_id = C.center_id WHERE geoname_id = "+ geoname_id + ";");
+			Center[] result = new Center[getRowCount(query)];
+
+			if (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int centerCity = query.getInt("city");
+				String centerStreet = query.getString("street");
+				int houseNumber = query.getInt("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result[query.getRow() - 1] = new Center(centerID, centerStreet, houseNumber, postalCode, centerCity, district);
 			}
 
 			return result;
@@ -575,7 +645,6 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
 			Parameter[] result = new Parameter[getRowCount(query)];
 
-			int i = 0;
 			while (query.next()) {
 
 				int geonameID = query.getInt("geoname_id");
@@ -590,7 +659,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String date = parts[0];
 				String time = parts[1];
 
-				result[i++] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
+				result[query.getRow() - 1] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
 			}
 
 			return result;
@@ -617,13 +686,12 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT * FROM category;");
 			Category[] result = new Category[getRowCount(query)];
 		
-			int i = 0;
 			while (query.next()) {
 
 				String categoryID = query.getString("category_id");
 				String explanation = query.getString("explanation");
 
-				result[i++] = new Category(categoryID, explanation);
+				result[query.getRow() - 1] = new Category(categoryID, explanation);
 			}
 
 			return result;

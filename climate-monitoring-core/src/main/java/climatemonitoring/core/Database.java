@@ -116,6 +116,16 @@ public interface Database {
 	public Area getArea(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
+	 * To get all the areas monitored by a specified center
+	 * 
+	 * @param center_id The id of the center the search is based on
+	 * @return The areas monitored as an array of areas
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Area[] getMonitoredAreas(String center_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * To get a center by its center id
 	 * 
 	 * @param center_id The center id of the center to be searched
@@ -136,6 +146,16 @@ public interface Database {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	public Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get all the centers that monitor a specified area
+	 * 
+	 * @param geoname_id The id of the area the search is based on
+	 * @return The centers associated as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center[] getAssociatedCenters(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * To get an operator based on their user id

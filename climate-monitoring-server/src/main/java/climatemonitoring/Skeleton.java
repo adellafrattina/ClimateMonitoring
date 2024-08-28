@@ -101,217 +101,120 @@ class Skeleton extends Thread {
 
 						break;
 
-					case SEARCH_AREAS_BY_NAME:
+					case SEARCH_AREAS_BY_NAME: {
 
-						String areaName = (String) m_in.readObject();
-
+						String str = (String) m_in.readObject();
+	
 						try {
-
-							Area[] result = m_serverDatabase.searchAreasByName(areaName);
-
+	
+							Area[] result = m_serverDatabase.searchAreasByName(str);
+	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
-
+	
 						catch (DatabaseRequestException e) {
-
+	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
-
+	
 						break;
+					}
 
-					case SEARCH_AREAS_BY_COUNTRY:
+					case SEARCH_AREAS_BY_COUNTRY: {
 
-						String countryName = (String) m_in.readObject();
-
+						String str = (String) m_in.readObject();
+	
 						try {
-
-							Area[] result = m_serverDatabase.searchAreasByCountry(countryName);
-
+	
+							Area[] result = m_serverDatabase.searchAreasByCountry(str);
+	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
-
+	
 						catch (DatabaseRequestException e) {
-
+	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
-
+	
 						break;
+					}
 
-					case SEARCH_AREAS_BY_COORDS:
+					case SEARCH_AREAS_BY_COORDS: {
 
 						double latitude = (Double) m_in.readObject();
 						double longitude = (Double) m_in.readObject();
-
+	
 						try {
-
+	
 							Area[] result = m_serverDatabase.searchAreasByCoords(latitude, longitude);
-
+	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
-
+	
 						catch (DatabaseRequestException e) {
-
+	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
-
+	
 						break;
+					}
 
-					case SEARCH_CENTERS_BY_NAME:
+					case SEARCH_CENTERS_BY_NAME: {
 
-						String centerName = (String) m_in.readObject();
-
+						String str = (String) m_in.readObject();
+	
 						try {
-
-							Center[] result = m_serverDatabase.searchCentersByName(centerName);
-
+	
+							Center[] result = m_serverDatabase.searchCentersByName(str);
+	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
-
+	
 						catch (DatabaseRequestException e) {
-
+	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
-
+	
 						break;
+					}
 
-					case GET_AREA:
-
-						int areaGeonameID = (Integer) m_in.readObject();
-
-						try {
-
-							Area result = m_serverDatabase.getArea(areaGeonameID);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_CENTER:
-
-						String monitoringCenterID = (String) m_in.readObject();
-
-						try {
-
-							Center result = m_serverDatabase.getCenter(monitoringCenterID);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_CENTER_BY_ADDRESS:
-
-						int city = (Integer) m_in.readObject();
-						String street = (String) m_in.readObject();
-						int houseNumber = (Integer) m_in.readObject();
-
-						try {
-
-							Center result = m_serverDatabase.getCenterByAddress(city, street, houseNumber);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_OPERATOR:
-
-						String operatorUserID = (String) m_in.readObject();
-
-						try {
-
-							Operator result = m_serverDatabase.getOperator(operatorUserID);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_OPERATOR_BY_SSID:
-
-						String operatorSSID = (String) m_in.readObject();
-
-						try {
-
-							Operator result = m_serverDatabase.getOperatorBySSID(operatorSSID);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_OPERATOR_BY_EMAIL:
-
-						String operatorEmail = (String) m_in.readObject();
-
-						try {
-
-							Operator result = m_serverDatabase.getOperatorByEmail(operatorEmail);
-
-							m_out.writeObject(true);
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case GET_PARAMETERS_AREA_CENTER:
+					case GET_AREA: {
 
 						int geonameID = (Integer) m_in.readObject();
+	
+						try {
+	
+							Area result = m_serverDatabase.getArea(geonameID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+
+					case GET_MONITORED_AREAS: {
+
 						String centerID = (String) m_in.readObject();
 
 						try {
 
-							Parameter[] result = m_serverDatabase.getParameters(geonameID, centerID);
+							Area[] result = m_serverDatabase.getMonitoredAreas(centerID);
 
 							m_out.writeObject(true);
 							m_out.writeObject(result);
@@ -324,12 +227,59 @@ class Skeleton extends Thread {
 						}
 
 						break;
+					}
 
-					case GET_CATEGORIES:
+					case GET_CENTER: {
+
+						String centerID = (String) m_in.readObject();
+	
+						try {
+	
+							Center result = m_serverDatabase.getCenter(centerID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case GET_CENTER_BY_ADDRESS: {
+
+						int city = (Integer) m_in.readObject();
+						String street = (String) m_in.readObject();
+						int houseNumber = (Integer) m_in.readObject();
+	
+						try {
+	
+							Center result = m_serverDatabase.getCenterByAddress(city, street, houseNumber);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case GET_ASSOCIATED_CENTERS: {
+
+						int geonameID = (Integer) m_in.readObject();
 
 						try {
 
-							Category[] result = m_serverDatabase.getCategories();
+							Center[] result = m_serverDatabase.getAssociatedCenters(geonameID);
 
 							m_out.writeObject(true);
 							m_out.writeObject(result);
@@ -340,184 +290,301 @@ class Skeleton extends Thread {
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
+					}
 
-						break;
-
-					case ADD_AREA:
-
-						Area area = (Area) m_in.readObject();
-
-						try {
-
-							m_serverDatabase.addArea(area);
-
-							m_out.writeObject(true);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case ADD_CENTER:
-
-						Center center = (Center) m_in.readObject();
-
-						try {
-
-							m_serverDatabase.addCenter(center);
-
-							m_out.writeObject(true);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case ADD_OPERATOR:
-
-						Operator operator = (Operator) m_in.readObject();
-
-						try {
-
-							m_serverDatabase.addOperator(operator);
-
-							m_out.writeObject(true);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case ADD_PARAMETER:
-
-						Parameter parameter = (Parameter) m_in.readObject();
-
-						try {
-
-							m_serverDatabase.addParameter(parameter);
-
-							m_out.writeObject(true);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case EDIT_OPERATOR:
+					case GET_OPERATOR: {
 
 						String userID = (String) m_in.readObject();
-						Operator newOperator = (Operator) m_in.readObject();
-
+	
 						try {
-
-							m_serverDatabase.editOperator(userID, newOperator);
-
-							m_out.writeObject(true);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case MONITORS:
-
-						String mCenterID = (String) m_in.readObject();
-						int aGeonameID = (Integer) m_in.readObject();
-
-						try {
-
-							boolean result = m_serverDatabase.monitors(mCenterID, aGeonameID);
-
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case EMPLOYS:
-
-						String monitCenterID = (String) m_in.readObject();
-						String opUserID = (String) m_in.readObject();
-
-						try {
-
-							boolean result = m_serverDatabase.employs(monitCenterID, opUserID);
-
-							m_out.writeObject(result);
-						}
-
-						catch (DatabaseRequestException e) {
-
-							m_out.writeObject(false);
-							m_out.writeObject(e);
-						}
-
-						break;
-
-					case VALIDATE_CREDENTIALS:
-
-						String loginID = (String) m_in.readObject();
-						String loginPassword = (String) m_in.readObject();
-
-						try {
-
-							Operator result = m_serverDatabase.validateCredentials(loginID, loginPassword);
-
+	
+							Operator result = m_serverDatabase.getOperator(userID);
+	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
-
+	
 						catch (DatabaseRequestException e) {
-
+	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
-
+	
 						break;
+					}
 
-					case PING:
+					case GET_OPERATOR_BY_SSID: {
+
+						String SSID = (String) m_in.readObject();
+	
+						try {
+	
+							Operator result = m_serverDatabase.getOperatorBySSID(SSID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case GET_OPERATOR_BY_EMAIL: {
+
+						String email = (String) m_in.readObject();
+	
+						try {
+	
+							Operator result = m_serverDatabase.getOperatorByEmail(email);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+
+					case GET_PARAMETERS_AREA_CENTER: {
+
+						int geonameID = (Integer) m_in.readObject();
+						String centerID = (String) m_in.readObject();
+	
+						try {
+	
+							Parameter[] result = m_serverDatabase.getParameters(geonameID, centerID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case GET_CATEGORIES: {
+
+						try {
+	
+							Category[] result = m_serverDatabase.getCategories();
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case ADD_AREA: {
+
+						Area area = (Area) m_in.readObject();
+	
+						try {
+	
+							m_serverDatabase.addArea(area);
+	
+							m_out.writeObject(true);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case ADD_CENTER: {
+
+						Center center = (Center) m_in.readObject();
+	
+						try {
+	
+							m_serverDatabase.addCenter(center);
+	
+							m_out.writeObject(true);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+
+					case ADD_OPERATOR: {
+
+						Operator operator = (Operator) m_in.readObject();
+	
+						try {
+	
+							m_serverDatabase.addOperator(operator);
+	
+							m_out.writeObject(true);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+
+					case ADD_PARAMETER: {
+
+						Parameter parameter = (Parameter) m_in.readObject();
+	
+						try {
+	
+							m_serverDatabase.addParameter(parameter);
+	
+							m_out.writeObject(true);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case EDIT_OPERATOR: {
+
+						String userID = (String) m_in.readObject();
+						Operator operator = (Operator) m_in.readObject();
+	
+						try {
+	
+							m_serverDatabase.editOperator(userID, operator);
+	
+							m_out.writeObject(true);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case MONITORS: {
+
+						String centerID = (String) m_in.readObject();
+						int geonameID = (Integer) m_in.readObject();
+	
+						try {
+	
+							boolean result = m_serverDatabase.monitors(centerID, geonameID);
+	
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case EMPLOYS: {
+
+						String centerID = (String) m_in.readObject();
+						String userID = (String) m_in.readObject();
+	
+						try {
+	
+							boolean result = m_serverDatabase.employs(centerID, userID);
+	
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case VALIDATE_CREDENTIALS: {
+
+						String userID = (String) m_in.readObject();
+						String password = (String) m_in.readObject();
+	
+						try {
+	
+							Operator result = m_serverDatabase.validateCredentials(userID, password);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
+					case PING: {
 
 						m_out.writeObject(request);
-
+	
 						break;
+					}
 
-					case DISCONNECT:
+					case DISCONNECT: {
 
 						m_running = false;
 						m_out.writeObject(request);
-
+	
 						break;
+					}
 
-					default:
+					default: {
 
 						Console.write("Unhandled request type: " + request);
-
+	
 						break;
+					}
 				}
 			}
 

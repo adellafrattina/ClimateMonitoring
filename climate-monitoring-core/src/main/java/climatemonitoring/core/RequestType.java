@@ -57,6 +57,11 @@ public enum RequestType {
 	GET_AREA,
 
 	/**
+	 * To get all the areas monitored by a specified center
+	 */
+	GET_MONITORED_AREAS,
+
+	/**
 	 * To get a center based on its center id
 	 */
 	GET_CENTER,
@@ -65,6 +70,11 @@ public enum RequestType {
 	 * To get a center based on its address
 	 */
 	GET_CENTER_BY_ADDRESS,
+
+	/**
+	 * To get all the centers that monitor the specified area
+	 */
+	GET_ASSOCIATED_CENTERS,
 
 	/**
 	 * To get an operator based on their user id
