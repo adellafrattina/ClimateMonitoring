@@ -102,6 +102,14 @@ public interface DatabaseMT {
 	public Result<Area> getArea(int geoname_id);
 
 	/**
+	 * To get all the areas monitored by a specified center
+	 * 
+	 * @param center_id The id of the center the search is based on
+	 * @return The areas monitored as an array of areas
+	 */
+	public Result<Area[]> getMonitoredAreas(String center_id);
+
+	/**
 	 * To get a center by its center id
 	 * 
 	 * @param center_id The center id of the center to be searched
@@ -118,6 +126,14 @@ public interface DatabaseMT {
 	 * @return The center that corresponds to the given address
 	 */
 	public Result<Center> getCenterByAddress(int city, String street, int house_number);
+
+	/**
+	 * To get all the centers that monitor a specified area
+	 * 
+	 * @param geoname_id The id of the area the search is based on
+	 * @return The centers associated as an array of centers
+	 */
+	public Result<Center[]> getAssociatedCenters(int geoname_id);
 
 	/**
 	 * To get an operator based on their user id
