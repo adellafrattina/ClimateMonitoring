@@ -342,6 +342,42 @@ class ProxyImpl implements Proxy{
 	}
 
 	/**
+	 * To get all the areas monitored by a specified center
+	 * 
+	 * @param center_id The id of the center the search is based on
+	 * @return The areas monitored as an array of areas
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Area[] getMonitoredAreas (String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		Area[] monitoredareas = null;
+
+		try {
+
+			out.writeObject(RequestType.GET_MONITORED_AREAS);
+			out.writeObject(center_id);
+
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				monitoredareas = (Area[]) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+		return monitoredareas;
+	}
+
+
+	/**
 	 * To get a center by its center id
 	 * 
 	 * @param center_id The center id of the center to be searched
@@ -402,6 +438,44 @@ class ProxyImpl implements Proxy{
 			if (success == true) {
 
 				center = (Center) in.readObject();
+			} else {
+
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+		} catch (IOException e) {
+
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+	
+		return center;
+	}
+
+	/**
+	 * To get all the centers that monitor a specified area
+	 * 
+	 * @param geoname_id The id of the area the search is based on
+	 * @return The centers associated as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public synchronized Center[] getAssociatedCenters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		Center[] center = null;
+	
+		try {
+
+			out.writeObject(RequestType.GET_ASSOCIATED_CENTERS);
+			out.writeObject(geoname_id);
+	
+			boolean success = (boolean) in.readObject();
+	
+			if (success == true) {
+
+				center = (Center[]) in.readObject();
 			} else {
 
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
