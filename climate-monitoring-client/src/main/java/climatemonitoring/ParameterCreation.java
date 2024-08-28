@@ -61,9 +61,11 @@ class ParameterCreation extends ViewState {
 			Category[] categories = null;
 
 			categories = Handler.getProxyServer().getCategories();
-			Console.write("--- Category list ---");
+			Console.write("\n--- Category list ---");
 			for (Category category : categories)
 				Console.write(category.getCategory() + " - " + category.getExplanation());
+
+			Console.write("\n");
 
 			// Category
 			do {
@@ -71,14 +73,19 @@ class ParameterCreation extends ViewState {
 				errorMsg = null;
 
 				m_category = Console.read("Category > ").trim().toLowerCase();
+				boolean found = false;
 				for (Category category : categories) {
 
-					if (!category.getCategory().trim().toLowerCase().equals(m_category)) {
+					if (category.getCategory().trim().toLowerCase().equals(m_category)) {
 
-						errorMsg = "The value must be a valid category";
+						m_category = category.getCategory();
+						found = true;
 						break;
 					}
 				}
+
+				if (!found)
+					errorMsg = "The value must be a valid category";
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
@@ -125,7 +132,7 @@ class ParameterCreation extends ViewState {
 				Handler.getLoggedOperator().getUserID(),
 				m_category,
 				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-				new SimpleDateFormat("hh-mm-ss").format(new Date()),
+				new SimpleDateFormat("hh:mm:ss").format(new Date()),
 				m_score,
 				m_notes);
 
