@@ -197,15 +197,6 @@ public class Console {
 		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][" + RED + "error" + RESET + "] " + msg);
 	}
 
-	private enum WRKey {
-		HKLM,  HKCU , HKCR , HKU , HKCC
-	}
-
-	private enum WRType {
-		REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ,
-		REG_DWORD, REG_QWORD, REG_BINARY, REG_NONE
-	}
-
 	/**
 	 * Constructs the input buffer
 	 */
@@ -217,30 +208,20 @@ public class Console {
 
 	private static boolean isWindows() {
 
-		return System.getProperty("os.name").equals("windows");
+		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
 	private static void activateANSICmd() {
 
-		if (isWindows())
+		if (!isWindows())
 			return;
-
-		String keyString = " " + WRKey.HKCU + "\\Console";
-		String valueString = " /v VirtualTerminalLevel";
-		String dataString =  " /d 0x00000001";
-		String typeString = " /t " + WRType.REG_DWORD;
-
-		String regString = keyString + valueString + dataString + typeString + "/f";
-		Process proc;
 
 		try {
 
-			proc = Runtime.getRuntime().exec("REG ADD " + regString);
+			Process proc = Runtime.getRuntime().exec("REG ADD HKCU\\Console /v VirtualTerminalLevel /d 0x00000001 /t REG_DWORD/f");
 			proc.waitFor();
-			if (proc.exitValue() == 0) {
-
+			if (proc.exitValue() == 0)
 				System.err.println("Failed to set command prompt as ANSI. Headless mode could be corrupted");
-			}
 		}
 
 		catch (IOException e) {
