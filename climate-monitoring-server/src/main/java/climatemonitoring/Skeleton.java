@@ -210,8 +210,23 @@ class Skeleton extends Thread {
 
 					case GET_MONITORED_AREAS: {
 
-						String monitoringCenterID = (String) m_in.readObject();
+						String centerID = (String) m_in.readObject();
 
+						try {
+
+							Area[] result = m_serverDatabase.getMonitoredAreas(centerID);
+
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+
+						catch (DatabaseRequestException e) {
+
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+
+						break;
 					}
 
 					case GET_CENTER: {
@@ -256,6 +271,25 @@ class Skeleton extends Thread {
 						}
 	
 						break;
+					}
+
+					case GET_ASSOCIATED_CENTERS: {
+
+						int geonameID = (Integer) m_in.readObject();
+
+						try {
+
+							Center[] result = m_serverDatabase.getAssociatedCenters(geonameID);
+
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+
+						catch (DatabaseRequestException e) {
+
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
 					}
 
 					case GET_OPERATOR: {
