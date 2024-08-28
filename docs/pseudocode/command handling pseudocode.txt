@@ -17,18 +17,11 @@ LOGIN
 login <user_id> <password>
 
 REGISTER
-register <user_id> <email> <password> <ssid> <name> <surname> <'center_id'>
-(if 'center_id' is not specified, then after the registration it will be required to create a new center)
-{
-
-	if registration has no center id
-		executeCenterCreation()
-}
+register
 
 ADD
-add <what> <args>
+add <what>
 <what>: [area, center, parameter]
-<args>: <(geoname_id, name, ascii_name, country_code, country_name, latitude, longitude), (center_id, street, house_number, postal_code, city, 'district'), (geoname_id, center_id, user_id, category, score, notes)>
 
 EDIT
 edit <profile>
