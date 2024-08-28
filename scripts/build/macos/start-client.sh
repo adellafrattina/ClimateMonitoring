@@ -1,5 +1,5 @@
 #!/bin/bash
 cd ../../../bin/
-java -jar clientCM.jar
+java -XstartOnFirstThread -jar clientCM.jar
 
 

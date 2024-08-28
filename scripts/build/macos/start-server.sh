@@ -1,5 +1,5 @@
 #!/bin/bash
 cd ../../../bin/
-java -jar serverCM.jar
+java -XstartOnFirstThread -jar serverCM.jar
 
 
