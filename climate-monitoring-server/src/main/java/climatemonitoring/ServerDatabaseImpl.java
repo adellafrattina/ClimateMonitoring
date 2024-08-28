@@ -175,7 +175,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 			
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
-			Area[] result = new Area[getQueryRows(query)];
+			Area[] result = new Area[getRowCount(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -215,7 +215,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 			
 			ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
-			Area[] result = new Area[getQueryRows(query)];
+			Area[] result = new Area[getRowCount(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -258,7 +258,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
-			Area[] result = new Area[getQueryRows(query)];
+			Area[] result = new Area[getRowCount(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -308,7 +308,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_name)), center_name;");
-			Center[] result = new Center[getQueryRows(query)];
+			Center[] result = new Center[getRowCount(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -573,7 +573,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
-			Parameter[] result = new Parameter[getQueryRows(query)];
+			Parameter[] result = new Parameter[getRowCount(query)];
 
 			int i = 0;
 			while (query.next()) {
@@ -614,8 +614,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM categories;");
-			Category[] result = new Category[getQueryRows(query)];
+			ResultSet query = execute("SELECT * FROM category;");
+			Category[] result = new Category[getRowCount(query)];
 		
 			int i = 0;
 			while (query.next()) {
@@ -687,6 +687,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String district = center.getDistrict();
 
 			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES ('" + centerID + "', " + city + ", '" + street + "', " + houseNumber + ", " + postalCode + ", " + (district == null ? "null" : "'" + district + "'") + ");");
+			execute("INSERT INTO monitors (center_id, geoname_id) VALUES ('" + centerID + "', " + city + ");");
 			return true;
 		}
 
@@ -744,7 +745,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String centerID = parameter.getCenterID();
 			String time = parameter.getTime();
 			String date = parameter.getDate();
-			String timestamp = time + " " + date;
+			String timestamp = date + " " + time;
 			String categoryID = parameter.getCategory();
 			String userID = parameter.getUserID();
 			int score = parameter.getScore();
@@ -805,9 +806,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center C JOIN area A ON C.city = A.geoname_id WHERE C.center_id = '" + center_id + "' AND A.geoname_id = " + geoname_id + ";");
+			ResultSet query = execute("SELECT * FROM monitors WHERE center_id = '" + center_id + "' AND geoname_id = " + geoname_id + ";");
 
-			if (query.next()) return true;
+			if (getRowCount(query) == 1) return true;
 			else return false;
 		}
 
@@ -832,7 +833,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE C.center_id = '" + center_id + " AND O.user_id = " + user_id + ";");
 
-			if (query.next()) return true;
+			if (getRowCount(query) == 1) return true;
 			else return false;
 		}
 
@@ -883,9 +884,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 		}
 	}
 
-	private int getQueryRows(ResultSet query) throws SQLException {
+	private int getRowCount(ResultSet query) throws SQLException {
 
-		int rows = -1;
+		int rows = 0;
 
 		if (query.last()) {
 

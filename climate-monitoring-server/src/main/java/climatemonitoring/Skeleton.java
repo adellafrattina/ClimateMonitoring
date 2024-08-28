@@ -59,9 +59,9 @@ class Skeleton extends Thread {
 	 */
 	public void run() {
 
-		while (m_running) {
+		try {
 
-			try {
+			while (m_running) {
 
 				RequestType request = (RequestType) m_in.readObject();
 
@@ -521,21 +521,19 @@ class Skeleton extends Thread {
 				}
 			}
 
-			catch (IOException | ConnectionLostException e) {
-
-				Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected unexpectedly");
-				m_running = false;
-			}
-
-			catch (ClassNotFoundException ex) {
-
-				Console.write("Class of a serialized object cannot be found");
-				m_running = false;
-			}
+			Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected");
+			close();
 		}
 
-		close();
-		Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected");
+		catch (IOException | ConnectionLostException e) {
+
+			Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected unexpectedly");
+		}
+
+		catch (ClassNotFoundException ex) {
+
+			Console.write("Class of a serialized object cannot be found");
+		}
 	}
 
 	/**
