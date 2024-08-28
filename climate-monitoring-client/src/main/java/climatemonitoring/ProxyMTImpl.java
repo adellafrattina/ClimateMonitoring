@@ -191,6 +191,21 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * To get all the areas monitored by a specified center
+	 * 
+	 * @param center_id The id of the center the search is based on
+	 * @return The areas monitored as an array of areas
+	 */
+	public Result<Area[]> getMonitoredAreas(String center_id) {
+
+		return new Result<Area[]>() {
+			public Area[] exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getMonitoredAreas(center_id);
+			}
+		};
+	}
+
+	/**
 	 * To get a center by its center id
 	 * 
 	 * @param center_id The center id of the center to be searched
@@ -219,6 +234,21 @@ class ProxyMTImpl implements ProxyMT {
 		return new Result<Center>() {
 			public Center exec() throws ConnectionLostException, DatabaseRequestException {
 				return m_proxy.getCenterByAddress(city, street, house_number);
+			}
+		};
+	}
+
+	/**
+	 * To get all the centers that monitor a specified area
+	 * 
+	 * @param geoname_id The id of the area the search is based on
+	 * @return The centers associated as an array of centers
+	 */
+	public Result<Center[]> getAssociatedCenters(int geoname_id) {
+
+		return new Result<Center[]>() {
+			public Center[] exec() throws ConnectionLostException, DatabaseRequestException {
+				return m_proxy.getAssociatedCenters(geoname_id);
 			}
 		};
 	}
