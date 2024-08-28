@@ -9,6 +9,7 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring.core.headless;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -50,37 +51,37 @@ public class Console {
 	/**
 	 * To set the red color
 	 */
-	public static final String RED = "\u001B[31m";
+	public static final String RED = isWindows() ? "\033[31m" : "\u001B[31m";
 
 	/**
 	 * To set the green color
 	 */
-	public static final String GREEN = "\u001B[32m";
+	public static final String GREEN = isWindows() ? "\033[32m" : "\u001B[32m";
 
 	/**
 	 * To set the yellow color
 	 */
-	public static final String YELLOW = "\u001B[33m";
+	public static final String YELLOW = isWindows() ? "\033[33m" : "\u001B[33m";
 
 	/**
 	 * To set the blue color
 	 */
-	public static final String BLUE = "\u001B[34m";
+	public static final String BLUE = isWindows() ? "\033[34m" : "\u001B[34m";
 
 	/**
 	 * To set the purple color
 	 */
-	public static final String PURPLE = "\u001B[35m";
+	public static final String PURPLE = isWindows() ? "\033[35m" : "\u001B[35m";
 
 	/**
 	 * To set the cyan color
 	 */
-	public static final String CYAN = "\u001B[36m";
+	public static final String CYAN = isWindows() ? "\033[36m" : "\u001B[36m";
 
 	/**
 	 * To set the white color
 	 */
-	public static final String WHITE = "\u001B[37m";
+	public static final String WHITE = isWindows() ? "\033[97m" : "\u001B[37m";
 
 	/**
 	 * <br> To set the log level: </br>
@@ -157,7 +158,7 @@ public class Console {
 		if (s_instance.m_logLevel > DEBUG)
 			return;
 
-		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][DEBUG] " + msg, BLUE);
+		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][" + CYAN + "debug" + RESET + "] " + msg);
 	}
 
 	/**
@@ -169,7 +170,7 @@ public class Console {
 		if (s_instance.m_logLevel > INFO)
 			return;
 
-		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][INFO] " + msg, GREEN);
+		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][" + GREEN + "info" + RESET + "] " + msg);
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class Console {
 		if (s_instance.m_logLevel > WARN)
 			return;
 
-		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][WARN] " + msg, YELLOW);
+		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][" + YELLOW + "warn" + RESET + "] " + msg);
 	}
 
 	/**
@@ -193,7 +194,16 @@ public class Console {
 		if (s_instance.m_logLevel > ERROR)
 			return;
 
-		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][ERROR] " + msg, RED);
+		write("[" + new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(new Date()) + "][" + RED + "error" + RESET + "] " + msg);
+	}
+
+	private enum WRKey {
+		HKLM,  HKCU , HKCR , HKU , HKCC
+	}
+
+	private enum WRType {
+		REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ,
+		REG_DWORD, REG_QWORD, REG_BINARY, REG_NONE
 	}
 
 	/**
@@ -202,12 +212,52 @@ public class Console {
 	private Console() {
 
 		m_in = new Scanner(System.in);
+		activateANSICmd();
+	}
+
+	private static boolean isWindows() {
+
+		return System.getProperty("os.name").equals("windows");
+	}
+
+	private static void activateANSICmd() {
+
+		if (isWindows())
+			return;
+
+		String keyString = " " + WRKey.HKCU + "\\Console";
+		String valueString = " /v VirtualTerminalLevel";
+		String dataString =  " /d 0x00000001";
+		String typeString = " /t " + WRType.REG_DWORD;
+
+		String regString = keyString + valueString + dataString + typeString + "/f";
+		Process proc;
+
+		try {
+
+			proc = Runtime.getRuntime().exec("REG ADD " + regString);
+			proc.waitFor();
+			if (proc.exitValue() == 0) {
+
+				System.err.println("Failed to set command prompt as ANSI. Headless mode could be corrupted");
+			}
+		}
+
+		catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * To revert to deafult color
 	 */
-	private static final String RESET = "\u001B[0m";
+	private static final String RESET = isWindows() ? "\033[0m" : "\u001B[0m";
 
 	private static Console s_instance = new Console();
 
