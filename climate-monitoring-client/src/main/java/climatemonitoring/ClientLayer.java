@@ -98,6 +98,19 @@ class ClientLayer extends Layer {
 						break;
 				}
 				break;
+			case CommandType.INCLUDE:
+				c = new Command(c.getArgs());
+				switch (c.getCmd()) {
+					case "area":
+						AreaInclude.onHeadlessRender(c.getArgs());
+						showView = false;
+						break;
+					default:
+						Console.write("Incorrect command syntax");
+						showView = false;
+					break;
+				}
+				break;
 			case CommandType.SETTINGS:
 				Handler.getView().setCurrentState(ViewType.SETTINGS);
 				break;
