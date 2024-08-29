@@ -53,7 +53,7 @@ class ClientLayer extends Layer {
 						showView = false;
 						break;
 					default:
-						Console.write("Incorrect command syntax");
+						Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [area, center, parameter]");
 						showView = false;
 						break;
 				}
@@ -81,7 +81,7 @@ class ClientLayer extends Layer {
 						Handler.getView().setCurrentState(ViewType.PARAMETER_CREATION);
 						break;
 					default:
-						Console.write("Incorrect command syntax");
+						Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [area, center, parameter]");
 						showView = false;
 						break;
 				}
@@ -93,7 +93,7 @@ class ClientLayer extends Layer {
 						Handler.getView().setCurrentState(ViewType.EDIT_PROFILE);
 						break;
 					default:
-						Console.write("Incorrect command syntax");
+						Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [profile]");
 						showView = false;
 						break;
 				}
@@ -106,7 +106,7 @@ class ClientLayer extends Layer {
 						showView = false;
 						break;
 					default:
-						Console.write("Incorrect command syntax");
+						Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [area]");
 						showView = false;
 					break;
 				}
@@ -133,7 +133,7 @@ class ClientLayer extends Layer {
 				showView = false;
 				break;
 			default:
-				Console.write("Unknown command");
+				Console.write("Unknown command. Type 'help' to get a command list");
 				showView = false;
 				break;
 		}
