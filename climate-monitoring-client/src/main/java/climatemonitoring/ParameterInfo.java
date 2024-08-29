@@ -56,7 +56,7 @@ public class ParameterInfo {
 				}
 
 				String errorMsg = null;
-				if ((errorMsg = Check.monitors(geonameID, m_geonameID)) != null) {
+				if ((errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID)) != null) {
 
 					Console.write(errorMsg);
 					return;
