@@ -16,6 +16,9 @@ view <what> <by> <args>
 LOGIN
 login <user_id> <password>
 
+LOGOUT
+logout
+
 REGISTER
 register
 
@@ -25,6 +28,11 @@ add <what>
 
 EDIT
 edit <profile>
+
+INCLUDE
+include <what> <args>
+<what>: [area]
+<args>: <geoname_id>
 
 SETTINGS
 settings <setting> <args>
