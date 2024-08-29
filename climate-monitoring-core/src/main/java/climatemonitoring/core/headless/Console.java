@@ -137,7 +137,7 @@ public class Console {
 	 */
 	public static void write(String str, String color) {
 
-		System.out.println(str);
+		System.out.println(color + str + RESET);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class Console {
 	 */
 	public static void write(String str) {
 
-		System.out.println(str);
+		write(str, WHITE);
 	}
 
 	/**
