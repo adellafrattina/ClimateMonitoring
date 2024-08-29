@@ -500,6 +500,25 @@ class Skeleton extends Thread {
 						break;
 					}
 
+					case INCLUDE_AREA_TO_CENTER: {
+
+						int geonameID = (Integer) m_in.readObject();
+						String centerID = (String) m_in.readObject();
+
+						try {
+
+							m_serverDatabase.includeAreaToCenter(geonameID, centerID);
+
+							m_out.writeObject(true);
+						}
+
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+					}
+
 					case MONITORS: {
 
 						String centerID = (String) m_in.readObject();
