@@ -220,6 +220,15 @@ public interface DatabaseMT {
 	public Result<Boolean> editOperator(String user_id, Operator operator);
 
 	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 */
+	public Result<Boolean> includeAreaToCenter(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * To check if a monitoring center is monitoring an area
 	 * 
 	 * @param center_id The ID of the center

@@ -262,6 +262,17 @@ public interface Database {
 	public boolean editOperator(String user_id, Operator operator) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean includeAreaToCenter(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * To check if a monitoring center is monitoring an area
 	 * 
 	 * @param center_id The ID of the center
