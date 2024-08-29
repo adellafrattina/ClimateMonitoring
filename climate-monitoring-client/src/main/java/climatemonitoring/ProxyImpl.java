@@ -888,7 +888,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				return (boolean) in.readObject();
+				return true;
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
