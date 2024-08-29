@@ -48,6 +48,10 @@ class ClientLayer extends Layer {
 					case "center":
 						Handler.getView().setCurrentState(ViewType.CENTER_INFO);
 						break;
+					case "parameter":
+						ParameterInfo.onHeadlessRender(c.getArgs());
+						showView = false;
+						break;
 					default:
 						Console.write("Incorrect command syntax");
 						showView = false;
@@ -56,6 +60,10 @@ class ClientLayer extends Layer {
 				break;
 			case CommandType.LOGIN:
 				Handler.getView().setCurrentState(ViewType.LOGIN);
+				break;
+			case CommandType.LOGOUT:
+				Handler.setLoggedOperator(null);
+				showView = false;
 				break;
 			case CommandType.REGISTER:
 				Handler.getView().setCurrentState(ViewType.REGISTRATION);
