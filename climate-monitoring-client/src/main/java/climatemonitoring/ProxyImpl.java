@@ -605,14 +605,51 @@ class ProxyImpl implements Proxy{
 	 */
 	@Override
 	public synchronized Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
+		
+		Parameter[] getparameters = null;
+		
+		try {
+			
+			out.writeObject(RequestType.GET_PARAMETERS_AREA_CENTER);
+			out.writeObject(geoname_id);
+			out.writeObject(center_id);
+			
+			boolean success = (boolean) in.readObject();
+			
+			if(success == true){
+				getparameters = (Parameter[]) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+			
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+		
+		return getparameters;
+	}
+	
+	/**
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
 
 		Parameter[] getparameters = null;
 
 		try {
 
-			out.writeObject(RequestType.GET_PARAMETERS_AREA_CENTER);
+			out.writeObject(RequestType.GET_PARAMETERS_AREA);
 			out.writeObject(geoname_id);
-			out.writeObject(center_id);
 
 			boolean success = (boolean) in.readObject();
 
@@ -631,7 +668,7 @@ class ProxyImpl implements Proxy{
 
 		return getparameters;
 	}
-	
+
 	/**
 	 * Get all the categories and their explanation
 	 * 
@@ -830,6 +867,41 @@ class ProxyImpl implements Proxy{
 
 		return false;
 	}
+
+	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public boolean includeAreaToCenter(int geoname_id, String center_id)throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+	
+			out.writeObject(RequestType.INCLUDE_AREA_TO_CENTER);
+			out.writeObject(geoname_id);
+			out.writeObject(center_id);
+			boolean success = (boolean) in.readObject();
+
+			if(success == true){
+				return (boolean) in.readObject();
+			}else{
+				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
+				throw e;
+			}
+
+		} catch (IOException e) {
+			throw new ConnectionLostException();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 	
 	/**
 	 * To check if a monitoring center is monitoring an area
@@ -968,4 +1040,5 @@ class ProxyImpl implements Proxy{
 	private Socket s;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+
 }

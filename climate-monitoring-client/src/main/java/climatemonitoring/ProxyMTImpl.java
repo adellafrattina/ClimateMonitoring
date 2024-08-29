@@ -321,6 +321,23 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 */
+	@Override
+	public Result<Parameter[]> getParameters(int geoname_id) {
+
+		return new Result<Parameter[]>() {
+			public Parameter[] exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getParameters(geoname_id);
+			}
+		};
+	}
+
+	/**
 	 * Get all the categories and their explanation.
 	 * This method will be executed in another thread, so the method is non-blocking.
 	 * 
@@ -423,6 +440,23 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 */
+	@Override
+	public Result<Boolean> includeAreaToCenter(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		return new Result<Boolean>() {
+			public Boolean exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.includeAreaToCenter(geoname_id, center_id);
+			}
+		};
+	}
+
+	/**
 	 * To check if a monitoring center is monitoring an area
 	 * 
 	 * @param center_id The ID of the center
@@ -489,5 +523,4 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	private Proxy m_proxy;
-
 }
