@@ -31,6 +31,11 @@ class CommandType {
 	 * The command used to log into the application with user_id and password
 	 */
 	public static final String LOGIN = "login";
+
+	/**
+	 * The command used to log out
+	 */
+	public static final String LOGOUT = "logout";
 	
 	/**
 	 * The command used to create a new account with user_id, surname, name, ssid, email and password
@@ -46,6 +51,11 @@ class CommandType {
 	 * The command to edit the operator's account
 	 */
 	public static final String EDIT = "edit";
+
+	/**
+	 * The command used to include an existing area to the logged operator's center
+	 */
+	public static final String INCLUDE = "include";
 	
 	/**
 	 * The command to change a bunch of settings such as the application's theme to classic, light and dark
