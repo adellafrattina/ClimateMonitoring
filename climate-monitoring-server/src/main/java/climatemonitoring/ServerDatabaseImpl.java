@@ -673,6 +673,34 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * Returns an array containing parameters about a specified area
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT center_id FROM parameter ORDER BY rec_timestamp DESC LIMIT 1");
+			Parameter[] result = null;
+
+			if (getRowCount(query) == 1)
+				result = getParameters(geoname_id, query.getString("center_id"));
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions

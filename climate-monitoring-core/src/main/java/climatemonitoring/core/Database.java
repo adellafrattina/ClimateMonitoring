@@ -200,6 +200,16 @@ public interface Database {
 	public Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
+	 * Returns an array containing parameters about a specified area
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions

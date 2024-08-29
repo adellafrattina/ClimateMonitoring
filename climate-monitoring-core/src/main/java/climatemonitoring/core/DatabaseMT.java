@@ -170,6 +170,14 @@ public interface DatabaseMT {
 	public Result<Parameter[]> getParameters(int geoname_id, String center_id);
 
 	/**
+	 * Returns an array containing parameters about a specified area
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 */
+	public Result<Parameter[]> getParameters(int geoname_id);
+
+	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions

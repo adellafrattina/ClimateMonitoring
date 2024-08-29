@@ -97,6 +97,11 @@ public enum RequestType {
 	GET_PARAMETERS_AREA_CENTER,
 
 	/**
+	 * To get the parameters based on an area
+	 */
+	GET_PARAMETERS_AREA,
+
+	/**
 	 * To get all the categories that are present in the database
 	 */
 	GET_CATEGORIES,
