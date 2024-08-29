@@ -132,7 +132,7 @@ class Registration extends ViewState {
 				Handler.getProxyServer().addCenter(cc.newCenter);
 
 			Handler.getProxyServer().addOperator(operator);
-			Console.write("Registration succesful!");
+			Console.write("Registration successful!");
 		}
 
 		catch (DatabaseRequestException e) {
