@@ -60,6 +60,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized void shutdown() {
 
 		if (m_connection != null)
+
 			try {
 
 				m_connection.close();
@@ -304,7 +305,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_name)), center_name;");
+			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_id)), center_id;");
 			Center[] result = new Center[getRowCount(query)];
 
 			while (query.next()) {

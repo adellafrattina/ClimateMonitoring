@@ -509,6 +509,7 @@ class Skeleton extends Thread {
 	
 							boolean result = m_serverDatabase.monitors(centerID, geonameID);
 	
+							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
 	
@@ -530,6 +531,7 @@ class Skeleton extends Thread {
 	
 							boolean result = m_serverDatabase.employs(centerID, userID);
 	
+							m_out.writeObject(true);
 							m_out.writeObject(result);
 						}
 	
