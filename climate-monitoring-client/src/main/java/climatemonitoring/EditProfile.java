@@ -11,6 +11,20 @@ class EditProfile extends ViewState {
 	@Override
 	public void onHeadlessRender(String args) {
 
+		if (!Handler.isOperatorLoggedIn()) {
+
+			Console.write("You must be a logged operator to edit your profile");
+			return;
+		}
+
+		m_userID = Handler.getLoggedOperator().getUserID();
+		m_ssid = new String(Handler.getLoggedOperator().getSSID());
+		m_surname = Handler.getLoggedOperator().getSurname();
+		m_name = Handler.getLoggedOperator().getName();
+		m_email = Handler.getLoggedOperator().getEmail();
+		m_password = Handler.getLoggedOperator().getPassword();
+		m_centerID = Handler.getLoggedOperator().getCenterID();
+
 		Console.write("User ID > " + m_userID);
 		Console.write("SSID > " + m_ssid);
 		Console.write("Surname > " + m_surname);
@@ -20,6 +34,20 @@ class EditProfile extends ViewState {
 		Console.write("Center ID > " + m_centerID);
 
 		String errorMsg = null;
+		do {
+
+			String answear = Console.read("Do you want to edit your profile? [Y/n]").trim().toLowerCase();
+			if (answear.equals("y"))
+				errorMsg = null;
+			else if (answear.equals("n"))
+				return;
+			else
+				errorMsg = "Not a valid answear";
+
+			if (errorMsg != null)
+				Console.write(errorMsg);
+
+		} while(errorMsg != null);
 
 		try {
 
