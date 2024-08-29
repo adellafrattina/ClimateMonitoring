@@ -170,6 +170,15 @@ public interface DatabaseMT {
 	public Result<Parameter[]> getParameters(int geoname_id, String center_id);
 
 	/**
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 */
+	public Result<Parameter[]> getParameters(int geoname_id);
+
+	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
@@ -218,6 +227,15 @@ public interface DatabaseMT {
 	 * @return Success or failure of the operation
 	 */
 	public Result<Boolean> editOperator(String user_id, Operator operator);
+
+	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 */
+	public Result<Boolean> includeAreaToCenter(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * To check if a monitoring center is monitoring an area

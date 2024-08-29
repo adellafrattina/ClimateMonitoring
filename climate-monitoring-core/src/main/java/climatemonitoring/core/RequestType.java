@@ -97,6 +97,11 @@ public enum RequestType {
 	GET_PARAMETERS_AREA_CENTER,
 
 	/**
+	 * To get the parameters based on an area
+	 */
+	GET_PARAMETERS_AREA,
+
+	/**
 	 * To get all the categories that are present in the database
 	 */
 	GET_CATEGORIES,
@@ -127,6 +132,11 @@ public enum RequestType {
 	 * To edit an existing operator
 	 */
 	EDIT_OPERATOR,
+
+	/**
+	 * To add an existing area to a specified center
+	 */
+	INCLUDE_AREA_TO_CENTER,
 
 	/**
 	 * To check if a monitoring center is monitoring an area

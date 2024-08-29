@@ -673,6 +673,35 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
+	 * 
+	 * @param geoname_id The area's ID
+	 * @return The result of the search as an array of parameters
+	 * @throws ConnectionLostException If the server loses connection to the database during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public synchronized Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT center_id FROM parameter ORDER BY rec_timestamp DESC LIMIT 1");
+			Parameter[] result = null;
+
+			if (getRowCount(query) == 1)
+				result = getParameters(geoname_id, query.getString("center_id"));
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * Get all the categories and their explanation
 	 * 
 	 * @return An array of all categories with relative descriptions
@@ -853,6 +882,29 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String centerID = operator.getCenterID();
 
 			execute("IF EXISTS (SELECT user_id FROM operator WHERE user_id = '" + user_id + "') THEN UPDATE OPERATOR SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = '" + centerID + "' END IF;");
+			return true;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To add an existing area to a specified center
+	 * 
+	 * @param geoname_id The area to be added in the center
+	 * @param center_id The center the area needs to be added in
+	 * @return Success or failure of the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public boolean includeAreaToCenter(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			execute("INSERT INTO monitors (center_id, geoname_id) VALUES ('" + center_id + "', " + geoname_id + ");");
 			return true;
 		}
 

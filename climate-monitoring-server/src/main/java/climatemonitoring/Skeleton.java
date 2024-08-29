@@ -378,6 +378,27 @@ class Skeleton extends Thread {
 						break;
 					}
 
+					case GET_PARAMETERS_AREA: {
+
+						int geonameID = (Integer) m_in.readObject();
+	
+						try {
+	
+							Parameter[] result = m_serverDatabase.getParameters(geonameID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+	
+						break;
+					}
+
 					case GET_CATEGORIES: {
 
 						try {
@@ -497,6 +518,27 @@ class Skeleton extends Thread {
 							m_out.writeObject(e);
 						}
 	
+						break;
+					}
+
+					case INCLUDE_AREA_TO_CENTER: {
+
+						int geonameID = (Integer) m_in.readObject();
+						String centerID = (String) m_in.readObject();
+
+						try {
+
+							m_serverDatabase.includeAreaToCenter(geonameID, centerID);
+
+							m_out.writeObject(true);
+						}
+
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+						}
+
 						break;
 					}
 
