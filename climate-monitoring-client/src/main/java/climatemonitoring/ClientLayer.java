@@ -31,7 +31,7 @@ class ClientLayer extends Layer {
 		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION)
 			Handler.getView().onHeadlessRender("");
 
-		String line = Console.read(">").toLowerCase();
+		String line = Console.read("> ").toLowerCase();
 		Command c = new Command(line);
 		boolean showView = true;
 
