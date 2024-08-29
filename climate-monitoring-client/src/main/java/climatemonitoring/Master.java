@@ -89,9 +89,10 @@ class Master extends ViewState {
 					return;
 			}
 	
+			int i = 0;
 			if (foundAreas != null)
 				for (Area area : foundAreas)
-					Console.write(area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
+					Console.write(i++ + ". " + area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
 			else
 				Console.write("No matching areas");
 		}
@@ -117,9 +118,15 @@ class Master extends ViewState {
 				return;
 		}
 
-		if (foundCenters != null)
-			for (Center center : foundCenters)
-				Console.write(center.getCenterID() + " - " + Handler.getProxyServer().getArea(center.getCity()) + " " + center.getStreet() + ", " + center.getHouseNumber());
+		if (foundCenters != null) {
+
+			int i = 0;
+			for (Center center : foundCenters) {
+
+				Area area = Handler.getProxyServer().getArea(center.getCity());
+				Console.write(i++ + ". " + center.getCenterID() + " - (" + area.getGeonameID() + ") " + area.getAsciiName() + " " + center.getStreet() + ", " + center.getHouseNumber());
+			}
+		}
 		else
 			Console.write("No matching centers");
 	}
