@@ -28,6 +28,8 @@ class Login extends ViewState {
 
 			if(op == null)
 				Console.write("Wrong username or password");
+			else
+				Console.write("Login successful!");
 			
 			Handler.setLoggedOperator(op);
 		} catch (ConnectionLostException e) {
