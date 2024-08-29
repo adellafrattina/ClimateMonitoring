@@ -200,7 +200,8 @@ public interface Database {
 	public Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
-	 * Returns an array containing parameters about a specified area
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
 	 * 
 	 * @param geoname_id The area's ID
 	 * @return The result of the search as an array of parameters

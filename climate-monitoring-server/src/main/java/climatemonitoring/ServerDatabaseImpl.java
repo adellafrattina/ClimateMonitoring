@@ -673,7 +673,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
-	 * Returns an array containing parameters about a specified area
+	 * Returns an array containing parameters about a specified area from
+	 * the last center that submitted a parameter
 	 * 
 	 * @param geoname_id The area's ID
 	 * @return The result of the search as an array of parameters
