@@ -61,8 +61,8 @@ class Registration extends ViewState {
 
 			do {
 
-				m_name = Console.read("Name > ");
-				errorMsg = Check.name(m_name);
+				m_surname = Console.read("Surname > ");
+				errorMsg = Check.surname(m_surname);
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
@@ -71,8 +71,8 @@ class Registration extends ViewState {
 
 			do {
 
-				m_surname = Console.read("Surname > ");
-				errorMsg = Check.surname(m_surname);
+				m_name = Console.read("Name > ");
+				errorMsg = Check.name(m_name);
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
