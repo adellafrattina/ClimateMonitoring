@@ -46,14 +46,15 @@ public class AreaInclude {
 				return;
 			}
 
-			String errorMsg = null;
-			if ((errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID)) != null) {
+			if (Handler.getProxyServer().monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID)) {
 
-				Console.write(errorMsg);
+				Console.write("This area is already monitored");
 				return;
 			}
 
 			Handler.getProxyServer().includeAreaToCenter(m_geonameID, Handler.getLoggedOperator().getCenterID());
+
+			Console.write("Area successfully included");
 		}
 
 		catch (NumberFormatException e) {
