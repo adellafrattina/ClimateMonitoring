@@ -517,6 +517,8 @@ class Skeleton extends Thread {
 							m_out.writeObject(false);
 							m_out.writeObject(e);
 						}
+
+						break;
 					}
 
 					case MONITORS: {
