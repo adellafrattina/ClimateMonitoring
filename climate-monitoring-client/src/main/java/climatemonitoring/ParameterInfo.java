@@ -49,14 +49,15 @@ public class ParameterInfo {
 
 			else {
 
-				if (Check.registrationCenterID(geonameID) != null) {
+				m_centerID = st.nextToken();
+				if (Check.registrationCenterID(m_centerID) != null) {
 
 					Console.write("The specified center ID does not exist");
 					return;
 				}
 
 				String errorMsg = null;
-				if ((errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID)) != null) {
+				if ((errorMsg = Check.monitors(m_centerID, m_geonameID)) != null) {
 
 					Console.write(errorMsg);
 					return;
