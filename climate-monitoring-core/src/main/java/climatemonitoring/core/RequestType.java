@@ -129,6 +129,11 @@ public enum RequestType {
 	EDIT_OPERATOR,
 
 	/**
+	 * To add an existing area to a specified center
+	 */
+	INCLUDE_AREA_TO_CENTER,
+
+	/**
 	 * To check if a monitoring center is monitoring an area
 	*/
 	MONITORS,
