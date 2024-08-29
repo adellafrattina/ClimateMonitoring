@@ -18,7 +18,7 @@ import climatemonitoring.core.headless.Console;
 
 public class ParameterInfo {
 
-	public void onHeadlessRender(String args) {
+	public static void onHeadlessRender(String args) {
 
 		String geonameID = null;
 
@@ -93,12 +93,12 @@ public class ParameterInfo {
 		}
 	}
 
-	public void onGUIRender() {
+	public static void onGUIRender() {
 
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
 
-	private Parameter[] m_parameters;
-	private int m_geonameID;
-	private String m_centerID;
+	private static Parameter[] m_parameters;
+	private static int m_geonameID;
+	private static String m_centerID;
 }
