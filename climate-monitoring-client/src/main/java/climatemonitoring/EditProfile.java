@@ -43,7 +43,6 @@ class EditProfile extends ViewState {
 		Console.write("Surname > " + m_surname);
 		Console.write("Name > " + m_name);
 		Console.write("Email > " + m_email);
-		Console.write("Password > " + m_password);
 		Console.write("Center ID > " + m_centerID);
 
 		String errorMsg = null;
@@ -116,8 +115,18 @@ class EditProfile extends ViewState {
 
 			do {
 
-				m_password = Console.read("New Password > ");
-				errorMsg = Check.password(m_password);
+				String oldPassword = Console.read("Old Password > ");
+
+				if (oldPassword.equals(m_password)) {
+
+					m_password = Console.read("New Password > ");
+					errorMsg = Check.password(m_password);
+				}
+
+				else {
+
+					errorMsg = "Incorrect password";
+				}
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
