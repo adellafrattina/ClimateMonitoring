@@ -146,6 +146,7 @@ class Handler {
 		m_view.addState(new CenterInfo());
 		m_view.addState(new AreaInfo());
 		m_view.addState(new Connection());
+		m_view.addState(new Help());
 
 		// adellafrattina: MASTER gets set before CONNECTION, so when we call "returnToPreviousState" inside the Connection view state,
 		// it goes back to Master view state, instead of throwing NullPointerException
