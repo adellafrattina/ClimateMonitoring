@@ -38,7 +38,7 @@ class SearchCenter {
 				return;
 		}
 
-		if (m_foundCenters != null) {
+		if (m_foundCenters != null && m_foundCenters.length != 0) {
 
 			int i = 0;
 			for (Center center : m_foundCenters) {
