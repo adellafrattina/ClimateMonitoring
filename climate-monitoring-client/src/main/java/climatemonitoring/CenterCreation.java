@@ -89,7 +89,7 @@ class CenterCreation extends ViewState {
 			if (getView().getPreviousStateIndex() == ViewType.REGISTRATION) return;
 
 			Handler.getProxyServer().addCenter(newCenter);
-			Console.write("Monitoring center created succesfully!");
+			Console.write("Monitoring center created successfully!");
 		}
 
 		catch (DatabaseRequestException e) {

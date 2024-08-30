@@ -48,11 +48,12 @@ class Login extends ViewState {
 			
 			Handler.setLoggedOperator(op);
 		} catch (ConnectionLostException e) {
-			
-			getView().setCurrentState(ViewType.CONNECTION);
+
+			Console.write("Connection lost");
+			setCurrentState(ViewType.CONNECTION);
 		} catch (DatabaseRequestException e) {
 
-			e.printStackTrace();
+			Console.write("Error message from database: " + e.getMessage());
 		}
 	}
 

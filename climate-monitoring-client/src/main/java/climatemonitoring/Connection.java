@@ -41,9 +41,10 @@ class Connection extends ViewState {
 			onHeadlessRender(args);
 		}
 		catch(Exception e){
+			Console.write("Unexpected error in Connection view (this should not have happened). Stack trace:");
 			e.printStackTrace();
+			System.exit(-1);
 		}
-		returnToPreviousState();
 	}
 
 	@Override

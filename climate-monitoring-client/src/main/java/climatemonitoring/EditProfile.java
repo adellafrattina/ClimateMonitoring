@@ -140,12 +140,12 @@ class EditProfile extends ViewState {
 
 		catch (DatabaseRequestException e) {
 
-			Console.write(e.getMessage());
-			onHeadlessRender("");
+			Console.write("Error message from database: " + e.getMessage());
 		}
 
 		catch (ConnectionLostException e) {
 
+			Console.write("Connection lost");
 			setCurrentState(ViewType.CONNECTION);
 		}
 	}

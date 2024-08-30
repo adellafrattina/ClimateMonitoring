@@ -66,9 +66,9 @@ class CenterInfo extends ViewState {
 			}
 		} catch (DatabaseRequestException e) {
 
-			Console.write(e.getMessage());
+			Console.write("Error message from database: " + e.getMessage());
 		} catch (ConnectionLostException e) {
-
+			Console.write("Connection lost");
 			getView().setCurrentState(ViewType.CONNECTION);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			
