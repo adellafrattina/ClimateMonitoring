@@ -68,7 +68,7 @@ class CenterInfo extends ViewState {
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
 	}
 
-	private void printCenterInfo(Center center) {
+	private void printCenterInfo(Center center) throws ConnectionLostException, DatabaseRequestException {
 
 		Console.write("Name > " + center.getCenterID());
 		Console.write("Street > " + center.getStreet() + ", "+ center.getHouseNumber());
