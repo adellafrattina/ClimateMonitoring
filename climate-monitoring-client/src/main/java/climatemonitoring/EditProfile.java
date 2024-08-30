@@ -23,6 +23,13 @@ class EditProfile extends ViewState {
 			return;
 		}
 
+		String password = Console.read("Password for " + Handler.getLoggedOperator().getUserID() + " > ");
+		if (!password.equals(Handler.getLoggedOperator().getPassword())) {
+
+			Console.write("Invalid password");
+			return;
+		}
+
 		m_userID = Handler.getLoggedOperator().getUserID();
 		m_ssid = new String(Handler.getLoggedOperator().getSSID());
 		m_surname = Handler.getLoggedOperator().getSurname();
@@ -31,7 +38,7 @@ class EditProfile extends ViewState {
 		m_password = Handler.getLoggedOperator().getPassword();
 		m_centerID = Handler.getLoggedOperator().getCenterID();
 
-		Console.write("User ID > " + m_userID);
+		Console.write("\nUser ID > " + m_userID);
 		Console.write("SSID > " + m_ssid);
 		Console.write("Surname > " + m_surname);
 		Console.write("Name > " + m_name);
@@ -43,7 +50,7 @@ class EditProfile extends ViewState {
 		do {
 
 			String answer = Console.read("Do you want to edit your profile? [Y/n]").trim().toLowerCase();
-			if (answer.equals("y"))
+			if (answer.equals("y")) 
 				errorMsg = null;
 			else if (answer.equals("n"))
 				return;
