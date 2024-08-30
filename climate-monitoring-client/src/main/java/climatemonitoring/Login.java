@@ -26,6 +26,8 @@ class Login extends ViewState {
 	@Override
 	public void onHeadlessRender(String args) {
 
+		Console.deletePreviousLine();
+
 		String[] parts = args.split(" ");
 		
 		if(parts.length < 2) {
