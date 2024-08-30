@@ -17,6 +17,12 @@ import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
+/**
+ * The main view. Mainly to search areas (and centers in Headless mode)
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 class Master extends ViewState {
 
 	@Override

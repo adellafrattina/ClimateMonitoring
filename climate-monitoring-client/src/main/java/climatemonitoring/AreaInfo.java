@@ -16,6 +16,12 @@ import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
+/**
+ * To view area info (also parameters info in GUI mode)
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 class AreaInfo extends ViewState {
 
 	@Override

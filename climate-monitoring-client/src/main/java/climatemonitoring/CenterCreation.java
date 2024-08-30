@@ -1,3 +1,12 @@
+/*
+
+Alessandro della Frattina 753073 VA
+Cristian Capiferri 752918 VA
+Francesco Lops 753175 VA
+Dariia Sniezhko 753057 VA
+
+*/
+
 package climatemonitoring;
 
 import climatemonitoring.core.Center;
@@ -6,6 +15,12 @@ import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To add a new center
+ * 
+ * @author ccapiferri
+ * @version 1.0-SNAPSHOT
+ */
 class CenterCreation extends ViewState {
 
 	@Override

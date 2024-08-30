@@ -16,6 +16,12 @@ import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Parameter;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To show all the parameters based on an area. This is not a typical view state, because it behaves differenty in GUI and Headless mode
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 public class ParameterInfo {
 
 	public static void onHeadlessRender(String args) {

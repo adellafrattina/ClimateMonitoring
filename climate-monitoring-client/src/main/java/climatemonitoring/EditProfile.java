@@ -6,6 +6,12 @@ import climatemonitoring.core.Operator;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To edit the operator's profile
+ * 
+ * @author ccapiferri
+ * @version 1.0-SNAPSHOT
+ */
 class EditProfile extends ViewState {
 
 	@Override

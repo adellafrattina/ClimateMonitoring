@@ -17,6 +17,12 @@ import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
+/**
+ * To view center info (also area inclusion if the operator is logged in GUI mode)
+ * 
+ * @author francescolops
+ * @version 1.0-SNAPSHOT
+ */
 class CenterInfo extends ViewState {
 
 	@Override

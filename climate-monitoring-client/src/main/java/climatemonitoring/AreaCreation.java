@@ -15,6 +15,12 @@ import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To add a new area
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 class AreaCreation extends ViewState {
 
 	@Override

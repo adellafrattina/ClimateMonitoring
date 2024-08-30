@@ -15,6 +15,12 @@ import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To add an existing area to the logged operator's center
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 public class AreaInclude {
 
 	public static void onHeadlessRender(String args) {

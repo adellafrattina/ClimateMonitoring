@@ -13,6 +13,12 @@ import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To show when the client is trying to connect to a server
+ * 
+ * @author dariiasniezhkoinsubria
+ * @version 1.0-SNAPSHOT
+ */
 class Connection extends ViewState {
 
 	@Override

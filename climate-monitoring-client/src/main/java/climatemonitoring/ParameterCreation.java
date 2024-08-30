@@ -20,6 +20,12 @@ import climatemonitoring.core.Parameter;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.headless.Console;
 
+/**
+ * To add a new parameter
+ * 
+ * @author adellafrattina
+ * @version 1.0-SNAPSHOT
+ */
 class ParameterCreation extends ViewState {
 
 	@Override
