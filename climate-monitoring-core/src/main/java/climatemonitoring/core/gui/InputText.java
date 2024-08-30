@@ -10,6 +10,7 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring.core.gui;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.type.ImString;
 import imgui.flag.ImGuiInputTextFlags;
 
@@ -22,7 +23,7 @@ import imgui.flag.ImGuiInputTextFlags;
  * @author adellafrattina
  * @version 1.0-SNAPSHOT
  */
-public class InputText {
+public class InputText extends Widget {
 
 	/**
 	 * Initialize InputText fields
@@ -62,50 +63,15 @@ public class InputText {
 
 	/**
 	 * Renders to screen the input text box
-	 * @param width The box width
-	 * @param x The box x position
-	 * @param y The box y position
-	 * @return True when the user is typing by default, but if the {@link #setEnterReturnsTrue(boolean)} method set the flag to true, then the function will return true only if the user presses enter while the input text has focus
-	 */
-	public boolean render(float width, float x, float y) {
-
-		ImGui.beginDisabled(((flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
-
-		ImGui.pushItemWidth(width);
-		ImGui.setCursorPos(x, y);
-		ImGui.text(m_label);
-		ImGui.sameLine();
-		final boolean value = ImGui.inputText("##" + m_label, m_string, flags);
-		ImGui.popItemWidth();
-
-		if (m_showErrorMsg) {
-
-			ImGui.setCursorPosX(x);
-			ImGui.textColored(1.0f, 0.0f, 0.0f, 1.0f, m_errorMsg);
-		}
-
-		ImGui.endDisabled();
-
-		return value;
-	}
-
-	/**
-	 * Renders to screen the input text box
-	 * @param width The box width
-	 * @return True when the user is typing by default, but if the {@link #setEnterReturnsTrue(boolean)} method set the flag to true, then the function will return true only if the user presses enter while the input text has focus
-	 */
-	public boolean render(float width) {
-
-		return render(width, ImGui.getCursorPosX(), ImGui.getCursorPosY());
-	}
-
-	/**
-	 * Renders to screen the input text box
 	 * @return True when the user is typing by default, but if the {@link #setEnterReturnsTrue(boolean)} method set the flag to true, then the function will return true only if the user presses enter while the input text has focus
 	 */
 	public boolean render() {
 
-		return render(-1, ImGui.getCursorPosX(), ImGui.getCursorPosY());
+		begin();
+		final boolean value = ImGui.inputText("##" + m_label, m_string, flags);
+		end();
+
+		return value;
 	}
 
 	/**
@@ -161,7 +127,7 @@ public class InputText {
 	}
 
 	/**
-	 * When not set, the default behavior for the {@link #render}, {@link #render(float)} and {@link #render(float, float, float)} methods is to return true when the user types. When set, it returns true only if the user presses enter when the input text box has focus
+	 * When not set, the default behavior for the {@link #render} method is to return true when the user types. When set, it returns true only if the user presses enter when the input text box has focus
 	 * @param enable True to enable, false to disable
 	 */
 	public void setEnterReturnsTrue(boolean enable) {
@@ -211,6 +177,35 @@ public class InputText {
 	public String getString() {
 
 		return m_string.toString();
+	}
+
+	protected void begin() {
+
+		ImGui.beginDisabled(((flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
+
+		if (m_label != null || !m_label.isEmpty()) {
+
+			ImVec2 size = ImGui.calcTextSize(m_label);
+			ImGui.setCursorPosX(getPositionX() + getWidth() / 2.0f - size.x / 2.0f);
+			ImGui.text(m_label);
+		}
+
+		ImGui.pushItemWidth(getWidth());
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
+	}
+
+	protected void end() {
+
+		ImGui.popItemWidth();
+
+		if (m_showErrorMsg) {
+
+			ImVec2 size = ImGui.calcTextSize(m_errorMsg);
+			ImGui.setCursorPosX(getPositionX() + getWidth() / 2.0f - size.x / 2.0f);
+			ImGui.textColored(1.0f, 0.0f, 0.0f, 1.0f, m_errorMsg);
+		}
+
+		ImGui.endDisabled();
 	}
 
 	private ImString m_string;
