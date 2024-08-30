@@ -383,7 +383,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT A.* FROM area A JOIN monitors M on A.geoname_id = M.geoname_id WHERE center_id = '" + center_id + "';");
 			Area[] result = new Area[getRowCount(query)];
 
-			if (query.next()) {
+			while (query.next()) {
 
 				int geonameID = query.getInt("geoname_id");
 				String areaName = query.getString("area_name");
@@ -418,7 +418,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE center_id = '" + center_id + "';");
+			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) = LOWER('" + center_id + "');");
 			Center result = null;
 
 			if (query.next()) {
@@ -689,7 +689,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT center_id FROM parameter ORDER BY rec_timestamp DESC LIMIT 1");
 			Parameter[] result = null;
 
-			if (getRowCount(query) == 1)
+			if (query.next())
 				result = getParameters(geoname_id, query.getString("center_id"));
 
 			return result;
