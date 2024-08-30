@@ -24,12 +24,13 @@ class Connection extends ViewState {
 	@Override
 	public void onHeadlessRender(String args) {
 
-		Handler.connect();
 		Console.write("Connecting...");
+		Handler.connect();
 		Handler.getConnectionResult().join();
 		try{
 			Handler.getConnectionResult().get();
 			Console.write("Connection established");
+			returnToPreviousState();
 		}
 		catch(ConnectionLostException e){
 			Console.write("Failed to connect to server");
