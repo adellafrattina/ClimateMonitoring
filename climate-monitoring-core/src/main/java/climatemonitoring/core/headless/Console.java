@@ -150,6 +150,15 @@ public class Console {
 	}
 
 	/**
+	 * To delete the previous line (used to hide info, such as a password)
+	 */
+	public static void deletePreviousLine() {
+
+		System.out.print("\033[1A");
+		System.out.print("\033[2K");
+	}
+
+	/**
 	 * To print out debug messages
 	 * @param msg The desired message
 	 */
