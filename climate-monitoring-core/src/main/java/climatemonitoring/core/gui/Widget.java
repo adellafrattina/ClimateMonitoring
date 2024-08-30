@@ -80,8 +80,8 @@ public class Widget {
 	 */
 	public void setPosition(float x, float y) {
 
-		setPositionX(x);
-		setPositionY(y);
+		m_x = x;
+		m_y = y;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class Widget {
 	 */
 	public void setPositionX(float x) {
 
-		m_x = x == DEFAULT_X ? ImGui.getCursorPosX() : x;
+		m_x = x;
 	}
 
 	/**
@@ -99,13 +99,7 @@ public class Widget {
 	 */
 	public void setPositionY(float y) {
 
-		if (y == SAME_LINE_Y) {
-
-			ImGui.sameLine();
-			y = DEFAULT_Y;
-		}
-
-		m_y = y == DEFAULT_Y ? ImGui.getCursorPosY() : y;
+		m_y = y;
 	}
 
 	/**
@@ -161,7 +155,7 @@ public class Widget {
 	 */
 	public float getPositionX() {
 
-		return m_x;
+		return m_x = (m_x == DEFAULT_X ? ImGui.getCursorPosX() : m_x);
 	}
 
 	/**
@@ -170,7 +164,13 @@ public class Widget {
 	 */
 	public float getPositionY() {
 
-		return m_y;
+		if (m_y == SAME_LINE_Y) {
+
+			ImGui.sameLine();
+			m_y = DEFAULT_Y;
+		}
+
+		return m_y = (m_y == DEFAULT_Y ? ImGui.getCursorPosY() : m_y);
 	}
 
 	/**
@@ -179,7 +179,15 @@ public class Widget {
 	 */
 	public float getWidth() {
 
-		return m_width;
+		float width = m_width;
+		if (m_width == DEFAULT_WIDTH) {
+
+			ImGui.pushItemWidth(m_width);
+			width = ImGui.calcItemWidth();
+			ImGui.popItemWidth();
+		}
+
+		return width;
 	}
 
 	/**
