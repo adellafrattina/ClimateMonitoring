@@ -99,8 +99,11 @@ class Registration extends ViewState {
 				m_centerID = Console.read("Center ID > ");
 				errorMsg = Check.registrationCenterID(m_centerID);
 
-				if (errorMsg != null)
+				if (errorMsg != null) {
+
 					Console.write(errorMsg);
+					m_centerID = null;
+				}
 
 			} while (errorMsg != null);
 
