@@ -51,7 +51,7 @@ class EditProfile extends ViewState {
 		do {
 
 			String answer = Console.read("Do you want to edit your profile? [Y/n]").trim().toLowerCase();
-			if (answer.equals("y")) 
+			if (answer.equals("y"))
 				errorMsg = null;
 			else if (answer.equals("n"))
 				return;
@@ -67,94 +67,108 @@ class EditProfile extends ViewState {
 
 			do {
 
-				String newSSID = Console.read("New SSID > ");
+				String newSSID = Console.read("New SSID > ").toUpperCase().trim();
 
-				if (!newSSID.equals(m_ssid)) {
+				if (Check.isEmpty(newSSID) != null || newSSID.equals(m_ssid))
+					errorMsg = null;
 
-					errorMsg = Check.ssid(m_ssid);
-					m_ssid = newSSID;
-		
-					if (errorMsg != null)
+				else
+					if ((errorMsg = Check.ssid(m_ssid)) == null)
+						m_ssid = newSSID;
+					else
 						Console.write(errorMsg);
-				}
 
 			} while (errorMsg != null);
 
 			do {
 
-				m_surname = Console.read("New Surname > ");
-				errorMsg = Check.surname(m_surname);
+				String newSurname = Console.read("New Surname > ").trim();
 
-				if (errorMsg != null)
-					Console.write(errorMsg);
+				if (Check.isEmpty(newSurname) != null || newSurname.equals(m_surname))
+					errorMsg = null;
 
-			} while (errorMsg != null);
-
-			do {
-
-				m_name = Console.read("New Name > ");
-				errorMsg = Check.name(m_name);
-
-				if (errorMsg != null)
-					Console.write(errorMsg);
-
-			} while (errorMsg != null);
-
-			do {
-
-				String newEmail = Console.read("New Email > ");
-
-				if (!newEmail.equals(m_email)) {
-
-					errorMsg = Check.email(m_email);
-					m_email = newEmail;
-		
-					if (errorMsg != null)
+				else
+					if ((errorMsg = Check.surname(m_surname)) == null)
+						m_surname = newSurname;
+					else
 						Console.write(errorMsg);
-				}
 
 			} while (errorMsg != null);
 
 			do {
 
-				String oldPassword = Console.read("Old Password > ");
+				String newName = Console.read("New Name > ").trim();
+
+				if (Check.isEmpty(newName) != null || newName.equals(m_name))
+					errorMsg = null;
+
+				else
+					if ((errorMsg = Check.name(m_name)) == null)
+						m_name = newName;
+					else
+						Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				String newEmail = Console.read("New Email > ").toLowerCase().trim();
+
+				if (Check.isEmpty(newEmail) != null || newEmail.equals(m_email))
+					errorMsg = null;
+
+				else
+					if ((errorMsg = Check.email(m_email)) == null)
+						m_email = newEmail;
+					else
+						Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			do {
+
+				String oldPassword = Console.read("Old Password > ").trim();
 
 				if (oldPassword.equals(m_password)) {
 
 					Console.deletePreviousLine();
-					m_password = Console.read("New Password > ");
-					errorMsg = Check.password(m_password);
+					String newPassword = Console.read("New Password > ");
+
+					if ((errorMsg = Check.password(newPassword)) == null)
+						m_password = newPassword;
+
+					Console.deletePreviousLine();
 				}
 
 				else {
 
+					Console.deletePreviousLine();
 					errorMsg = "Incorrect password";
 				}
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
-				else
-					Console.deletePreviousLine();
 
 			} while (errorMsg != null);
 
 			do {
 
-				String newCenterID = Console.read("New Center ID > ");
+				String newCenterID = Console.read("New Center ID > ").trim();
 
-				if (!newCenterID.equals(m_centerID)) {
+				if (Check.isEmpty(newCenterID) != null || newCenterID.equals(m_centerID))
+					errorMsg = null;
 
-					errorMsg = Check.registrationCenterID(m_centerID);
-					m_centerID = newCenterID;
-
-					if (errorMsg != null)
+				else
+					if ((errorMsg = Check.registrationCenterID(newCenterID)) == null)
+						m_centerID = newCenterID;
+					else
 						Console.write(errorMsg);
-				}
 
 			} while (errorMsg != null);
 
 			Operator operator = new Operator(m_userID, m_ssid.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 			Handler.getProxyServer().editOperator(m_userID, operator);
+			Handler.setLoggedOperator(operator);
 
 			Console.write("Operator info edited succesfully");
 		}
