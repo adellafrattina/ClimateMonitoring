@@ -90,5 +90,13 @@ class CenterInfo extends ViewState {
 		Area area = Handler.getProxyServer().getArea(center.getCity());
 		Console.write("City > " + area.getAsciiName() + "(" + area.getGeonameID() + ")");
 		Console.write("District > " + center.getDistrict());
+
+		Console.write("\n--- Monitored Areas ---");
+
+		Area[] monitoredAreas = Handler.getProxyServer().getMonitoredAreas(center.getCenterID());
+		for (Area a : monitoredAreas)
+			Console.write(a.getGeonameID() + " - " + a.getAsciiName() + ", " + a.getCountryCode());
+
+		Console.write("\n");
 	}
 }
