@@ -51,7 +51,7 @@ class SearchArea {
 			}
 
 			int i = 0;
-			if (m_foundAreas != null)
+			if (m_foundAreas != null && m_foundAreas.length != 0)
 				for (Area area : m_foundAreas)
 					Console.write(i++ + ". " + area.getGeonameID() + " - " + area.getAsciiName() + ", " + area.getCountryCode());
 			else
