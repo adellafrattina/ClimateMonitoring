@@ -30,6 +30,8 @@ class EditProfile extends ViewState {
 			return;
 		}
 
+		Console.deletePreviousLine();
+
 		m_userID = Handler.getLoggedOperator().getUserID();
 		m_ssid = new String(Handler.getLoggedOperator().getSSID());
 		m_surname = Handler.getLoggedOperator().getSurname();
@@ -119,6 +121,7 @@ class EditProfile extends ViewState {
 
 				if (oldPassword.equals(m_password)) {
 
+					Console.deletePreviousLine();
 					m_password = Console.read("New Password > ");
 					errorMsg = Check.password(m_password);
 				}
@@ -130,6 +133,8 @@ class EditProfile extends ViewState {
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
+				else
+					Console.deletePreviousLine();
 
 			} while (errorMsg != null);
 
