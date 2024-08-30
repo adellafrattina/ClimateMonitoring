@@ -1,5 +1,6 @@
 package climatemonitoring;
 
+import climatemonitoring.core.Area;
 import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
@@ -15,9 +16,9 @@ class CenterInfo extends ViewState {
 		try {
 
 			Command c = new Command(args);
-			
+
 			String by = c.getCmd();
-			
+
 			if (by.equals("id")) {
 
 				String id = c.getArgs();
@@ -25,12 +26,7 @@ class CenterInfo extends ViewState {
 				
 				if (center != null) {
 
-					Console.write(center.getCenterID());
-					Console.write(center.getStreet());
-					Console.write(String.valueOf(center.getHouseNumber()));
-					Console.write(String.valueOf(center.getPostalCode()));
-					Console.write(String.valueOf(center.getCity()));
-					Console.write(center.getDistrict());
+					printCenterInfo(center);
 				} else {
 
 					Console.write("Center not found");
@@ -39,18 +35,13 @@ class CenterInfo extends ViewState {
 
 				int index = Integer.parseInt(c.getArgs());
 				
-				Master m = (Master) Handler.getView().getState(ViewType.MASTER); 
-				Center[] centers = m.foundCenters; 
+				Master m = (Master) Handler.getView().getState(ViewType.MASTER);
+				Center[] centers = m.foundCenters;
 				Center center = centers[index];
 				
 				if (center != null) {
 
-					Console.write(center.getCenterID());
-					Console.write(center.getStreet());
-					Console.write(String.valueOf(center.getHouseNumber()));
-					Console.write(String.valueOf(center.getPostalCode()));
-					Console.write(String.valueOf(center.getCity()));
-					Console.write(center.getDistrict());  
+					printCenterInfo(center);
 				} else {
 					
 					Console.write("Center not found");
@@ -58,7 +49,7 @@ class CenterInfo extends ViewState {
 			}else{
 
 				Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [id, index]");
-			} 
+			}
 		} catch (DatabaseRequestException e) {
 
 			Console.write(e.getMessage());
@@ -75,5 +66,15 @@ class CenterInfo extends ViewState {
 	public void onGUIRender() {
 
 		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+	}
+
+	private void printCenterInfo(Center center) {
+
+		Console.write("Name > " + center.getCenterID());
+		Console.write("Street > " + center.getStreet() + ", "+ center.getHouseNumber());
+		Console.write("Postal code > " + center.getPostalCode());
+		Area area = Handler.getProxyServer().getArea(center.getCity());
+		Console.write("City > " + area.getAsciiName() + "(" + area.getGeonameID() + ")");
+		Console.write("District > " + center.getDistrict());
 	}
 }
