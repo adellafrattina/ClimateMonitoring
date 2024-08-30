@@ -21,7 +21,7 @@ class CenterInfo extends ViewState {
 			if (by.equals("id")) {
 
 				String id = c.getArgs();
-				Center center = Handler.getProxyServer().getCenter(id);
+				Center center = Handler.getProxyServer().getCenter(id.trim());
 				
 				if (center != null) {
 
@@ -33,7 +33,7 @@ class CenterInfo extends ViewState {
 					Console.write(center.getDistrict());
 				} else {
 
-					Console.write("Center not found.");
+					Console.write("Center not found");
 				}
 			} else if (by.equals("index")) {
 
@@ -53,7 +53,7 @@ class CenterInfo extends ViewState {
 					Console.write(center.getDistrict());  
 				} else {
 					
-					Console.write("Center not found.");
+					Console.write("Center not found");
 				}
 			}else{
 
@@ -67,7 +67,7 @@ class CenterInfo extends ViewState {
 			getView().setCurrentState(ViewType.CONNECTION);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			
-			Console.write("Invalid index provided. Please ensure the index is within the valid range.");
+			Console.write("Invalid index provided. Please ensure the index is within the valid range");
 		}
 	}
 
