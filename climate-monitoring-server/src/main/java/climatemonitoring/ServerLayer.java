@@ -40,7 +40,7 @@ class ServerLayer extends Layer {
 
 		catch (IOException e) {
 
-			Console.write("Server starting failed");
+			Console.error("Server starting failed");
 			e.printStackTrace();
 		}
 	}
@@ -53,13 +53,13 @@ class ServerLayer extends Layer {
 		try {
 
 			Socket client = m_server.accept();
-			Console.write("New client connected: " + client.getInetAddress());
+			Console.info("New client connected: " + client.getInetAddress());
 			new Skeleton(client, new ServerDatabaseImpl(m_url, m_username, m_password));
 		}
 
 		catch (IOException ex) {
 
-			Console.write("Client binding failed");
+			Console.error("Client binding failed");
 		}
 	}
 

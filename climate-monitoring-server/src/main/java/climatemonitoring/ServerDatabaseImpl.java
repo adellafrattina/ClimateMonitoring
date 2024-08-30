@@ -45,12 +45,12 @@ class ServerDatabaseImpl implements ServerDatabase {
 		try {
 
 			m_connection = DriverManager.getConnection(url, username, password);
-			if (m_connection != null) Console.write("Connected");
+			if (m_connection != null) Console.info("Connected");
 		}
 
 		catch (SQLException e) {
 
-			Console.write("Invalid credentials: " + e.getMessage());
+			Console.error("Invalid credentials: " + e.getMessage());
 		}
 	}
 
@@ -68,7 +68,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			catch (SQLException e) {
 
-				Console.write("Failed to close connection: " + e.getMessage());
+				Console.error("Failed to close connection: " + e.getMessage());
 			}
 	}
 
@@ -80,6 +80,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized ResultSet execute(String statement) throws SQLException {
 
 		PreparedStatement pst = m_connection.prepareStatement(statement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		Console.debug("Issued query: " + statement);
 		boolean isQuery = pst.execute();
 
 		if (isQuery)

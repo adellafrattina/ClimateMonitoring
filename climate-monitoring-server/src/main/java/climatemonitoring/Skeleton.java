@@ -50,7 +50,7 @@ class Skeleton extends Thread {
 
 		catch (IOException e) {
 
-			Console.write("Failed to initialize I/O channels");
+			Console.error("Failed to initialize I/O channels");
 		}
 	}
 
@@ -64,6 +64,7 @@ class Skeleton extends Thread {
 			while (m_running) {
 
 				RequestType request = (RequestType) m_in.readObject();
+				Console.debug("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] issued " + request);
 
 				switch (request) {
 
@@ -80,6 +81,7 @@ class Skeleton extends Thread {
 
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 
 						break;
@@ -97,6 +99,7 @@ class Skeleton extends Thread {
 
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 
 						break;
@@ -117,6 +120,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -138,6 +142,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -160,6 +165,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -181,6 +187,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -202,6 +209,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -224,6 +232,7 @@ class Skeleton extends Thread {
 
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 
 						break;
@@ -245,6 +254,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -268,6 +278,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -289,6 +300,7 @@ class Skeleton extends Thread {
 
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 					}
 
@@ -308,6 +320,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -329,6 +342,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -350,6 +364,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -373,6 +388,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -394,6 +410,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -413,6 +430,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -433,6 +451,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -453,6 +472,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -474,6 +494,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -495,6 +516,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -516,6 +538,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -537,6 +560,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 
 						break;
@@ -559,6 +583,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -581,6 +606,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -603,6 +629,7 @@ class Skeleton extends Thread {
 	
 							m_out.writeObject(false);
 							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
 						break;
@@ -625,25 +652,25 @@ class Skeleton extends Thread {
 
 					default: {
 
-						Console.write("Unhandled request type: " + request);
+						Console.error("Unhandled request type: " + request);
 	
 						break;
 					}
 				}
 			}
 
-			Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected");
+			Console.info("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected");
 			close();
 		}
 
 		catch (IOException | ConnectionLostException e) {
 
-			Console.write("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected unexpectedly");
+			Console.warn("Client [" + m_client.getInetAddress() + ":" + m_client.getPort() + "] has disconnected unexpectedly");
 		}
 
 		catch (ClassNotFoundException ex) {
 
-			Console.write("Class of a serialized object cannot be found");
+			Console.error("Class of a serialized object cannot be found");
 		}
 	}
 
@@ -663,7 +690,7 @@ class Skeleton extends Thread {
 
 		catch (IOException e) {
 
-			Console.write("I/O stream closure failed");
+			Console.error("I/O stream closure failed");
 		}
 	}
 
