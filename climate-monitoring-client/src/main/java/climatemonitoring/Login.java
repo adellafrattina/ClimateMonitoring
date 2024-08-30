@@ -41,12 +41,16 @@ class Login extends ViewState {
 
 		try {
 
-			Operator op = Handler.getProxyServer().validateCredentials(userid, password);
+			String errorMsg = null;
 
-			if(op == null)
-				Console.write("Wrong username or password");
-			else
-				Console.write("Logged in as " + op.getUserID() + "!");
+			if ((errorMsg = Check.login(userid, password)) != null) {
+
+				Console.write(errorMsg);
+				return;
+			}
+
+			Operator op = Handler.getProxyServer().validateCredentials(userid, password);
+			Console.write("Logged in as " + op.getUserID() + "!");
 			
 			Handler.setLoggedOperator(op);
 		} catch (ConnectionLostException e) {
