@@ -42,13 +42,13 @@ class EditProfile extends ViewState {
 		String errorMsg = null;
 		do {
 
-			String answear = Console.read("Do you want to edit your profile? [Y/n]").trim().toLowerCase();
-			if (answear.equals("y"))
+			String answer = Console.read("Do you want to edit your profile? [Y/n]").trim().toLowerCase();
+			if (answer.equals("y"))
 				errorMsg = null;
-			else if (answear.equals("n"))
+			else if (answer.equals("n"))
 				return;
 			else
-				errorMsg = "Not a valid answear";
+				errorMsg = "Not a valid answer";
 
 			if (errorMsg != null)
 				Console.write(errorMsg);
@@ -61,7 +61,7 @@ class EditProfile extends ViewState {
 
 				String newSSID = Console.read("New SSID > ");
 
-				if (newSSID != m_ssid) {
+				if (!newSSID.equals(m_ssid)) {
 
 					errorMsg = Check.ssid(m_ssid);
 					m_ssid = newSSID;
@@ -96,7 +96,7 @@ class EditProfile extends ViewState {
 
 				String newEmail = Console.read("New Email > ");
 
-				if (newEmail != m_email) {
+				if (!newEmail.equals(m_email)) {
 
 					errorMsg = Check.email(m_email);
 					m_email = newEmail;
@@ -121,7 +121,7 @@ class EditProfile extends ViewState {
 
 				String newCenterID = Console.read("New Center ID > ");
 
-				if (newCenterID != m_centerID) {
+				if (!newCenterID.equals(m_centerID)) {
 
 					errorMsg = Check.registrationCenterID(m_centerID);
 					m_centerID = newCenterID;
