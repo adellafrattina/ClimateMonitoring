@@ -12,7 +12,11 @@ package climatemonitoring;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
+import climatemonitoring.core.Application;
 import climatemonitoring.core.Layer;
 import climatemonitoring.core.headless.Console;
 
@@ -33,7 +37,15 @@ class ServerLayer extends Layer {
 		m_username = Console.read("Username > ");
 		m_password = Console.read("Password > ");
 
+
 		try {
+
+			Connection dummy = DriverManager.getConnection(m_url, m_username, m_password);
+
+			if (dummy != null)
+				Console.info("Server connection estabilished");
+			else
+				Application.close();
 
 			m_server = new ServerSocket(25565);
 		}
@@ -41,7 +53,13 @@ class ServerLayer extends Layer {
 		catch (IOException e) {
 
 			Console.error("Server starting failed");
-			e.printStackTrace();
+			Application.close();
+		}
+
+		catch (SQLException ex) {
+
+			Console.error("Database connection failed");
+			Application.close();
 		}
 	}
 
