@@ -49,9 +49,8 @@ class CenterInfo extends ViewState {
 			} else if (by.equals("index")) {
 
 				int index = Integer.parseInt(c.getArgs());
-				
-				Master m = (Master) Handler.getView().getState(ViewType.MASTER);
-				Center[] centers = m.foundCenters;
+
+				Center[] centers = SearchCenter.getFoundCenters();
 				Center center = centers[index];
 				
 				if (center != null) {

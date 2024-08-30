@@ -91,15 +91,13 @@ class AreaInfo extends ViewState {
 
 			int index = Integer.parseInt(c.getArgs().trim());
 
-			Master m = (Master) getView().getState(ViewType.MASTER);
-
-			if (m.foundAreas == null) {
+			if (SearchArea.getFoundAreas() == null) {
 
 				Console.write("Before calling this command, you should call 'search area [name, country, coords]' to get a list of selectable areas");
 				return;
 			}
 
-			Area area = m.foundAreas[index];
+			Area area = SearchArea.getFoundAreas()[index];
 
 			printAreaInfo(area);
 		}
