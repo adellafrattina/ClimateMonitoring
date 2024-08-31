@@ -203,6 +203,6 @@ public class Widget {
 	private float m_originY = 0.0f;
 	private float m_x = DEFAULT_X;
 	private float m_y = DEFAULT_Y;
-	private float m_width = DEFAULT_WIDTH;
-	private float m_height = DEFAULT_HEIGHT;
+	protected float m_width = DEFAULT_WIDTH;
+	protected float m_height = DEFAULT_HEIGHT;
 }
