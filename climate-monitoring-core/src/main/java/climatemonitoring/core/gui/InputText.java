@@ -13,6 +13,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.type.ImString;
 import imgui.flag.ImGuiInputTextFlags;
+import imgui.flag.ImGuiKey;
 
 /**
  * The InputText class renders to screen a box to input text and holds the written string.
@@ -72,9 +73,8 @@ public class InputText extends Widget {
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		final boolean value = ImGui.inputText("##" + m_label, m_string, m_flags);
 		ImGui.popItemWidth();
-		end();
 
-		return value;
+		return end(value);
 	}
 
 	/**
@@ -189,12 +189,32 @@ public class InputText extends Widget {
 		if (m_label != null || !m_label.isEmpty()) {
 
 			ImVec2 size = ImGui.calcTextSize(m_label);
-			ImGui.setCursorPosX(getPositionX() + getWidth() / 2.0f - size.x / 2.0f);
+			ImGui.setCursorPosX(getPositionX() - getOriginX() + getWidth() / 2.0f - size.x / 2.0f);
 			ImGui.text(m_label);
 		}
+
+		m_enterReturnsTrue = ((m_flags & ImGuiInputTextFlags.EnterReturnsTrue) == ImGuiInputTextFlags.EnterReturnsTrue);
+		m_flags &= ~ImGuiInputTextFlags.EnterReturnsTrue;
 	}
 
-	protected void end() {
+	protected boolean end(boolean value) {
+
+		if (ImGui.isItemActive())
+			m_active = true;
+
+		if (m_enterReturnsTrue) {
+
+			boolean b = m_active && !ImGui.isItemActive() && ImGui.isKeyPressed(ImGui.getIO().getKeyMap(ImGuiKey.Enter));
+			if (b)
+				m_active = false;
+
+			value = b;
+		}
+
+		else {
+
+			m_active = false;
+		}
 
 		if (m_showErrorMsg) {
 
@@ -204,6 +224,8 @@ public class InputText extends Widget {
 		}
 
 		ImGui.endDisabled();
+
+		return value;
 	}
 
 	protected ImString m_string;
@@ -211,4 +233,6 @@ public class InputText extends Widget {
 	protected int m_flags = 0;
 	protected boolean m_showErrorMsg = false;
 	protected String m_errorMsg;
+	private boolean m_active = false;
+	private boolean m_enterReturnsTrue = false;
 }
