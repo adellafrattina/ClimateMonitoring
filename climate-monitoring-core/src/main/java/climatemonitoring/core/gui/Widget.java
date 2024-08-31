@@ -155,6 +155,11 @@ public class Widget {
 	 */
 	public float getPositionX() {
 
+		if (m_y == SAME_LINE_Y) {
+
+			ImGui.sameLine();
+		}
+
 		return (m_x == DEFAULT_X ? ImGui.getCursorPosX() : m_x);
 	}
 
