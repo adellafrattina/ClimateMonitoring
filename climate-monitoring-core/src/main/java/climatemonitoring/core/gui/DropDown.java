@@ -42,7 +42,7 @@ public class DropDown extends Widget {
 		ImGui.sameLine();
 		ImGui.setCursorPos(getPositionX(), getPositionY());
 		ImGui.pushItemWidth(getWidth());
-		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
+		ImGui.setCursorPos(getPositionX() - getOriginX() - 5.0f, getPositionY() - getOriginY() - ImGui.getStyle().getFramePaddingY());
 		if (ImGui.beginCombo("##" + m_label, m_selectables[m_currentItem], ImGuiComboFlags.HeightRegular)) {
 
 			for (int i = 0; i < m_selectables.length; i++) {
