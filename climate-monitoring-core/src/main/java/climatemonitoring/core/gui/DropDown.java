@@ -10,7 +10,6 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring.core.gui;
 
 import imgui.ImGui;
-import imgui.ImVec2;
 import imgui.flag.ImGuiComboFlags;
 import imgui.flag.ImGuiSelectableFlags;
 
@@ -40,9 +39,8 @@ public class DropDown extends Widget {
 	public int render() {
 
 		ImGui.text(m_label);
-		ImVec2 size = ImGui.calcTextSize(m_label);
-		setPositionY(SAME_LINE_Y);
-		ImGui.setCursorPos(size.x + getPositionX(), getPositionY());
+		ImGui.sameLine();
+		ImGui.setCursorPos(getPositionX(), getPositionY());
 		ImGui.pushItemWidth(getWidth());
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		if (ImGui.beginCombo("##" + m_label, m_selectables[m_currentItem], ImGuiComboFlags.HeightRegular)) {
