@@ -10,6 +10,8 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring.core.gui;
 
 import imgui.ImGui;
+import imgui.ImVec2;
+import imgui.flag.ImGuiStyleVar;
 
 /**
  * To render a button
@@ -34,8 +36,23 @@ public class Button extends Widget {
 	 */
 	public boolean render() {
 
+		if (m_width == DEFAULT_WIDTH) {
+
+			ImVec2 size = ImGui.calcTextSize(m_label);
+			setWidth(size.x + ImGui.getStyle().getFramePaddingX());
+		}
+
+		if (m_height == DEFAULT_HEIGHT) {
+
+			ImVec2 size = ImGui.calcTextSize(m_label);
+			setHeight(size.y + ImGui.getStyle().getFramePaddingY());
+		}
+
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		return m_texture != 0 ? ImGui.imageButton(m_texture, getWidth(), getHeight()) : ImGui.button(m_label);
+		ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 0, 0);
+		final boolean value = m_texture != 0 ? ImGui.imageButton(m_texture, getWidth(), getHeight()) : ImGui.button(m_label, getWidth(), getHeight());
+		ImGui.popStyleVar();
+		return value;
 	}
 
 	/**
