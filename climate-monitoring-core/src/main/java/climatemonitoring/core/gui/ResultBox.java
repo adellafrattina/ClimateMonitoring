@@ -18,7 +18,7 @@ import imgui.flag.ImGuiSelectableFlags;
  * @author adellafrattina
  * @version 1.0-SNAPSHOT
  */
-public class ResultBox {
+public class ResultBox extends Widget {
 
 	/**
 	 * Initialize InputText fields
@@ -43,19 +43,15 @@ public class ResultBox {
 
 	/**
 	 * To render the result box
-	 * @param width The box width. Inputting a -1 value will fill all the available space
-	 * @param height The box height. Inputting a -1 value will fill all the available space
-	 * @param x The box x position
-	 * @param y The box y position
 	 * @return The current selected item as an array index. -1 if no item was selected
 	 */
-	public int render(float width, float height, float x, float y) {
+	public int render() {
 
 		if (m_list == null || m_list.length == 0)
 			return -1;
 
-		ImGui.setCursorPos(x, y);
-		if (ImGui.beginListBox(m_label, width, height)) {
+		ImGui.setCursorPos(getPositionX(), getPositionY());
+		if (ImGui.beginListBox("##" + m_label, getWidth(), getHeight())) {
 
 			for (int i = 0; i < m_list.length; i++) {
 
@@ -69,26 +65,6 @@ public class ResultBox {
 		}
 
 		return m_currentItem;
-	}
-
-	/**
-	 * To render the result box
-	 * @param width The box width. Inputting a -1 value will fill all the available space
-	 * @param height The box height. Inputting a -1 value will fill all the available space
-	 * @return The current selected item as an array index. -1 if no item was selected
-	 */
-	public int render(float width, float height) {
-
-		return render(width, height, ImGui.getCursorPosX(), ImGui.getCursorPosY());
-	}
-
-	/**
-	 * To render the result box
-	 * @return The current selected item as an array index. -1 if no item was selected
-	 */
-	public int render() {
-
-		return render(-1, -1);
 	}
 
 	/**
