@@ -155,7 +155,7 @@ public class Widget {
 	 */
 	public float getPositionX() {
 
-		return m_x = (m_x == DEFAULT_X ? ImGui.getCursorPosX() : m_x);
+		return (m_x == DEFAULT_X ? ImGui.getCursorPosX() : m_x);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Widget {
 			m_y = DEFAULT_Y;
 		}
 
-		return m_y = (m_y == DEFAULT_Y ? ImGui.getCursorPosY() : m_y);
+		return (m_y == DEFAULT_Y ? ImGui.getCursorPosY() : m_y);
 	}
 
 	/**
