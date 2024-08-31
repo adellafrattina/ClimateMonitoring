@@ -50,7 +50,7 @@ public class ResultBox extends Widget {
 		if (m_list == null || m_list.length == 0)
 			return -1;
 
-		ImGui.setCursorPos(getPositionX(), getPositionY());
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		if (ImGui.beginListBox("##" + m_label, getWidth(), getHeight())) {
 
 			for (int i = 0; i < m_list.length; i++) {

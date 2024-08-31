@@ -27,6 +27,7 @@ public class Panel extends Widget {
 	 */
 	public void begin(String title, int imGuiWindowFlags) {
 
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		ImGui.beginChild(title, getWidth(), getHeight(), true, imGuiWindowFlags);
 	}
 

@@ -34,6 +34,7 @@ public class Button extends Widget {
 	 */
 	public boolean render() {
 
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		return m_texture != 0 ? ImGui.imageButton(m_texture, getWidth(), getHeight()) : ImGui.button(m_label);
 	}
 

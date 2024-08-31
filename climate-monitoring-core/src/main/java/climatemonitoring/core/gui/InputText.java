@@ -68,7 +68,10 @@ public class InputText extends Widget {
 	public boolean render() {
 
 		begin();
-		final boolean value = ImGui.inputText("##" + m_label, m_string, flags);
+		ImGui.pushItemWidth(getWidth());
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
+		final boolean value = ImGui.inputText("##" + m_label, m_string, m_flags);
+		ImGui.popItemWidth();
 		end();
 
 		return value;
@@ -81,10 +84,10 @@ public class InputText extends Widget {
 	public void setNoSpaces(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.CharsNoBlank;
+			m_flags |= ImGuiInputTextFlags.CharsNoBlank;
 
 		else
-			flags &= ~ImGuiInputTextFlags.CharsNoBlank;
+			m_flags &= ~ImGuiInputTextFlags.CharsNoBlank;
 	}
 
 	/**
@@ -94,10 +97,10 @@ public class InputText extends Widget {
 	public void setAlwaysUpperCase(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.CharsUppercase;
+			m_flags |= ImGuiInputTextFlags.CharsUppercase;
 
 		else
-			flags &= ~ImGuiInputTextFlags.CharsUppercase;
+			m_flags &= ~ImGuiInputTextFlags.CharsUppercase;
 	}
 
 	/**
@@ -107,10 +110,10 @@ public class InputText extends Widget {
 	public void setNumbersOnly(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.CharsDecimal;
+			m_flags |= ImGuiInputTextFlags.CharsDecimal;
 
 		else
-			flags &= ~ImGuiInputTextFlags.CharsDecimal;
+			m_flags &= ~ImGuiInputTextFlags.CharsDecimal;
 	}
 
 	/**
@@ -120,10 +123,10 @@ public class InputText extends Widget {
 	public void setReadOnly(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.ReadOnly;
+			m_flags |= ImGuiInputTextFlags.ReadOnly;
 
 		else
-			flags &= ~ImGuiInputTextFlags.ReadOnly;
+			m_flags &= ~ImGuiInputTextFlags.ReadOnly;
 	}
 
 	/**
@@ -133,10 +136,10 @@ public class InputText extends Widget {
 	public void setEnterReturnsTrue(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.EnterReturnsTrue;
+			m_flags |= ImGuiInputTextFlags.EnterReturnsTrue;
 
 		else
-			flags &= ~ImGuiInputTextFlags.EnterReturnsTrue;
+			m_flags &= ~ImGuiInputTextFlags.EnterReturnsTrue;
 	}
 
 	/**
@@ -146,10 +149,10 @@ public class InputText extends Widget {
 	public void setPassword(boolean enable) {
 
 		if (enable)
-			flags |= ImGuiInputTextFlags.Password;
+			m_flags |= ImGuiInputTextFlags.Password;
 
 		else
-			flags &= ~ImGuiInputTextFlags.Password;
+			m_flags &= ~ImGuiInputTextFlags.Password;
 	}
 
 	/**
@@ -181,7 +184,7 @@ public class InputText extends Widget {
 
 	protected void begin() {
 
-		ImGui.beginDisabled(((flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
+		ImGui.beginDisabled(((m_flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
 
 		if (m_label != null || !m_label.isEmpty()) {
 
@@ -189,14 +192,9 @@ public class InputText extends Widget {
 			ImGui.setCursorPosX(getPositionX() + getWidth() / 2.0f - size.x / 2.0f);
 			ImGui.text(m_label);
 		}
-
-		ImGui.pushItemWidth(getWidth());
-		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 	}
 
 	protected void end() {
-
-		ImGui.popItemWidth();
 
 		if (m_showErrorMsg) {
 
@@ -208,9 +206,9 @@ public class InputText extends Widget {
 		ImGui.endDisabled();
 	}
 
-	private ImString m_string;
-	private String m_label;
-	private int flags = 0;
-	private boolean m_showErrorMsg = false;
-	private String m_errorMsg;
+	protected ImString m_string;
+	protected String m_label;
+	protected int m_flags = 0;
+	protected boolean m_showErrorMsg = false;
+	protected String m_errorMsg;
 }
