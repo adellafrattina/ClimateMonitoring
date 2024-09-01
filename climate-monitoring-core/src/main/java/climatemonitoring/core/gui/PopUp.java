@@ -18,14 +18,14 @@ import imgui.flag.ImGuiSelectableFlags;
  * @author adellafrattina
  * @version 1.0-SNAPSHOT
  */
-public class PopUp {
+public class Popup {
 
 	/**
 	 * To create the pop-up
 	 * @param label The pop-up label
 	 * @param selectables The selectable list
 	 */
-	public PopUp(String label, String[] selectables) {
+	public Popup(String label, String[] selectables) {
 
 		m_label = label;
 		m_selectables = selectables;
