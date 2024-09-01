@@ -19,14 +19,14 @@ import imgui.flag.ImGuiSelectableFlags;
  * @author adellfrattina
  * @version 1.0-SNAPSHOT
  */
-public class DropDown extends Widget {
+public class Dropdown extends Widget {
 
 	/**
 	 * To create a drop-down menu
 	 * @param label The drop down label
 	 * @param selectables The selectables list
 	 */
-	public DropDown(String label, String[] selectables) {
+	public Dropdown(String label, String[] selectables) {
 
 		m_label = label;
 		m_selectables = selectables;
