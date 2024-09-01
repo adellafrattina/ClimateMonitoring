@@ -10,6 +10,8 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring.core.gui;
 
 import imgui.ImGui;
+import imgui.ImGuiListClipper;
+import imgui.callback.ImListClipperCallback;
 import imgui.flag.ImGuiSelectableFlags;
 
 /**
@@ -51,15 +53,20 @@ public class ResultBox extends Widget {
 			return -1;
 
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
+
 		if (ImGui.beginListBox("##" + m_label, getWidth(), getHeight())) {
 
-			for (int i = 0; i < m_list.length; i++) {
+			ImGuiListClipper.forEach(m_list.length, new ImListClipperCallback() {
 
-				final boolean isSelected = (m_currentItem == i);
+				@Override
+				public void accept(int index) {
 
-				if (ImGui.selectable(m_list[i], isSelected, ImGuiSelectableFlags.AllowDoubleClick))
-					m_currentItem = i;
-			}
+					final boolean isSelected = (m_currentItem == index);
+
+					if (ImGui.selectable(m_list[index], isSelected, ImGuiSelectableFlags.AllowDoubleClick))
+						m_currentItem = index;
+				}
+			});
 
 			ImGui.endListBox();
 		}
