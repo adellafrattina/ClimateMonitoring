@@ -31,11 +31,25 @@ public class InputText extends Widget {
 	 * @param label The input text box label
 	 * @param str The string that will be rendered inside the box for the first time
 	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
+	 * @param max_chars The maximum number of characters that can be typed in the input text box
+	 */
+	public InputText(String label, String str, String error_msg, int max_chars) {
+
+		m_label = label;
+		m_string = new ImString(str, max_chars);
+		m_errorMsg = error_msg;
+	}
+
+	/**
+	 * Initialize InputText fields
+	 * @param label The input text box label
+	 * @param str The string that will be rendered inside the box for the first time
+	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
 	 */
 	public InputText(String label, String str, String error_msg) {
 
 		m_label = label;
-		m_string = new ImString(str, ImString.DEFAULT_LENGTH);
+		m_string = new ImString(str, 1024);
 		m_errorMsg = error_msg;
 	}
 
@@ -47,7 +61,7 @@ public class InputText extends Widget {
 	public InputText(String label, String str) {
 
 		m_label = label;
-		m_string = new ImString(str, ImString.DEFAULT_LENGTH);
+		m_string = new ImString(str, 1024);
 		m_errorMsg = null;
 	}
 
@@ -58,7 +72,7 @@ public class InputText extends Widget {
 	public InputText(String label) {
 
 		m_label = label;
-		m_string = new ImString(ImString.DEFAULT_LENGTH);
+		m_string = new ImString(1024);
 		m_errorMsg = null;
 	}
 
@@ -198,6 +212,9 @@ public class InputText extends Widget {
 	}
 
 	protected boolean end(boolean value) {
+
+		if (!ImGui.isItemFocused())
+			m_active = false;
 
 		if (ImGui.isItemActive())
 			m_active = true;

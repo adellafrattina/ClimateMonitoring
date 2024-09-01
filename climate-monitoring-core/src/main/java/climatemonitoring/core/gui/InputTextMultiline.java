@@ -24,6 +24,18 @@ public class InputTextMultiline extends InputText {
 	 * @param label The input text box label
 	 * @param str The string that will be rendered inside the box for the first time
 	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
+	 * @param max_chars The maximum number of characters that can be typed in the input text box
+	 */
+	public InputTextMultiline(String label, String str, String error_msg, int max_chars) {
+
+		super(label, str, error_msg, max_chars);
+	}
+
+	/**
+	 * Initialize InputText fields
+	 * @param label The input text box label
+	 * @param str The string that will be rendered inside the box for the first time
+	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
 	 */
 	public InputTextMultiline(String label, String str, String error_msg) {
 
