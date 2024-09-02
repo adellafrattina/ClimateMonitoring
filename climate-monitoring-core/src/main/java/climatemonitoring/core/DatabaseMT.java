@@ -210,7 +210,7 @@ public interface DatabaseMT {
 	 * @param center_id The center's ID
 	 * @return The latest category of the given center for the given area
 	 */
-	public Result<Category> getLatestCategory();
+	public Result<Category> getLatestCategory(int geoname_id, String center_id);
 
 
 	/**

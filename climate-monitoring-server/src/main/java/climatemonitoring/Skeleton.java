@@ -260,6 +260,26 @@ class Skeleton extends Thread {
 						break;
 					}
 
+					case GET_CENTERS: {
+
+						try {
+
+							Center[] result = m_serverDatabase.getCenters();
+
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+
+						catch (DatabaseRequestException e) {
+
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
+						}
+
+						break;
+					}
+
 					case GET_CENTER_BY_ADDRESS: {
 
 						int city = (Integer) m_in.readObject();
@@ -281,6 +301,28 @@ class Skeleton extends Thread {
 							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
+						break;
+					}
+
+					case GET_LATEST_CENTER: {
+
+						int geonameID = (Integer) m_in.readObject();
+
+						try {
+
+							Center result = m_serverDatabase.getLatestCenter(geonameID);
+
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+
+						catch (DatabaseRequestException e) {
+
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
+						}
+
 						break;
 					}
 
@@ -371,14 +413,15 @@ class Skeleton extends Thread {
 					}
 
 
-					case GET_PARAMETERS_AREA_CENTER: {
+					case GET_PARAMETERS: {
 
 						int geonameID = (Integer) m_in.readObject();
 						String centerID = (String) m_in.readObject();
+						String category = (String) m_in.readObject();
 	
 						try {
 	
-							Parameter[] result = m_serverDatabase.getParameters(geonameID, centerID);
+							Parameter[] result = m_serverDatabase.getParameters(geonameID, centerID, category);
 	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
@@ -394,13 +437,15 @@ class Skeleton extends Thread {
 						break;
 					}
 
-					case GET_PARAMETERS_AREA: {
+					case GET_PARAMETERS_AVERAGE: {
 
 						int geonameID = (Integer) m_in.readObject();
+						String centerID = (String) m_in.readObject();
+						String category = (String) m_in.readObject();
 	
 						try {
 	
-							Parameter[] result = m_serverDatabase.getParameters(geonameID);
+							double result = m_serverDatabase.getParametersAverage(geonameID, centerID, category);
 	
 							m_out.writeObject(true);
 							m_out.writeObject(result);
@@ -433,6 +478,29 @@ class Skeleton extends Thread {
 							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
 	
+						break;
+					}
+
+					case GET_LATEST_CATEGORY: {
+
+						int geonameID = (Integer) m_in.readObject();
+						String centerID = (String) m_in.readObject();
+
+						try {
+	
+							Category result = m_serverDatabase.getLatestCategory(geonameID, centerID);
+	
+							m_out.writeObject(true);
+							m_out.writeObject(result);
+						}
+	
+						catch (DatabaseRequestException e) {
+	
+							m_out.writeObject(false);
+							m_out.writeObject(e);
+							Console.error("Error on request " + request + ": " + e.getMessage());
+						}
+
 						break;
 					}
 

@@ -444,6 +444,42 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
+	 * To get all the available centers
+	 * 
+	 * @return All the centers as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public Center[] getCenters() throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM center;");
+			Center[] result = new Center[getRowCount(query)];
+
+			while (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int city = query.getInt("city");
+				String street = query.getString("street");
+				int houseNumber = query.getInt("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result[query.getRow() - 1] = new Center(centerID, street, houseNumber, postalCode, city, district);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
 	 * To get a center based on its address
 	 * 
 	 * @param city The city the center is located in
@@ -479,6 +515,43 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			throw new DatabaseRequestException(e.getMessage());
 		}
+	}
+
+	/**
+	 * To get the center with the most recent recording about the specified area
+	 * 
+	 * @param geoname_id The area's id
+	 * @return The latest center that submitted a recording for the given area
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public Center getLatestCenter(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT C.* FROM center C JOIN parameter P ON C.center_id = P.center_id WHERE P.geoname_id = " + geoname_id + " ORDER BY P.rec_timestamp DESC LIMIT 1;");
+			Center result = null;
+
+			if (query.next()) {
+
+				String centerID = query.getString("center_id");
+				int centerCity = query.getInt("city");
+				String centerStreet = query.getString("street");
+				int houseNumber = query.getInt("house_number");
+				int postalCode = query.getInt("postal_code");
+				String district = query.getString("district");
+
+				result = new Center(centerID, centerStreet, houseNumber, postalCode, centerCity, district);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		} 
 	}
 
 	/**
@@ -629,22 +702,22 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
-	 * Returns an array containing parameters about a specified area that
-	 * were recorded by the desired center
+	 * Returns an array containing parameters about a specified area that were recorded
+	 * by the desired center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
+	 * @param category The parameter's category
 	 * @return The result of the search as an array of parameters
-	 * @throws ConnectionLostException If the server loses connection to the database during the operation
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public synchronized Parameter[] getParameters(int geoname_id, String center_id)
-			throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Parameter[] getParameters(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "';");
+			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "' AND category_id = '" + category + "';");
 			Parameter[] result = new Parameter[getRowCount(query)];
 
 			while (query.next()) {
@@ -674,24 +747,26 @@ class ServerDatabaseImpl implements ServerDatabase {
 	}
 
 	/**
-	 * Returns an array containing parameters about a specified area from
-	 * the last center that submitted a parameter
+	 * To get the average about the score of a specific area,
+	 * of a specific center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
-	 * @return The result of the search as an array of parameters
-	 * @throws ConnectionLostException If the server loses connection to the database during the operation
+	 * @param center_id The center's ID
+	 * @param category The parameter's category
+	 * @return The average of the scores as a double
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public synchronized Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized double getParametersAverage(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 
-			ResultSet query = execute("SELECT center_id FROM parameter ORDER BY rec_timestamp DESC LIMIT 1");
-			Parameter[] result = null;
+			ResultSet query = execute("SELECT AVG(score) FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "' AND category_id = '" + category + "';");
+			double result = 0.0;
 
-			if (query.next())
-				result = getParameters(geoname_id, query.getString("center_id"));
+			if (getRowCount(query) == 1)
+				result = query.getDouble("avg");
 
 			return result;
 		}
@@ -723,6 +798,40 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String explanation = query.getString("explanation");
 
 				result[query.getRow() - 1] = new Category(categoryID, explanation);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e) {
+
+			throw new DatabaseRequestException(e.getMessage());
+		}
+	}
+
+	/**
+	 * To get the category with the most recent recording about the specified area in the specified center
+	 * 
+	 * @param geoname_id The area's ID
+	 * @param center_id The center's ID
+	 * @return The latest category of the given center for the given area
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	@Override
+	public Category getLatestCategory(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
+
+		try {
+
+			ResultSet query = execute("SELECT * FROM parameter P JOIN category C on C.category_id = P.category_id WHERE P.geoname_id = " + geoname_id + " AND P.center_id = '" + center_id + "' ORDER BY P.rec_timestamp DESC LIMIT 1;");
+			Category result = null;
+		
+			if (query.next()) {
+
+				String categoryID = query.getString("category_id");
+				String explanation = query.getString("explanation");
+
+				result = new Category(categoryID, explanation);
 			}
 
 			return result;

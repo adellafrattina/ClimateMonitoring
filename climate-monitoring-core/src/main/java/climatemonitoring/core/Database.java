@@ -250,7 +250,7 @@ public interface Database {
 	 * @throws ConnectionLostException If the client loses connection during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Category getLatestCategory() throws ConnectionLostException, DatabaseRequestException;
+	public Category getLatestCategory(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 
 	/**

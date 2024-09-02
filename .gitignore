@@ -35,6 +35,12 @@ replay_pid*
 # Local test files
 climate-monitoring-client/**/ADFTestApp.java
 climate-monitoring-client/**/ADFTestLayer.java
+climate-monitoring-client/**/CCTestApp.java
+climate-monitoring-client/**/CCTestLayer.java
+climate-monitoring-client/**/FLTestApp.java
+climate-monitoring-client/**/FLTestLayer.java
+climate-monitoring-client/**/DSTestApp.java
+climate-monitoring-client/**/DSTestLayer.java
 
 # Bin folder
 bin/**
