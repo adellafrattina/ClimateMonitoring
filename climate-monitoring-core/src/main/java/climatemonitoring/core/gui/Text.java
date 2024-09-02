@@ -34,10 +34,8 @@ public class Text extends Widget {
 	 */
 	public void render() {
 
-		ImGui.setCursorPos(getPositionX(), getPositionY());
-		//ImGui.pushItemWidth(getWidth());
+		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		ImGui.textColored(color[0], color[1], color[2], color[3], m_str);
-		//ImGui.popItemWidth();
 	}
 
 	/**
@@ -62,6 +60,18 @@ public class Text extends Widget {
 		color[1] = g;
 		color[2] = b;
 		color[3] = a;
+	}
+
+	@Override
+	public float getWidth() {
+
+		return ImGui.calcTextSize(m_str).x;
+	}
+
+	@Override
+	public float getHeight() {
+
+		return ImGui.calcTextSize(m_str).y;
 	}
 
 	private String m_str;
