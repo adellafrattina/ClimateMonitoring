@@ -420,12 +420,12 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Center[] getCenters() throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Center[] getCenters() throws ConnectionLostException, DatabaseRequestException {
 		
 		Center[] getcenters = null;
 
 		try {
-			out.writeObject(RequestType.GET_CENTER);
+			out.writeObject(RequestType.GET_CENTERS);
 	
 			boolean success = (boolean) in.readObject();
 
@@ -495,13 +495,13 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Center getLatestCenter(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Center getLatestCenter(int geoname_id) throws ConnectionLostException, DatabaseRequestException {
 		
 		Center getlatestcenter = null;
 
 		try {
 
-			out.writeObject(RequestType.GET_PARAMETERS);
+			out.writeObject(RequestType.GET_LATEST_CENTER);
 			out.writeObject(geoname_id);
 
 			boolean success = (boolean) in.readObject();
@@ -714,7 +714,7 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public double getParametersAverage(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized double getParametersAverage(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException {
 
 		double getparametersaverage = 0.0;
 
@@ -728,7 +728,7 @@ class ProxyImpl implements Proxy{
 			boolean success = (boolean) in.readObject();
 
 			if(success == true){
-				getparametersaverage = (double) in.readObject();
+				getparametersaverage = (Double) in.readObject();
 			}else{
 				DatabaseRequestException e = (DatabaseRequestException) in.readObject();
 				throw e;
@@ -785,13 +785,15 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public Category getLatestCategory() throws ConnectionLostException, DatabaseRequestException {
+	public synchronized Category getLatestCategory(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException {
 		
 		Category getlatestcategory = null;
 
 		try {
 
 			out.writeObject(RequestType.GET_LATEST_CATEGORY);
+			out.writeObject(geoname_id);
+			out.writeObject(center_id);
 
 			boolean success = (boolean) in.readObject();
 
@@ -988,7 +990,7 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean includeAreaToCenter(int geoname_id, String center_id)throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean includeAreaToCenter(int geoname_id, String center_id)throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 	
@@ -1023,7 +1025,7 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean monitors(String center_id, int geoname_id) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 			
@@ -1058,7 +1060,7 @@ class ProxyImpl implements Proxy{
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	@Override
-	public boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized boolean employs(String center_id, String user_id) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 			

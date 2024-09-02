@@ -394,11 +394,11 @@ class ProxyMTImpl implements ProxyMT {
 	 * @return The latest category of the given center for the given area
 	 */
 	@Override
-	public Result<Category> getLatestCategory() {
+	public Result<Category> getLatestCategory(int geoname_id, String center_id) {
 
 		return new Result<Category>() {
 			public Category exec() throws ConnectionLostException, DatabaseRequestException{
-				return m_proxy.getLatestCategory();
+				return m_proxy.getLatestCategory(geoname_id, center_id);
 			}
 		};
 	}
