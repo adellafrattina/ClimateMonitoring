@@ -221,6 +221,21 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	/**
+	 * To get all the available centers
+	 * 
+	 * @return All the centers as an array of centers
+	 */
+	@Override
+	public Result<Center[]> getCenters() {
+
+		return new Result<Center[]>() {
+			public Center[] exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getCenters();
+			}
+		};
+	}
+
+	/**
 	 * To get a center based on its address
 	 * 
 	 * @param city The city the center is located in
@@ -234,6 +249,22 @@ class ProxyMTImpl implements ProxyMT {
 		return new Result<Center>() {
 			public Center exec() throws ConnectionLostException, DatabaseRequestException {
 				return m_proxy.getCenterByAddress(city, street, house_number);
+			}
+		};
+	}
+
+	/**
+	 * To get the center with the most recent recording about the specified area
+	 * 
+	 * @param geoname_id The area's id
+	 * @return The latest center that submitted a recording for the given area
+	 */
+	@Override
+	public Result<Center> getLatestCenter(int geoname_id) {
+
+		return new Result<Center>() {
+			public Center exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getLatestCenter(geoname_id);
 			}
 		};
 	}
@@ -311,28 +342,30 @@ class ProxyMTImpl implements ProxyMT {
 	 * @return The result of the search as an array of parameters
 	 */
 	@Override
-	public Result<Parameter[]> getParameters(int geoname_id, String center_id) {
+	public Result<Parameter[]> getParameters(int geoname_id, String center_id, String category) {
 
 		return new Result<Parameter[]>() {
 			public Parameter[] exec() throws ConnectionLostException, DatabaseRequestException{
-				return m_proxy.getParameters(geoname_id, center_id);
+				return m_proxy.getParameters(geoname_id, center_id, category);
 			}
 		};
 	}
 
 	/**
-	 * Returns an array containing parameters about a specified area from
-	 * the last center that submitted a parameter
+	 * To get the average about the score of a specific area,
+	 * of a specific center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
-	 * @return The result of the search as an array of parameters
+	 * @param center_id The center's ID
+	 * @param category The parameter's category
+	 * @return The average of the scores as a double
 	 */
 	@Override
-	public Result<Parameter[]> getParameters(int geoname_id) {
+	public Result<Double> getParametersAverage(int geoname_id, String center_id, String category) {
 
-		return new Result<Parameter[]>() {
-			public Parameter[] exec() throws ConnectionLostException, DatabaseRequestException{
-				return m_proxy.getParameters(geoname_id);
+		return new Result<Double>() {
+			public Double exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getParametersAverage(geoname_id, center_id, category);
 			}
 		};
 	}
@@ -349,6 +382,23 @@ class ProxyMTImpl implements ProxyMT {
 		return new Result<Category[]>() {
 			public Category[] exec() throws ConnectionLostException, DatabaseRequestException{
 				return m_proxy.getCategories();
+			}
+		};
+	}
+
+	/**
+	 * To get the category with the most recent recording about the specified area in the specified center
+	 * 
+	 * @param geoname_id The area's ID
+	 * @param center_id The center's ID
+	 * @return The latest category of the given center for the given area
+	 */
+	@Override
+	public Result<Category> getLatestCategory() {
+
+		return new Result<Category>() {
+			public Category exec() throws ConnectionLostException, DatabaseRequestException{
+				return m_proxy.getLatestCategory();
 			}
 		};
 	}
@@ -523,4 +573,5 @@ class ProxyMTImpl implements ProxyMT {
 	}
 
 	private Proxy m_proxy;
+	
 }
