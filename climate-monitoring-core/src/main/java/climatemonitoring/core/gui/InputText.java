@@ -188,7 +188,7 @@ public class InputText extends Widget {
 	}
 
 	/**
-	 * If the {@link #setEnterReturnsTrue(boolean)} method set the flag to true, the string will not be updated until the user presses enter in the input text box
+	 * 
 	 * @return The string inside the input text box
 	 */
 	public String getString() {
