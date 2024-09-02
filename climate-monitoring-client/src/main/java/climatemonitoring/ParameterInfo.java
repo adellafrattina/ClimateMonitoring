@@ -11,6 +11,7 @@ package climatemonitoring;
 
 import java.util.StringTokenizer;
 
+import climatemonitoring.core.Category;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Parameter;
@@ -30,7 +31,7 @@ public class ParameterInfo {
 
 		try {
 
-			// view parameter area center
+			// view parameter area
 			StringTokenizer st = new StringTokenizer(args);
 
 			// Geoname ID
@@ -43,44 +44,94 @@ public class ParameterInfo {
 			geonameID = st.nextToken().trim();
 			m_geonameID = Integer.parseInt(geonameID);
 
-			if (Check.geonameID(m_geonameID) == null) {
+			if (Handler.getProxyServer().getLatestCenter(m_geonameID) == null) {
 
-				Console.write("The specified area's geoname ID does not exist");
+				Console.write("This area does not have any parameters / is not monitored by any center");
 				return;
 			}
 
+			Console.write("(You can leave blank to get the latest parameters)");
+
+			String errorMsg = null;
+
 			// Center ID
-			if (!st.hasMoreTokens())
-				m_parameters = Handler.getProxyServer().getParameters(m_geonameID);
+			do {
 
-			else {
+				errorMsg = null;
+				String centerID = Console.read("Center ID > ").trim().toLowerCase();
 
-				m_centerID = st.nextToken();
-				if (Check.registrationCenterID(m_centerID) != null) {
+				if (Check.isEmpty(centerID) != null) {
 
-					Console.write("The specified center ID does not exist");
-					return;
+					m_centerID = Handler.getProxyServer().getLatestCenter(m_geonameID).getCenterID();
+					break;
 				}
 
-				String errorMsg = null;
-				if ((errorMsg = Check.monitors(m_centerID, m_geonameID)) != null) {
+				if ((errorMsg = Check.registrationCenterID(centerID)) != null) {
 
 					Console.write(errorMsg);
-					return;
+					continue;
 				}
 
-				m_parameters = Handler.getProxyServer().getParameters(m_geonameID, m_centerID);
-			}
+				if ((errorMsg = Check.monitors(centerID, m_geonameID)) != null) {
 
-			if (m_parameters == null) {
+					Console.write(errorMsg);
+					continue;
+				}
+
+				if (errorMsg == null)
+					m_centerID = Handler.getProxyServer().getCenter(centerID).getCenterID();
+
+			} while (errorMsg != null);
+
+			// Category
+			do {
+
+				errorMsg = null;
+				String category = Console.read("Category > ").trim().toLowerCase();
+
+				if (Check.isEmpty(category) != null) {
+
+					m_category = Handler.getProxyServer().getLatestCategory(m_geonameID, m_centerID).getCategory();
+					break;
+				}
+
+				if ((errorMsg = Check.category(category)) == null) {
+
+					Category[] categories = Handler.getProxyServer().getCategories();
+					for (Category c : categories) {
+
+						if (c.getCategory().trim().toLowerCase().equals(category)) {
+
+							m_category = c.getCategory();
+							break;
+						}
+					}
+
+					break;
+				}
+
+				else
+					Console.write(errorMsg);
+
+			} while (errorMsg != null);
+
+			m_parameters = Handler.getProxyServer().getParameters(m_geonameID, m_centerID, m_category);
+
+			if (m_parameters == null || m_parameters.length == 0) {
 
 				Console.write("No available parameters");
 				return;
 			}
 
+			Console.write("--- " + Handler.getProxyServer().getArea(m_geonameID).getAsciiName() + " parameters ---");
+			Console.write("From " + m_centerID);
+			Console.write("Grouped by " + m_category);
+			Console.write("Count: " + m_parameters.length);
+			Console.write("Average: " + Handler.getProxyServer().getParametersAverage(m_geonameID, m_centerID, m_category));
+
 			// Show parameters
 			for (Parameter parameter : m_parameters)
-				Console.write(parameter.getDate() + " " + parameter.getTime() + " [by " + parameter.getUserID() + "] --- " + parameter.getCategory() + " : " + parameter.getScore() + " (" + parameter.getNotes() + ")");
+				Console.write("[" + parameter.getDate() + " " + parameter.getTime() + "] [by " + parameter.getUserID() + "] --- " + parameter.getScore() + " (" + parameter.getNotes() + ")");
 		}
 
 		catch (NumberFormatException e) {
@@ -108,4 +159,5 @@ public class ParameterInfo {
 	private static Parameter[] m_parameters;
 	private static int m_geonameID;
 	private static String m_centerID;
+	private static String m_category;
 }

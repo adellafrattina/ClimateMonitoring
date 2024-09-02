@@ -57,6 +57,7 @@ class Registration extends ViewState {
 			do {
 
 				m_password = Console.read("Password > ");
+				Console.deletePreviousLine();
 				errorMsg = Check.password(m_password);
 
 				if (errorMsg != null)
@@ -96,7 +97,7 @@ class Registration extends ViewState {
 
 			do {
 
-				m_centerID = Console.read("Center ID > ");
+				m_centerID = Console.read("Center ID > ").trim();
 				errorMsg = Check.registrationCenterID(m_centerID);
 
 				if (errorMsg != null) {
@@ -110,7 +111,7 @@ class Registration extends ViewState {
 
 			CenterCreation cc = null;
 
-			if (m_centerID == null) {
+			if (m_centerID == null || Check.isEmpty(m_centerID) != null) {
 
 				Console.write("Center ID is missing, redirecting to Center Creation");
 
@@ -120,7 +121,7 @@ class Registration extends ViewState {
 
 				m_centerID = cc.newCenter.getCenterID();
 			}
-	
+
 			Operator operator = new Operator(m_userID, m_SSID.toCharArray(), m_surname, m_name, m_email, m_password, m_centerID);
 
 			Email email = new Email("climatemonitoringappservice@mail.com", "Climate Monitoring");
@@ -155,7 +156,7 @@ class Registration extends ViewState {
 
 		catch (DatabaseRequestException e) {
 
-			Console.write("Error message from database: " + e.getMessage());
+			Console.write(e.getMessage());
 		}
 
 		catch (ConnectionLostException e) {

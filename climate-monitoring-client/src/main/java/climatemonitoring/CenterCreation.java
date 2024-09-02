@@ -44,16 +44,16 @@ class CenterCreation extends ViewState {
 
 				try {
 
-					m_city = Integer.parseInt(Console.read("City > "));
-					m_street = Console.read("Street > ");
+					m_city = Integer.parseInt(Console.read("City's geoname ID > "));
 					m_houseNumber = Integer.parseInt(Console.read("House number > "));
+					m_street = Console.read("Street > ");
 
 					errorMsg = Check.address(m_city, m_street, m_houseNumber);
 				}
 
 				catch (NumberFormatException e) {
 
-					errorMsg = "City and house number must be numbers";
+					errorMsg = "The value must be a number";
 				}
 
 				if (errorMsg != null)

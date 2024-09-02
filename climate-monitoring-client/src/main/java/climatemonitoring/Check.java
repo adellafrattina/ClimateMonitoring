@@ -505,12 +505,13 @@ class Check {
 				Category[] categories = Handler.getProxyServer().getCategories();
 				for (Category category : categories) {
 
-					if (!category.getCategory().trim().toLowerCase().equals(c.trim().toLowerCase())) {
+					if (category.getCategory().trim().toLowerCase().equals(c.trim().toLowerCase())) {
 
-						msg = "The value must be a valid category";
-						break;
+						return null;
 					}
 				}
+
+				msg = "The value must be a valid category";
 			}
 	
 			catch (DatabaseRequestException e) {
