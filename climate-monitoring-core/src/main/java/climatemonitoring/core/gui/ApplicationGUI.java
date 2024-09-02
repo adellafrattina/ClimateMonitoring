@@ -9,10 +9,16 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring.core.gui;
 
+import java.io.InputStream;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL32;
 
+import imgui.ImFontAtlas;
+import imgui.ImFontConfig;
+import imgui.ImFontGlyphRangesBuilder;
 import imgui.ImGui;
+import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
@@ -145,6 +151,31 @@ public class ApplicationGUI extends Application {
 		// Disable imgui.ini file
 		ImGui.getIO().setIniFilename(null);
 		ImGui.getIO().setLogFilename(null);
+
+		ImGuiIO io = ImGui.getIO();
+		ImFontAtlas fonts = io.getFonts();
+
+		try {
+
+			InputStream in = getClass().getResourceAsStream("/font.ttf");
+
+			ImFontGlyphRangesBuilder builder = new ImFontGlyphRangesBuilder();
+			builder.addRanges(fonts.getGlyphRangesDefault());
+			for (char c = '\u00FF'; c < '\u20FF'; c++)
+				builder.addChar(c);
+
+			short[] rangesData = builder.buildRanges();
+
+			fonts.addFontFromMemoryTTF(in.readAllBytes(), 22.0f, new ImFontConfig(), rangesData);
+		}
+
+		catch (Exception e) {
+
+			ImFontConfig config = new ImFontConfig();
+			config.setSizePixels(15.0f);
+			config.setGlyphRanges(fonts.getGlyphRangesDefault());
+			fonts.addFontDefault(config);
+		}
 	}
 
 	/**

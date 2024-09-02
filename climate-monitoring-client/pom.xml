@@ -27,6 +27,11 @@
 
 	<!--Build jar file-->
 	<build>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -52,7 +57,11 @@
 							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-								<mainClass>climatemonitoring.ClientApp</mainClass>
+									<mainClass>climatemonitoring.ClientApp</mainClass>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+									<resource>resources</resource>
+									<file>font.ttf</file>
 								</transformer>
 							</transformers>
 							<relocations>
