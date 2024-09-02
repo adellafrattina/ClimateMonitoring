@@ -65,7 +65,10 @@ public class ApplicationGUI extends Application {
 	@Override
 	public void run() {
 
+
 		while (isRunning() && !m_window.isClosed()) {
+
+			long startTime = System.nanoTime();
 
 			GL32.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			GL32.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
@@ -83,6 +86,19 @@ public class ApplicationGUI extends Application {
 			endFrame();
 
 			m_window.swap();
+
+			long endTime = System.nanoTime();
+			long elapsedTime = endTime - startTime;
+
+			try {
+
+				Thread.sleep(Math.abs((long)(1000.0/(double)m_fps) - elapsedTime / 1000000l));
+			}
+
+			catch (InterruptedException e) {
+
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -111,6 +127,12 @@ public class ApplicationGUI extends Application {
 	protected int getWindowHeight() {
 
 		return m_window.getHeight();
+	}
+
+	@Override
+	protected void setFramerateLimitGUI(int framerate) {
+
+		m_fps = framerate;
 	}
 
 	/**
@@ -159,6 +181,7 @@ public class ApplicationGUI extends Application {
 	}
 
 	private Window m_window;
+	private int m_fps = 60;
 	private final ImGuiImplGlfw m_imGuiGlfw = new ImGuiImplGlfw();
 	private final ImGuiImplGl3 m_imGuiGl3 = new ImGuiImplGl3();
 }

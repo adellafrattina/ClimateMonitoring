@@ -108,6 +108,16 @@ public abstract class Application {
 	}
 
 	/**
+	 * To set a limit to the frame rate. By doing this, the application will not saturate the CPU and GPU
+	 * by going as fast as it can. It is also recommended to use this method instead of relying on the {@link ApplicationSpecification#vSync} flag
+	 * @param framerate The frame rate (it is recommended to set it above 60 fps)
+	 */
+	public static void setFramerateLimit(int framerate) {
+
+		s_instance.setFramerateLimitGUI(framerate);
+	}
+
+	/**
 	 * It runs the main loop where all the layers are updated and the graphics is rendered or the cmd inputs are executed
 	 */
 	public abstract void run();
@@ -135,6 +145,15 @@ public abstract class Application {
 	protected int getWindowHeight() {
 
 		return 0;
+	}
+
+	/**
+	 * To be implemented in the subclasses
+	 * @param framerate The application's frame rate (GUI mode only)
+	 */
+	protected void setFramerateLimitGUI(int framerate) {
+
+		
 	}
 
 	protected static Application s_instance;

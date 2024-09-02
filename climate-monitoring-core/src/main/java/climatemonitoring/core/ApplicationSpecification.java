@@ -45,9 +45,9 @@ public class ApplicationSpecification {
 
 	/**
 	 * If the application should enable the vertical synchronization (The application's frame rate will be the monitor's frame rate).
-	 * True by default to prevent the application from overloading the CPU
+	 * False by default because it is preferable to use the {@link Application#setFramerateLimit(int)} method to reduce the CPU and GPU utilization
 	 */
-	public boolean vSync = true;
+	public boolean vSync = false;
 
 	/**
 	 * Time (in milliseconds) that elapses between two iterations of the main loop. Meaningful only in headless configuration.
