@@ -136,6 +136,15 @@ public interface Database {
 	public Center getCenter(String center_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
+	 * To get all the available centers
+	 * 
+	 * @return All the centers as an array of centers
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center[] getCenters() throws ConnectionLostException, DatabaseRequestException;
+
+	/**
 	 * To get a center based on its address
 	 * 
 	 * @param city The city the center is located in
@@ -146,6 +155,16 @@ public interface Database {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	public Center getCenterByAddress(int city, String street, int house_number) throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get the center with the most recent recording about the specified area
+	 * 
+	 * @param geoname_id The area's id
+	 * @return The latest center that submitted a recording for the given area
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Center getLatestCenter(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * To get all the centers that monitor a specified area
@@ -188,27 +207,30 @@ public interface Database {
 	public Operator getOperatorByEmail(String email) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
-	 * Returns an array containing parameters about a specified area that
-	 * were recorded by the desired center
+	 * Returns an array containing parameters about a specified area that were recorded
+	 * by the desired center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
+	 * @param category The parameter's category
 	 * @return The result of the search as an array of parameters
 	 * @throws ConnectionLostException If the client loses connection during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Parameter[] getParameters(int geoname_id, String center_id) throws ConnectionLostException, DatabaseRequestException;
+	public Parameter[] getParameters(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
-	 * Returns an array containing parameters about a specified area from
-	 * the last center that submitted a parameter
+	 * To get the average about the score of a specific area,
+	 * of a specific center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
-	 * @return The result of the search as an array of parameters
+	 * @param center_id The center's ID
+	 * @param category The parameter's category
+	 * @return The average of the scores as a double
 	 * @throws ConnectionLostException If the client loses connection during the operation
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
-	public Parameter[] getParameters(int geoname_id) throws ConnectionLostException, DatabaseRequestException;
+	public double getParametersAverage(int geoname_id, String center_id, String category) throws ConnectionLostException, DatabaseRequestException;
 
 	/**
 	 * Get all the categories and their explanation
@@ -218,6 +240,17 @@ public interface Database {
 	 * @throws DatabaseRequestException If the database fails to process the given request
 	 */
 	public Category[] getCategories() throws ConnectionLostException, DatabaseRequestException;
+
+	/**
+	 * To get the category with the most recent recording about the specified area in the specified center
+	 * 
+	 * @param geoname_id The area's ID
+	 * @param center_id The center's ID
+	 * @return The latest category of the given center for the given area
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 * @throws DatabaseRequestException If the database fails to process the given request
+	 */
+	public Category getLatestCategory() throws ConnectionLostException, DatabaseRequestException;
 
 
 	/**

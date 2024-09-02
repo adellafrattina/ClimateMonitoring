@@ -118,6 +118,13 @@ public interface DatabaseMT {
 	public Result<Center> getCenter(String center_id);
 
 	/**
+	 * To get all the available centers
+	 * 
+	 * @return All the centers as an array of centers
+	 */
+	public Result<Center[]> getCenters();
+
+	/**
 	 * To get a center based on its address
 	 * 
 	 * @param city The city the center is located in
@@ -126,6 +133,14 @@ public interface DatabaseMT {
 	 * @return The center that corresponds to the given address
 	 */
 	public Result<Center> getCenterByAddress(int city, String street, int house_number);
+
+	/**
+	 * To get the center with the most recent recording about the specified area
+	 * 
+	 * @param geoname_id The area's id
+	 * @return The latest center that submitted a recording for the given area
+	 */
+	public Result<Center> getLatestCenter(int geoname_id);
 
 	/**
 	 * To get all the centers that monitor a specified area
@@ -160,23 +175,26 @@ public interface DatabaseMT {
 	public Result<Operator> getOperatorByEmail(String email);
 
 	/**
-	 * Returns an array containing parameters about a specified area that
-	 * were recorded by the desired center
+	 * Returns an array containing parameters about a specified area that were recorded
+	 * by the desired center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
 	 * @param center_id The center's ID
+	 * @param category The parameter's category
 	 * @return The result of the search as an array of parameters
 	 */
-	public Result<Parameter[]> getParameters(int geoname_id, String center_id);
+	public Result<Parameter[]> getParameters(int geoname_id, String center_id, String category);
 
 	/**
-	 * Returns an array containing parameters about a specified area from
-	 * the last center that submitted a parameter
+	 * To get the average about the score of a specific area,
+	 * of a specific center about a specific category
 	 * 
 	 * @param geoname_id The area's ID
-	 * @return The result of the search as an array of parameters
+	 * @param center_id The center's ID
+	 * @param category The parameter's category
+	 * @return The average of the scores as a double
 	 */
-	public Result<Parameter[]> getParameters(int geoname_id);
+	public Result<Double> getParametersAverage(int geoname_id, String center_id, String category);
 
 	/**
 	 * Get all the categories and their explanation
@@ -184,6 +202,15 @@ public interface DatabaseMT {
 	 * @return An array of all categories with relative descriptions
 	 */
 	public Result<Category[]> getCategories();
+
+	/**
+	 * To get the category with the most recent recording about the specified area in the specified center
+	 * 
+	 * @param geoname_id The area's ID
+	 * @param center_id The center's ID
+	 * @return The latest category of the given center for the given area
+	 */
+	public Result<Category> getLatestCategory();
 
 
 	/**

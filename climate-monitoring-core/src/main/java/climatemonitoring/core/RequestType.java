@@ -67,9 +67,19 @@ public enum RequestType {
 	GET_CENTER,
 
 	/**
+	 * To get all the available centers
+	 */
+	GET_CENTERS,
+
+	/**
 	 * To get a center based on its address
 	 */
 	GET_CENTER_BY_ADDRESS,
+
+	/**
+	 * To get the center with the most recent recording about the specified area
+	 */
+	GET_LATEST_CENTER,
 
 	/**
 	 * To get all the centers that monitor the specified area
@@ -92,19 +102,27 @@ public enum RequestType {
 	GET_OPERATOR_BY_EMAIL,
 
 	/**
-	 * To get the parameters based on an area and a center
+	 * To get the parameters about a specified area that were recorded
+	 * by the desired center about a specific category
 	 */
-	GET_PARAMETERS_AREA_CENTER,
+	GET_PARAMETERS,
 
 	/**
-	 * To get the parameters based on an area
+	 * To get the average about the score of a specific area,
+	 * of a specific center about a specific category
 	 */
-	GET_PARAMETERS_AREA,
+	GET_PARAMETERS_AVERAGE,
 
 	/**
 	 * To get all the categories that are present in the database
 	 */
 	GET_CATEGORIES,
+
+	/**
+	 * To get the category with the most recent recording
+	 * about the specified area in the specified center
+	 */
+	GET_LATEST_CATEGORY,
 
 
 	/**
