@@ -25,6 +25,20 @@ public class InputTextButton extends InputText {
 	 * @param str The string that will be rendered inside the box for the first time
 	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
 	 * @param max_chars The maximum number of characters that can be typed in the input text box
+	 * @param button_label The button label
+	 */
+	public InputTextButton(String label, String str, String error_msg, int max_chars, String button_label) {
+
+		super(label, str, error_msg, max_chars);
+		m_button = new Button(button_label);
+	}
+
+	/**
+	 * Initialize InputText fields
+	 * @param label The input text box label
+	 * @param str The string that will be rendered inside the box for the first time
+	 * @param error_msg The error message that will be shown when the {@link #showErrorMsg(boolean)} method will enable the error message rendering
+	 * @param max_chars The maximum number of characters that can be typed in the input text box
 	 */
 	public InputTextButton(String label, String str, String error_msg, int max_chars) {
 
@@ -81,9 +95,31 @@ public class InputTextButton extends InputText {
 		return value;
 	}
 
+	/**
+	 * 
+	 * @return True if the button is pressed, false if not
+	 */
 	public boolean isButtonPressed() {
 
 		return isButtonPressed;
+	}
+
+	/**
+	 * To set the button's label
+	 * @param label The button's label
+	 */
+	public void setButtonLabel(String label) {
+
+		m_button = new Button(label);
+	}
+
+	/**
+	 * To set the button's texture
+	 * @param texture The button's texture
+	 */
+	public void setButtonTexture(int texture) {
+
+		m_button.setTexture(texture);
 	}
 
 	private Button m_button = new Button("##");
