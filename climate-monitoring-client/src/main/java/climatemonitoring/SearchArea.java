@@ -9,17 +9,21 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import imgui.ImGui;
+import imgui.type.ImDouble;
+
 import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Result;
+import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Dropdown;
 import climatemonitoring.core.gui.InputTextButton;
 import climatemonitoring.core.gui.ResultBox;
 import climatemonitoring.core.gui.Text;
+import climatemonitoring.core.gui.Widget;
 import climatemonitoring.core.headless.Console;
-import imgui.ImGui;
 
 /**
  * To search an area
@@ -75,17 +79,19 @@ class SearchArea {
 
 		try {
 
-			//searchBar.setWidth((float)Application.getWidth() / 2.0f);
-			//searchBar.setOriginX(searchBar.getWidth() / 2.0f);
-			//searchBar.setPositionX((float)Application.getWidth() / 2.0f);
-
-			selectSearchMethod.setOriginX(selectSearchMethod.getWidth() / 2.0f);
 			selectSearchMethod.setWidth(100);
+			selectSearchMethod.setOriginX(selectSearchMethod.getWidth() / 2.0f);
 			selectSearchMethod.setPositionX(searchBar.getPositionX() + searchBar.getWidth() / 2.0f);
 
 			int searchMethod = selectSearchMethod.render();
 
-			switch (selectSearchMethod.getList()[searchMethod]) {
+			if (currentSearchMethod != searchMethod) {
+
+				resultBox.setList(null);
+				currentSearchMethod = searchMethod;
+			}
+
+			switch (selectSearchMethod.getList()[currentSearchMethod]) {
 
 				case "name":
 
@@ -94,7 +100,6 @@ class SearchArea {
 		
 						foundAreasResult = Handler.getProxyServerMT().searchAreasByName(searchBar.getString());
 						createResultBox = true;
-						searchBar.showErrorMsg(false);
 					}
 
 					break;
@@ -105,14 +110,39 @@ class SearchArea {
 		
 						foundAreasResult = Handler.getProxyServerMT().searchAreasByCountry(searchBar.getString());
 						createResultBox = true;
-						searchBar.showErrorMsg(false);
+						resultBox.setList(null);
 					}
 
 					break;
 				case "coords":
-					ImGui.text("Not implemented yet");
-					createResultBox = true;
-					searchBar.showErrorMsg(false);
+
+					ImGui.newLine();
+
+					final float labelY = ImGui.getCursorPosY();
+					latitudeLabel.setOriginX(latitudeLabel.getWidth() / 2.0f);
+					latitudeLabel.setPositionX(ImGui.getCursorPosX() + (searchBar.getWidth() / 4.0f) / 2.0f);
+					latitudeLabel.render();
+					ImGui.pushItemWidth(searchBar.getWidth() / 4.0f);
+					ImGui.inputDouble("##latitude", latitude);
+					ImGui.popItemWidth();
+
+					searchCoords.setOriginX(searchCoords.getWidth() / 2.0f);
+					searchCoords.setPosition(searchBar.getPositionX() - searchBar.getOriginX() + searchBar.getWidth() / 2.0f, Widget.SAME_LINE_Y);
+					if (searchCoords.render()) {
+
+						foundAreasResult = Handler.getProxyServerMT().searchAreasByCoords(latitude.doubleValue(), longitude.doubleValue());
+						createResultBox = true;
+						resultBox.setList(null);
+					}
+
+					longitudeLabel.setOriginX(longitudeLabel.getWidth() / 2.0f);
+					longitudeLabel.setPosition(searchBar.getPositionX() + searchBar.getWidth() - searchBar.getWidth() / 4.0f + (searchBar.getWidth() / 4.0f) / 2.0f, labelY);
+					longitudeLabel.render();
+					ImGui.pushItemWidth(searchBar.getWidth() / 4.0f);
+					ImGui.setCursorPosX(searchBar.getPositionX() + searchBar.getWidth() - searchBar.getWidth() / 4.0f);
+					ImGui.inputDouble("##longitude", longitude);
+					ImGui.popItemWidth();
+
 					break;
 			}
 
@@ -142,7 +172,10 @@ class SearchArea {
 
 				else {
 
-					searchBar.showErrorMsg(true);
+					errorText.setColor(255, 0, 0, 255);
+					errorText.setOriginX(errorText.getWidth() / 2.0f);
+					errorText.setPositionX(searchBar.getPositionX() + searchBar.getWidth() / 2.0f);
+					errorText.render();
 				}
 			}
 
@@ -176,12 +209,19 @@ class SearchArea {
 		return m_selectedArea;
 	}
 
+	private static int currentSearchMethod = 0;
 	private static Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
 	private static InputTextButton searchBar = new InputTextButton(null, "", "No matching areas", 300, "Search");
 	private static Text loadingText = new Text("Loading...");
 	private static boolean createResultBox = false;
 	private static ResultBox resultBox = new ResultBox("##");
 	private static Result<Area[]> foundAreasResult;
+	private static Text latitudeLabel = new Text("Latitude");
+	private static Text longitudeLabel = new Text("Longitude");
+	private static ImDouble latitude = new ImDouble();
+	private static ImDouble longitude = new ImDouble();
+	private static Button searchCoords = new Button("Search");
+	private static Text errorText = new Text("No matching areas");
 
 	private static Area[] m_foundAreas;
 	private static Area m_selectedArea;
