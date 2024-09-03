@@ -61,7 +61,6 @@
 								</transformer>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
 									<resource>resources</resource>
-									<file>font.ttf</file>
 								</transformer>
 							</transformers>
 							<relocations>

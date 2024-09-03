@@ -208,6 +208,19 @@
 			<classifier>${lwjgl.natives}</classifier>
 		</dependency>
 
+		<!--stb-->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-stb</artifactId>
+		</dependency>
+
+		<!--stb (natives)-->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-stb</artifactId>
+			<classifier>${lwjgl.natives}</classifier>
+		</dependency>
+
 		<!--ImGui-->
 		<dependency>
 			<groupId>io.github.spair</groupId>
