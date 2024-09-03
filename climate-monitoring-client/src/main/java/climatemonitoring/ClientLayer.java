@@ -156,11 +156,24 @@ class ClientLayer extends Layer {
 		ImGui.setNextWindowSize(Application.getWidth(), Application.getHeight());
 		ImGui.setNextWindowPos(0.0f, 0.0f);
 
+		ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0.0f, 0.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.ChildBorderSize, 0.0f);
+		ImGui.begin("ClimateMonitoringMap", flags);
+		ImGui.setCursorPos(0.0f, 0.0f);
+		ImGui.image(Resources.getTexture(Resources.MAP).getID(), Application.getWidth(), Application.getHeight(), 0.0f, 0.0f, 1.0f, 1.0f, 0.2f, 0.2f, 0.2f, 0.5f);
+		ImGui.end();
+		ImGui.popStyleVar(3);
+
+		ImGui.setNextWindowSize(Application.getWidth(), Application.getHeight());
+		ImGui.setNextWindowPos(0.0f, 0.0f);
+
+		ImGui.begin("ClimateMonitoring", flags);
 		ImGui.pushStyleVar(ImGuiStyleVar.FrameRounding, 5.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.ChildRounding, 5.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 5.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.ScrollbarRounding, 5.0f);
-		ImGui.begin("ClimateMonitoring", flags);
+		ImGui.setCursorPos(ImGui.getStyle().getWindowPaddingX(), ImGui.getStyle().getWindowPaddingY());
 		Handler.onGUIRender();
 		ImGui.popStyleVar(4);
 		ImGui.end();

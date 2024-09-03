@@ -31,11 +31,17 @@ class Resources {
 	public static final String GEAR = "gear.png";
 
 	/**
+	 * The map to render as background
+	 */
+	public static final String MAP = "map.png";
+
+	/**
 	 * To initialize and load the resources. Must be called after a valid OpenGL context
 	 */
 	public static void init() {
 
 		s_instance.m_textures.put(GEAR, loadTexture(GEAR));
+		s_instance.m_textures.put(MAP, loadTexture(MAP));
 	}
 
 	/**
