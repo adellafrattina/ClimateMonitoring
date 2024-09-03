@@ -27,8 +27,16 @@ public class Panel extends Widget {
 	 */
 	public void begin(String title, int imGuiWindowFlags) {
 
+		if (title != null) {
+
+			m_title = new Text(validateLabel(title));
+			m_title.setOriginX(m_title.getWidth() / 2.0f);
+			m_title.setPositionX(getPositionX());
+			m_title.render();
+		}
+
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		ImGui.beginChild(title, getWidth(), getHeight(), true, imGuiWindowFlags);
+		ImGui.beginChild("##" + title, getWidth(), getHeight(), true, imGuiWindowFlags);
 	}
 
 	/**
@@ -47,4 +55,6 @@ public class Panel extends Widget {
 
 		ImGui.endChild();
 	}
+
+	private Text m_title;
 }

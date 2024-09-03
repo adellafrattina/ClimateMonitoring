@@ -85,7 +85,7 @@ public class InputText extends Widget {
 		begin();
 		ImGui.pushItemWidth(getWidth());
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		final boolean value = ImGui.inputText("##" + m_label, m_string, m_flags);
+		final boolean value = ImGui.inputText("##" + validateLabel(m_label), m_string, m_flags);
 		ImGui.popItemWidth();
 
 		return end(value);
@@ -200,7 +200,7 @@ public class InputText extends Widget {
 
 		ImGui.beginDisabled(((m_flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
 
-		if (m_label != null || !m_label.isEmpty()) {
+		if (m_label != null && !m_label.isEmpty()) {
 
 			ImVec2 size = ImGui.calcTextSize(m_label);
 			ImGui.setCursorPosX(getPositionX() - getOriginX() + getWidth() / 2.0f - size.x / 2.0f);
@@ -236,7 +236,7 @@ public class InputText extends Widget {
 		if (m_showErrorMsg) {
 
 			ImVec2 size = ImGui.calcTextSize(m_errorMsg);
-			ImGui.setCursorPosX(getPositionX() + getWidth() / 2.0f - size.x / 2.0f);
+			ImGui.setCursorPosX(getPositionX() - getOriginX() + getWidth() / 2.0f - size.x / 2.0f);
 			ImGui.textColored(1.0f, 0.0f, 0.0f, 1.0f, m_errorMsg);
 		}
 

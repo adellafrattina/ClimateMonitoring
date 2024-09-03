@@ -204,6 +204,11 @@ public class Widget {
 		return m_height;
 	}
 
+	protected String validateLabel(String label) {
+
+		return label != null ? label : "";
+	}
+
 	private float m_originX = 0.0f;
 	private float m_originY = 0.0f;
 	private float m_x = DEFAULT_X;
