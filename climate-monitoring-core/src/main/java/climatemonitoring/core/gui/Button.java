@@ -59,7 +59,7 @@ public class Button extends Widget {
 	 * To set a texture renderer ID
 	 * @param texture
 	 */
-	void setTexture(int texture) {
+	public void setTexture(int texture) {
 
 		m_texture = texture;
 	}
