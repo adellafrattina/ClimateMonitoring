@@ -87,6 +87,7 @@ class SearchArea {
 
 			if (currentSearchMethod != searchMethod) {
 
+				foundAreasResult = null;
 				resultBox.setList(null);
 				currentSearchMethod = searchMethod;
 			}
