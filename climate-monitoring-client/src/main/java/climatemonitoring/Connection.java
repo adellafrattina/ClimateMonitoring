@@ -9,8 +9,11 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import climatemonitoring.core.Application;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.gui.Modal;
+import climatemonitoring.core.gui.Text;
 import climatemonitoring.core.headless.Console;
 
 /**
@@ -50,7 +53,30 @@ class Connection extends ViewState {
 
 	@Override
 	public void onGUIRender() {
-
-		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+		if(m_startConnection == true){
+			Handler.connect();
+			m_startConnection = false;
+		}
+		if(Handler.getConnectionResult().ready()==true){
+			try{
+				Handler.getConnectionResult().get();
+				m_startConnection = true;
+				returnToPreviousState();
+			}catch(Exception e){
+				m_retryModal.open();
+			}
+		}
+		else{
+			m_connectingText.setOrigin(m_connectingText.getWidth()/2.0f, m_connectingText.getHeight()/2.0f);
+			m_connectingText.setPosition((float)Application.getWidth()/2.0f, (float)Application.getHeight()/2.0f);
+			m_connectingText.render();
+		}
+		int result = m_retryModal.render();
+		if(result == Modal.CANCEL) Application.close();
+		else if(result == Modal.OK) m_startConnection = true;
 	}
+
+	private boolean m_startConnection = true;
+	private Text m_connectingText = new Text("Connecting...");
+	private Modal m_retryModal = new Modal("Failed to connect to server", "Do you want to connect again?");
 }
