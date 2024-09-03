@@ -153,15 +153,18 @@ class ClientLayer extends Layer {
 		flags |= ImGuiWindowFlags.NoBackground;
 		flags |= ImGuiWindowFlags.NoResize;
 		flags |= ImGuiWindowFlags.NoMove;
+		flags |= ImGuiWindowFlags.NoNav;
+		flags |= ImGuiWindowFlags.NoNavFocus;
+		flags |= ImGuiWindowFlags.NoNavInputs;
 		ImGui.setNextWindowSize(Application.getWidth(), Application.getHeight());
 		ImGui.setNextWindowPos(0.0f, 0.0f);
 
 		ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0.0f, 0.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.ChildBorderSize, 0.0f);
-		ImGui.begin("ClimateMonitoringMap", flags);
+		ImGui.begin("ClimateMonitoring", flags);
 		ImGui.setCursorPos(0.0f, 0.0f);
-		ImGui.image(Resources.getTexture(Resources.MAP).getID(), Application.getWidth(), Application.getHeight(), 0.0f, 0.0f, 1.0f, 1.0f, 0.2f, 0.2f, 0.2f, 0.5f);
+		ImGui.image(Resources.getTexture(Resources.MAP).getID(), Application.getWidth(), Application.getHeight(), 0.0f, 0.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.4f);
 		ImGui.end();
 		ImGui.popStyleVar(3);
 
