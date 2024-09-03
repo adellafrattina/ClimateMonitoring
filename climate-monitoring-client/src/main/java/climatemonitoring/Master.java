@@ -10,12 +10,9 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
-
 import climatemonitoring.core.Application;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
-import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Panel;
@@ -66,49 +63,9 @@ class Master extends ViewState {
 		}
 	}
 
-	long time;
-	long ping = 0;
-
 	@Override
 	public void onGUIRender() {
 
-		try {
-
-			if (System.currentTimeMillis() - time > 1000) {
-
-				pingResult = Handler.getProxyServerMT().ping();
-				time = System.currentTimeMillis();
-			}
-
-			if (pingResult != null) {
-
-				if (pingResult.ready()) {
-
-					ping = pingResult.get();
-				}
-			}
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
-		}
-
-		catch (Exception e) {
-
-			e.printStackTrace();
-			Application.close();
-		}
-
-		settingsButton.setTexture(Resources.getTexture(Resources.GEAR).getID());
-		ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 1.0f);
-		ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 1.0f);
-		ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.4f, 0.4f, 0.4f, 1.0f);
-		if (settingsButton.render())
-			setCurrentState(ViewType.SETTINGS);
-		ImGui.popStyleColor(3);
-		ImGui.sameLine();
-		ImGui.text("ping: " + ping + "ms");
 		ImGui.sameLine();
 		loginButton.setOriginX(loginButton.getWidth());
 		loginButton.setPositionX(Application.getWidth() - 10.0f);
@@ -126,7 +83,5 @@ class Master extends ViewState {
 	}
 
 	private Panel panel = new Panel();
-	private Button settingsButton = new Button("##");
 	private Button loginButton = new Button(" Login ");
-	private Result<Long> pingResult;
 }

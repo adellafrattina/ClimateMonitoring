@@ -10,12 +10,15 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.Layer;
+import climatemonitoring.core.Result;
+import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
@@ -177,6 +180,7 @@ class ClientLayer extends Layer {
 		ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 5.0f);
 		ImGui.pushStyleVar(ImGuiStyleVar.ScrollbarRounding, 5.0f);
 		ImGui.setCursorPos(ImGui.getStyle().getWindowPaddingX(), ImGui.getStyle().getWindowPaddingY());
+		renderSettingsButton();
 		Handler.onGUIRender();
 		ImGui.popStyleVar(4);
 		ImGui.end();
@@ -190,4 +194,53 @@ class ClientLayer extends Layer {
 			Console.write("Connection lost");
 		}
 	}
+
+	private void renderSettingsButton() {
+
+		if (Handler.getView().getCurrentStateIndex() != ViewType.CONNECTION) {
+
+			try {
+
+				if (System.currentTimeMillis() - time > 1000) {
+	
+					pingResult = Handler.getProxyServerMT().ping();
+					time = System.currentTimeMillis();
+				}
+	
+				if (pingResult != null) {
+	
+					if (pingResult.ready()) {
+	
+						ping = pingResult.get();
+					}
+				}
+			}
+	
+			catch (ConnectionLostException e) {
+	
+				Handler.getView().setCurrentState(ViewType.CONNECTION);
+			}
+	
+			catch (Exception e) {
+	
+				e.printStackTrace();
+				Application.close();
+			}
+	
+			settingsButton.setTexture(Resources.getTexture(Resources.GEAR).getID());
+			ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 0.0f);
+			ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 0.5f);
+			ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.2f, 0.8f);
+			if (settingsButton.render())
+				Handler.getView().setCurrentState(ViewType.SETTINGS);
+			ImGui.popStyleColor(3);
+			ImGui.sameLine();
+			ImGui.text("ping: " + ping + "ms");
+		}
+	}
+
+	private Button settingsButton = new Button("##");
+	private Result<Long> pingResult;
+	long time = 0;
+	long ping = 0;
 }
