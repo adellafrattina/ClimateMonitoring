@@ -10,6 +10,7 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 
 import climatemonitoring.core.Application;
@@ -23,6 +24,9 @@ class ClientLayer extends Layer {
 	public void onAttach() {
 
 		Handler.init();
+
+		if (Application.getConfiguration() == Application.GUI)
+			Resources.init();
 	}
 
 	public void onHeadlessRender() {
@@ -152,8 +156,13 @@ class ClientLayer extends Layer {
 		ImGui.setNextWindowSize(Application.getWidth(), Application.getHeight());
 		ImGui.setNextWindowPos(0.0f, 0.0f);
 
+		ImGui.pushStyleVar(ImGuiStyleVar.FrameRounding, 5.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.ChildRounding, 5.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 5.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.ScrollbarRounding, 5.0f);
 		ImGui.begin("ClimateMonitoring", flags);
 		Handler.onGUIRender();
+		ImGui.popStyleVar(4);
 		ImGui.end();
 	}
 
