@@ -92,6 +92,7 @@ class SearchArea {
 				longitude = new ImDouble(0.0);
 				foundAreasResult = null;
 				resultBox.setList(null);
+				resultBox.setCurrentItem(-1);
 				currentSearchMethod = searchMethod;
 			}
 
@@ -172,6 +173,8 @@ class SearchArea {
 					resultBox.setWidth(searchBar.getWidth());
 					resultBox.setPositionX(searchBar.getPositionX());
 					resultBox.render();
+					if (resultBox.getCurrentItem() != -1)
+						m_selectedArea = m_foundAreas[resultBox.getCurrentItem()];
 				}
 
 				else {

@@ -16,6 +16,7 @@ import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Panel;
+import climatemonitoring.core.gui.Popup;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
@@ -67,10 +68,46 @@ class Master extends ViewState {
 	public void onGUIRender() {
 
 		ImGui.sameLine();
-		loginButton.setOriginX(loginButton.getWidth());
-		loginButton.setPositionX(Application.getWidth() - 10.0f);
-		if (loginButton.render())
-			setCurrentState(ViewType.LOGIN);
+
+		if (Handler.isOperatorLoggedIn()) {
+
+			if (optionsButton == null)
+				optionsButton = new Button("(" + Handler.getLoggedOperator().getUserID() + ")");
+
+			optionsButton.setOriginX(optionsButton.getWidth());
+			optionsButton.setPositionX(Application.getWidth() - 10.0f);
+
+			if (optionsButton.render()) {
+
+				optionsPopup.open();
+			}
+
+			int currentItem = optionsPopup.render();
+			if (currentItem != -1) {
+
+				switch (options[currentItem]) {
+
+					case "Edit profile":
+						setCurrentState(ViewType.EDIT_PROFILE);
+						break;
+					case "Center info":
+						setCurrentState(ViewType.CENTER_INFO);
+						break;
+					case "Logout":
+						optionsButton = null;
+						Handler.setLoggedOperator(null);
+						break;
+				}
+			}
+		}
+
+		else {
+
+			loginButton.setOriginX(loginButton.getWidth());
+			loginButton.setPositionX(Application.getWidth() - 10.0f);
+			if (loginButton.render())
+				setCurrentState(ViewType.LOGIN);
+		}
 
 		ImGui.separator();
 		ImGui.newLine();
@@ -84,4 +121,7 @@ class Master extends ViewState {
 
 	private Panel panel = new Panel();
 	private Button loginButton = new Button(" Login ");
+	private Button optionsButton = null;
+	private String[] options = new String[] { "Edit profile", "Center info", "Logout" };
+	private Popup optionsPopup = new Popup("Options", options);
 }
