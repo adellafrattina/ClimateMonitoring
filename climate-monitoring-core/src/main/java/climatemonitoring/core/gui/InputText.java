@@ -35,8 +35,9 @@ public class InputText extends Widget {
 	 */
 	public InputText(String label, String str, String error_msg, int max_chars) {
 
-		m_label = label;
+		m_label = new Text(label);
 		m_string = new ImString(str, max_chars);
+		m_maxChars = max_chars;
 		m_errorMsg = error_msg;
 	}
 
@@ -48,7 +49,7 @@ public class InputText extends Widget {
 	 */
 	public InputText(String label, String str, String error_msg) {
 
-		m_label = label;
+		m_label = new Text(label);
 		m_string = new ImString(str, 1024);
 		m_errorMsg = error_msg;
 	}
@@ -60,7 +61,7 @@ public class InputText extends Widget {
 	 */
 	public InputText(String label, String str) {
 
-		m_label = label;
+		m_label = new Text(label);
 		m_string = new ImString(str, 1024);
 		m_errorMsg = null;
 	}
@@ -71,7 +72,7 @@ public class InputText extends Widget {
 	 */
 	public InputText(String label) {
 
-		m_label = label;
+		m_label = new Text(label);
 		m_string = new ImString(1024);
 		m_errorMsg = null;
 	}
@@ -85,7 +86,7 @@ public class InputText extends Widget {
 		begin();
 		ImGui.pushItemWidth(getWidth());
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		final boolean value = ImGui.inputText("##" + validateLabel(m_label), m_string, m_flags);
+		final boolean value = ImGui.inputText("##" + validateLabel(m_label.getString()), m_string, m_flags);
 		ImGui.popItemWidth();
 
 		return end(value);
@@ -188,6 +189,15 @@ public class InputText extends Widget {
 	}
 
 	/**
+	 * To reset the string to be rendered inside the input text box
+	 * @param str The string inside the input text box
+	 */
+	public void setString(String str) {
+
+		m_string = new ImString(str, m_maxChars);
+	}
+
+	/**
 	 * 
 	 * @return The string inside the input text box
 	 */
@@ -196,15 +206,24 @@ public class InputText extends Widget {
 		return m_string.toString();
 	}
 
+	/**
+	 * 
+	 * @return The maximum number of characters
+	 */
+	public int getMaxCharacters() {
+
+		return m_maxChars;
+	}
+
 	protected void begin() {
 
 		ImGui.beginDisabled(((m_flags & ImGuiInputTextFlags.ReadOnly) == ImGuiInputTextFlags.ReadOnly));
 
-		if (m_label != null && !m_label.isEmpty()) {
+		if (m_label.getString() != null && !m_label.getString().isEmpty()) {
 
-			ImVec2 size = ImGui.calcTextSize(m_label);
-			ImGui.setCursorPosX(getPositionX() - getOriginX() + getWidth() / 2.0f - size.x / 2.0f);
-			ImGui.text(m_label);
+			m_label.setOriginX(m_label.getWidth() / 2.0f);
+			m_label.setPosition(getPositionX() - getOriginX() + getWidth() / 2.0f, m_y == DEFAULT_Y ? getPositionY() - getOriginY() : getPositionY() - getOriginY() - m_label.getHeight() - ImGui.getStyle().getFramePaddingY());
+			m_label.render();
 		}
 
 		m_enterReturnsTrue = ((m_flags & ImGuiInputTextFlags.EnterReturnsTrue) == ImGuiInputTextFlags.EnterReturnsTrue);
@@ -246,10 +265,11 @@ public class InputText extends Widget {
 	}
 
 	protected ImString m_string;
-	protected String m_label;
+	protected Text m_label;
 	protected int m_flags = 0;
 	protected boolean m_showErrorMsg = false;
 	protected String m_errorMsg;
 	private boolean m_active = false;
 	private boolean m_enterReturnsTrue = false;
+	private int m_maxChars = ImString.DEFAULT_LENGTH;
 }

@@ -69,7 +69,7 @@ public class InputTextMultiline extends InputText {
 
 		begin();
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		final boolean value = ImGui.inputTextMultiline("##" + validateLabel(m_label), m_string, getWidth(), getHeight(), m_flags);
+		final boolean value = ImGui.inputTextMultiline("##" + validateLabel(m_label.getString()), m_string, getWidth(), getHeight(), m_flags);
 
 		return end(value);
 	}

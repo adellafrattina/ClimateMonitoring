@@ -48,6 +48,15 @@ public class Text extends Widget {
 	}
 
 	/**
+	 * 
+	 * @return The text's string
+	 */
+	public String getString() {
+
+		return m_str;
+	}
+
+	/**
 	 * To set the text's color
 	 * @param r The red value (between 0 and 255)
 	 * @param g The green value (between 0 and 255)

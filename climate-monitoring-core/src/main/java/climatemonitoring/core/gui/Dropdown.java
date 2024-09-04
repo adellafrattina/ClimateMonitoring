@@ -38,11 +38,10 @@ public class Dropdown extends Widget {
 	 */
 	public int render() {
 
-		m_label.setOrigin(getOriginX(), getOriginY());
-		m_label.setPosition(getPositionX(), getPositionY());
+		m_label.setPosition(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		m_label.render();
-		ImGui.sameLine();
-		ImGui.pushItemWidth(getWidth());
+		//ImGui.sameLine();
+		ImGui.pushItemWidth(super.getWidth());
 		ImGui.setCursorPos(m_label.getWidth() + getPositionX() - getOriginX(), m_label.getPositionY() - m_label.getOriginY() - ImGui.getStyle().getFramePaddingY()); //, getPositionY() - getOriginY() - ImGui.getStyle().getFramePaddingY()
 		if (ImGui.beginCombo("##" + m_label, m_selectables[m_currentItem], ImGuiComboFlags.HeightRegular)) {
 
@@ -80,7 +79,7 @@ public class Dropdown extends Widget {
 	@Override
 	public float getHeight() {
 
-		return m_label.getWidth();
+		return m_label.getHeight();
 	}
 
 	private Text m_label;

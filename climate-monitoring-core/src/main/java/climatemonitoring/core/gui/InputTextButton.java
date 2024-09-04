@@ -84,9 +84,9 @@ public class InputTextButton extends InputText {
 		begin();
 		float width = m_width == DEFAULT_HEIGHT ? Math.abs(getWidth() - m_button.getWidth()) : getWidth();
 		ImGui.pushItemWidth(width);
-		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		float y = getPositionY() - getOriginY();
-		boolean value = ImGui.inputText("##" + validateLabel(m_label), m_string, m_flags);
+		ImGui.setCursorPos(getPositionX() - getOriginX(), y);
+		boolean value = ImGui.inputText("##" + validateLabel(m_label.getString()), m_string, m_flags);
 		ImGui.popItemWidth();
 		value = end(value);
 		m_button.setHeight(ImGui.getFrameHeight());

@@ -31,7 +31,7 @@ public class Panel extends Widget {
 
 			m_title = new Text(validateLabel(title));
 			m_title.setOriginX(m_title.getWidth() / 2.0f);
-			m_title.setPositionX(getPositionX() - getOriginX() + getWidth() / 2.0f);
+			m_title.setPosition(getPositionX() - getOriginX() + getWidth() / 2.0f, m_y == DEFAULT_Y ? getPositionY() - getOriginY() : getPositionY() - getOriginY() - m_title.getHeight() - ImGui.getStyle().getFramePaddingY());
 			m_title.render();
 		}
 
