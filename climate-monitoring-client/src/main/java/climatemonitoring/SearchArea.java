@@ -87,6 +87,9 @@ class SearchArea {
 
 			if (currentSearchMethod != searchMethod) {
 
+				searchBar.setString("");
+				latitude = new ImDouble(0.0);
+				longitude = new ImDouble(0.0);
 				foundAreasResult = null;
 				resultBox.setList(null);
 				currentSearchMethod = searchMethod;
