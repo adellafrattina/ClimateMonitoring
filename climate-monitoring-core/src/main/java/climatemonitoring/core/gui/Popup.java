@@ -40,6 +40,7 @@ public class Popup {
 		if (m_label == null)
 			m_label = "##";
 
+		m_currentItem = -1;
 		if (ImGui.beginPopup(m_label, 0)) {
 
 			if (!m_label.equals("##")) {
