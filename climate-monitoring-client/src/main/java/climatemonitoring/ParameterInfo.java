@@ -279,9 +279,40 @@ public class ParameterInfo {
 		}
 	}
 
+	/**
+	 * 
+	 * @return The parameter's singleton instance
+	 */
 	public static ParameterInfo get() {
 
 		return s_instance;
+	}
+
+	/**
+	 * 
+	 * @return The selected area
+	 */
+	public static Area getSelectedArea() {
+
+		return get().selectedArea;
+	}
+
+	/**
+	 * 
+	 * @return The selected center
+	 */
+	public static Center getSelectedCenter() {
+
+		return get().selectedCenter;
+	}
+
+	/**
+	 * 
+	 * @return The selected category
+	 */
+	public static Category getSelectedCategory() {
+
+		return get().selectedCategory;
 	}
 
 	private void loadInitialData() throws ConnectionLostException, Exception {
