@@ -105,6 +105,8 @@ class SearchArea {
 		
 						foundAreasResult = Handler.getProxyServerMT().searchAreasByName(searchBar.getString());
 						createResultBox = true;
+						resultBox.setList(null);
+						resultBox.setCurrentItem(-1);
 					}
 
 					break;
@@ -116,6 +118,7 @@ class SearchArea {
 						foundAreasResult = Handler.getProxyServerMT().searchAreasByCountry(searchBar.getString());
 						createResultBox = true;
 						resultBox.setList(null);
+						resultBox.setCurrentItem(-1);
 					}
 
 					break;
@@ -138,6 +141,7 @@ class SearchArea {
 						foundAreasResult = Handler.getProxyServerMT().searchAreasByCoords(latitude.doubleValue(), longitude.doubleValue());
 						createResultBox = true;
 						resultBox.setList(null);
+						resultBox.setCurrentItem(-1);
 					}
 
 					longitudeLabel.setOriginX(longitudeLabel.getWidth() / 2.0f);
@@ -209,6 +213,11 @@ class SearchArea {
 	public static synchronized Area[] getFoundAreas() {
 
 		return m_foundAreas;
+	}
+
+	public static synchronized boolean isAnyAreaSelected() {
+
+		return resultBox.isAnyItemSelected();
 	}
 
 	public static synchronized Area getSelectedArea() {
