@@ -9,12 +9,16 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.gui.Button;
+import climatemonitoring.core.gui.Panel;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
+import imgui.ImGui;
 
 /**
  * To view area info (also parameters info in GUI mode)
@@ -60,7 +64,43 @@ class AreaInfo extends ViewState {
 	@Override
 	public void onGUIRender() {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+		if (SearchArea.getSelectedArea() == null) {
+
+			Console.error("The selected area should not be null");
+			returnToPreviousState();
+		}
+
+		else if (selectedArea != null) {
+
+			if (selectedArea.getGeonameID() != SearchArea.getSelectedArea().getGeonameID()) {
+
+				selectedArea = null;
+				return;
+			}
+		}
+
+		else {
+
+			selectedArea = SearchArea.getSelectedArea();
+		}
+
+		panel.setSize(Application.getWidth() / 1.2f, cancel.getPositionY() - ImGui.getCursorPosY() - 50);
+		panel.setOriginX(panel.getWidth() / 2.0f);
+		panel.setPositionX(Application.getWidth() / 2.0f);
+		panel.begin(SearchArea.getSelectedArea().getName() + ", " + SearchArea.getSelectedArea().getCountryCode());
+		ImGui.text("Geoname ID: " + selectedArea.getGeonameID());
+		ImGui.text("Country: " + selectedArea.getCountryName() + " (" + selectedArea.getCountryCode() + ")");
+		ImGui.text("Coordinates: (" + selectedArea.getLatitude() + ", " + selectedArea.getLongitude() + ")");
+		ImGui.newLine();
+		ImGui.separator();
+		ImGui.newLine();
+		ParameterInfo.onGUIRender();
+		panel.end();
+
+		cancel.setOriginX(cancel.getWidth() / 2.0f);
+		cancel.setPositionX(panel.getPositionX());
+		if (cancel.render())
+			returnToPreviousState();
 	}
 
 	private void viewByID(Command c) throws ConnectionLostException, DatabaseRequestException {
@@ -120,4 +160,8 @@ class AreaInfo extends ViewState {
 		Console.write("Country: " + area.getCountryName() + " (" + area.getCountryCode() + ")");
 		Console.write("Coordinates: (" + area.getLatitude() + ", " + area.getLongitude() + ")");
 	}
+
+	private Area selectedArea = null;
+	private Panel panel = new Panel();
+	private Button cancel = new Button("Cancel");
 }
