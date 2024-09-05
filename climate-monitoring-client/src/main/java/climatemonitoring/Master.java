@@ -111,7 +111,7 @@ class Master extends ViewState {
 
 		ImGui.separator();
 		ImGui.newLine();
-		panel.setWidth(Application.getWidth() / 2.0f);
+		panel.setSize(Application.getWidth() / 2.0f, Application.getHeight() / 1.2f);
 		panel.setOriginX(panel.getWidth() / 2.0f);
 		panel.setPositionX(Application.getWidth() / 2.0f);
 		panel.begin(null);
