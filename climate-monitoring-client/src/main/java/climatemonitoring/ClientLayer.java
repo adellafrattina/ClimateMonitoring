@@ -205,6 +205,11 @@ class ClientLayer extends Layer {
 			Handler.getView().setCurrentState(ViewType.SETTINGS);
 		ImGui.popStyleColor(3);
 
+		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION)
+			ping = Long.MAX_VALUE;
+		else
+			ping = 0;
+
 		if (ping != Long.MAX_VALUE) {
 
 			try {
