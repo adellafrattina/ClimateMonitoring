@@ -116,6 +116,8 @@ class Master extends ViewState {
 		panel.setPositionX(Application.getWidth() / 2.0f);
 		panel.begin(null);
 		SearchArea.onGUIRender();
+		if (SearchArea.isAnyAreaSelected())
+			setCurrentState(ViewType.AREA_INFO);
 		panel.end();
 	}
 
