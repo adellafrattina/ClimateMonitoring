@@ -489,9 +489,6 @@ public class ParameterInfo {
 
 		for (Parameter parameter : parameters)
 			table.addRow(new String[] { parameter.getDate(), parameter.getTime(), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
-
-		for (int i = 0; i < 20; i++)
-			table.addRow(new String[] { "parameter.getDate()", "parameter.getTime()", "parameter.getUserID()", "" + "parameter.getScore()", "parameter.getNotes()" });
 	}
 
 	public static void resetData() {
