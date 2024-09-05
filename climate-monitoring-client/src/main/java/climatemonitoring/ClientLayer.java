@@ -153,7 +153,7 @@ class ClientLayer extends Layer {
 
 		int flags = 0;
 		flags |= ImGuiWindowFlags.NoDecoration;
-		flags |= ImGuiWindowFlags.NoBackground;
+		//flags |= ImGuiWindowFlags.NoBackground;
 		flags |= ImGuiWindowFlags.NoResize;
 		flags |= ImGuiWindowFlags.NoMove;
 		flags |= ImGuiWindowFlags.NoNav;
@@ -197,7 +197,15 @@ class ClientLayer extends Layer {
 
 	private void renderSettingsButton() {
 
-		if (Handler.getView().getCurrentStateIndex() != ViewType.CONNECTION) {
+		settingsButton.setTexture(Resources.getTexture(Resources.GEAR).getID());
+		ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 0.0f);
+		ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 0.5f);
+		ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.2f, 0.8f);
+		if (settingsButton.render())
+			Handler.getView().setCurrentState(ViewType.SETTINGS);
+		ImGui.popStyleColor(3);
+
+		if (ping != Long.MAX_VALUE) {
 
 			try {
 
@@ -226,21 +234,20 @@ class ClientLayer extends Layer {
 				e.printStackTrace();
 				Application.close();
 			}
-	
-			settingsButton.setTexture(Resources.getTexture(Resources.GEAR).getID());
-			ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 0.0f);
-			ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 0.5f);
-			ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.2f, 0.8f);
-			if (settingsButton.render())
-				Handler.getView().setCurrentState(ViewType.SETTINGS);
-			ImGui.popStyleColor(3);
+
 			ImGui.sameLine();
 			ImGui.text("ping: " + ping + "ms");
+		}
+
+		else {
+
+			ImGui.sameLine();
+			ImGui.text("ping: " + Float.NaN);
 		}
 	}
 
 	private Button settingsButton = new Button("##");
 	private Result<Long> pingResult;
 	long time = 0;
-	long ping = 0;
+	long ping = Long.MAX_VALUE;
 }
