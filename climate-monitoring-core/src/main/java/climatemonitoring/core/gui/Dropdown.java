@@ -38,10 +38,11 @@ public class Dropdown extends Widget {
 	 */
 	public int render() {
 
+		m_isAnyItemSelected = false;
 		m_label.setPosition(getPositionX() - getOriginX(), getPositionY() - getOriginY());
 		m_label.render();
-		//ImGui.sameLine();
-		ImGui.pushItemWidth(super.getWidth());
+		float w = ImGui.calcTextSize(m_selectables[m_currentItem]).x;
+		ImGui.pushItemWidth(w + 50);
 		ImGui.setCursorPos(m_label.getWidth() + getPositionX() - getOriginX(), m_label.getPositionY() - m_label.getOriginY() - ImGui.getStyle().getFramePaddingY()); //, getPositionY() - getOriginY() - ImGui.getStyle().getFramePaddingY()
 		if (ImGui.beginCombo("##" + m_label, m_selectables[m_currentItem], ImGuiComboFlags.HeightRegular)) {
 
@@ -49,8 +50,11 @@ public class Dropdown extends Widget {
 
 				final boolean isSelected = (m_currentItem == i);
 
-				if (ImGui.selectable(m_selectables[i], isSelected, ImGuiSelectableFlags.AllowDoubleClick))
+				if (ImGui.selectable(m_selectables[i], isSelected, ImGuiSelectableFlags.AllowDoubleClick)) {
+
 					m_currentItem = i;
+					m_isAnyItemSelected = true;
+				}
 			}
 
 			ImGui.endCombo();
@@ -62,12 +66,30 @@ public class Dropdown extends Widget {
 	}
 
 	/**
+	 * To set the current item
+	 * @param current_item The current item
+	 */
+	public void setCurrentItem(int current_item) {
+
+		m_currentItem = current_item;
+	}
+
+	/**
 	 * 
 	 * @return The drop-down's selectable list
 	 */
 	public String[] getList() {
 
 		return m_selectables;
+	}
+
+	/**
+	 * 
+	 * @return True if an item in the list has been pressed, false if not (even if it was selected previously)
+	 */
+	public boolean isAnyItemSelected() {
+
+		return m_isAnyItemSelected;
 	}
 
 	@Override
@@ -85,4 +107,5 @@ public class Dropdown extends Widget {
 	private Text m_label;
 	private final String[] m_selectables;
 	private int m_currentItem = 0;
+	private boolean m_isAnyItemSelected = false;
 }

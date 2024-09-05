@@ -45,8 +45,18 @@ public class Table extends Widget {
 		flags |= ImGuiTableFlags.RowBg;
 		flags |= ImGuiTableFlags.SizingFixedSame;
 		flags |= ImGuiTableFlags.Resizable;
+		flags |= ImGuiTableFlags.ScrollY;
 
-		if (ImGui.beginTable(m_label, m_columns.length, flags)) {
+		boolean render = false;
+		if (m_height == DEFAULT_HEIGHT)
+			render = ImGui.beginTable(m_label, m_columns.length, flags);
+
+		else
+			render = ImGui.beginTable(m_label, m_columns.length, flags, -1, getHeight());
+
+		if (render) {
+
+			ImGui.tableSetupScrollFreeze(0, 1);
 
 			for (int i = 0; i < m_columns.length; i++)
 				ImGui.tableSetupColumn(m_columns[i], ImGuiTableColumnFlags.WidthStretch);
