@@ -12,13 +12,22 @@ package climatemonitoring;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
 import climatemonitoring.core.Parameter;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
+import climatemonitoring.core.gui.Button;
+import climatemonitoring.core.gui.InputTextMultiline;
+import climatemonitoring.core.gui.Modal;
+import climatemonitoring.core.gui.Panel;
+import climatemonitoring.core.gui.Text;
+import climatemonitoring.core.gui.Widget;
 import climatemonitoring.core.headless.Console;
+import imgui.ImGui;
 
 /**
  * To add a new parameter
@@ -169,11 +178,130 @@ class ParameterCreation extends ViewState {
 	@Override
 	public void onGUIRender() {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+		if (addResult != null) {
+
+			if (addResult.ready()) {
+
+				try {
+
+					addResult.get();
+				}
+
+				catch (ConnectionLostException e) {
+
+					setCurrentState(ViewType.CONNECTION);
+					addResult = null;
+					return;
+				}
+
+				catch (Exception e) {
+
+					e.printStackTrace();
+					Application.close();
+				}
+
+				addResult = null;
+				ParameterInfo.resetData();
+				resetStateData(new ParameterCreation());
+				returnToPreviousState();
+			}
+
+			else {
+
+				loadingText.setOrigin(loadingText.getWidth() / 2.0f, loadingText.getHeight() / 2.0f);
+				loadingText.setPosition(ImGui.getWindowWidth() / 2.0f, ImGui.getWindowHeight() / 2.0f);
+				loadingText.render();
+			}
+
+			return;
+		}
+
+		panel.setSize(Application.getWidth() / 1.2f, cancel.getPositionY() - ImGui.getCursorPosY() - 50);
+		panel.setOriginX(panel.getWidth() / 2.0f);
+		panel.setPositionX(Application.getWidth() / 2.0f);
+		panel.begin(ParameterInfo.getSelectedArea().getName() + ", " + ParameterInfo.getSelectedArea().getCountryCode());
+
+		ImGui.text("Center: " + ParameterInfo.getSelectedCenter().getCenterID());
+		ImGui.text("Category: " + ParameterInfo.getSelectedCategory().getCategory() + " (" + ParameterInfo.getSelectedCategory().getExplanation() + ")");
+		ImGui.newLine();
+		ImGui.separator();
+		ImGui.newLine();
+		ImGui.text("Slide to set the score: ");
+		ImGui.sameLine(m_geonameID);
+		ImGui.pushItemWidth(200);
+		ImGui.sliderInt("##slider", score, 0, 5);
+		ImGui.popItemWidth();
+		ImGui.newLine();
+		textLabel.setOriginX(textLabel.getWidth() / 2.0f);
+		textLabel.setPositionX(panel.getWidth() / 2.0f);
+		textLabel.render();
+		if (notes.render()) {
+
+			if (notes.getString().length() > 0) {
+
+				textLabel.setString("(" + notes.getString().length() + "/" + notes.getMaxCharacters() + ")");
+			}
+
+			else {
+
+				textLabel.setString("Notes (max 256 characters)");
+			}
+		}
+
+		panel.end();
+
+		cancel.setOriginX(0);
+		cancel.setPositionX(panel.getPositionX() - panel.getWidth() / 2.0f);
+		if (cancel.render())
+			discard.open();
+
+		int discardResult = discard.render();
+		if (discardResult == Modal.CANCEL)
+			discardResult = 0;
+		else if (discardResult == Modal.OK) {
+
+			resetStateData(new ParameterCreation());
+			returnToPreviousState();
+		}
+
+		record.setOriginX(record.getWidth());
+		record.setPositionX(panel.getPositionX() + panel.getWidth() / 2.0f);
+		record.setPositionY(Widget.SAME_LINE_Y);
+		if (record.render())
+			confirm.open();
+
+		int confirmResult = confirm.render();
+		if (confirmResult == Modal.CANCEL)
+			confirmResult = 0;
+		else if (confirmResult == Modal.OK) {
+
+			Parameter parameter = new Parameter(
+				ParameterInfo.getSelectedArea().getGeonameID(),
+				ParameterInfo.getSelectedCenter().getCenterID(),
+				Handler.getLoggedOperator().getUserID(),
+				ParameterInfo.getSelectedCategory().getCategory(),
+				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+				new SimpleDateFormat("hh:mm:ss").format(new Date()),
+				score[0],
+				notes.getString());
+
+			addResult = Handler.getProxyServerMT().addParameter(parameter);
+		}
 	}
 
 	private int m_geonameID;
 	private String m_category;
 	private int m_score;
 	private String m_notes;
+
+	private Panel panel = new Panel();
+	private Button cancel = new Button("Cancel");
+	private Button record = new Button("Record");
+	private Modal confirm = new Modal("Parameter recording", "Do you want to record this new parameter?");
+	private Modal discard = new Modal("WARNING", "Are you shure you want to discard your work?");
+	private int[] score = new int[1];
+	private Text textLabel = new Text("Notes (max 256 characters)");
+	private InputTextMultiline notes = new InputTextMultiline(null, "", "", 256);
+	private Result<Boolean> addResult;
+	private Text loadingText = new Text("Loading...");
 }
