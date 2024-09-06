@@ -68,21 +68,10 @@ class AreaInfo extends ViewState {
 
 			Console.error("The selected area should not be null");
 			returnToPreviousState();
+			return;
 		}
 
-		else if (selectedArea != null) {
-
-			if (selectedArea.getGeonameID() != SearchArea.getSelectedArea().getGeonameID()) {
-
-				selectedArea = null;
-				return;
-			}
-		}
-
-		else {
-
-			selectedArea = SearchArea.getSelectedArea();
-		}
+		selectedArea = SearchArea.getSelectedArea();
 
 		panel.setSize(Application.getWidth() / 1.2f, cancel.getPositionY() - ImGui.getCursorPosY() - 50);
 		panel.setOriginX(panel.getWidth() / 2.0f);
