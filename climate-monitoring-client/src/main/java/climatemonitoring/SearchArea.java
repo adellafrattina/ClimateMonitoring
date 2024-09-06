@@ -35,6 +35,11 @@ class SearchArea {
 
 	public synchronized static void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
 
+		get().onHeadlessRenderImpl(by, args);
+	}
+
+	private void onHeadlessRenderImpl(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
+
 		try {
 
 			m_foundAreas = null;
@@ -76,6 +81,11 @@ class SearchArea {
 	}
 
 	public synchronized static void onGUIRender() {
+
+		get().onGUIRenderImpl();
+	}
+
+	private void onGUIRenderImpl() {
 
 		try {
 
@@ -210,35 +220,47 @@ class SearchArea {
 		}
 	}
 
+	public static synchronized void resetData() {
+
+		s_instance = new SearchArea();
+	}
+
 	public static synchronized Area[] getFoundAreas() {
 
-		return m_foundAreas;
+		return get().m_foundAreas;
 	}
 
 	public static synchronized boolean isAnyAreaSelected() {
 
-		return resultBox.isAnyItemSelected();
+		return get().resultBox.isAnyItemSelected();
 	}
 
 	public static synchronized Area getSelectedArea() {
 
-		return m_selectedArea;
+		return get().m_selectedArea;
 	}
 
-	private static int currentSearchMethod = 0;
-	private static Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
-	private static InputTextButton searchBar = new InputTextButton(null, "", "No matching areas", 300, "Search");
-	private static Text loadingText = new Text("Loading...");
-	private static boolean createResultBox = false;
-	private static ResultBox resultBox = new ResultBox("##");
-	private static Result<Area[]> foundAreasResult;
-	private static Text latitudeLabel = new Text("Latitude");
-	private static Text longitudeLabel = new Text("Longitude");
-	private static ImDouble latitude = new ImDouble();
-	private static ImDouble longitude = new ImDouble();
-	private static Button searchCoords = new Button("Search");
-	private static Text errorText = new Text("No matching areas");
+	private static SearchArea get() {
 
-	private static Area[] m_foundAreas;
-	private static Area m_selectedArea;
+		return s_instance;
+	}
+
+	private static SearchArea s_instance = new SearchArea();
+
+	private int currentSearchMethod = 0;
+	private Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
+	private InputTextButton searchBar = new InputTextButton(null, "", "No matching areas", 300, "Search");
+	private Text loadingText = new Text("Loading...");
+	private boolean createResultBox = false;
+	private ResultBox resultBox = new ResultBox("##");
+	private Result<Area[]> foundAreasResult;
+	private Text latitudeLabel = new Text("Latitude");
+	private Text longitudeLabel = new Text("Longitude");
+	private ImDouble latitude = new ImDouble();
+	private ImDouble longitude = new ImDouble();
+	private Button searchCoords = new Button("Search");
+	private Text errorText = new Text("No matching areas");
+
+	private Area[] m_foundAreas;
+	private Area m_selectedArea;
 }
