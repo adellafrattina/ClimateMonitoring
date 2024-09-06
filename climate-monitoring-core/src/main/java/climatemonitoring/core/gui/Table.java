@@ -12,6 +12,8 @@ package climatemonitoring.core.gui;
 import java.util.LinkedList;
 
 import imgui.ImGui;
+import imgui.ImGuiListClipper;
+import imgui.callback.ImListClipperCallback;
 import imgui.flag.ImGuiTableColumnFlags;
 import imgui.flag.ImGuiTableFlags;
 
@@ -63,15 +65,19 @@ public class Table extends Widget {
 
 			ImGui.tableHeadersRow();
 
-			for (int i = 0; i < m_rows.size(); i++) {
+			ImGuiListClipper.forEach(m_rows.size(), new ImListClipperCallback() {
 
-				ImGui.tableNextRow();
-				for (int j = 0; j < m_columns.length; j++) {
+				@Override
+				public void accept(int index) {
 
-					ImGui.tableSetColumnIndex(j);
-					ImGui.textWrapped(m_rows.get(i)[j]);
+					ImGui.tableNextRow();
+					for (int j = 0; j < m_columns.length; j++) {
+
+						ImGui.tableSetColumnIndex(j);
+						ImGui.textWrapped(m_rows.get(index)[j]);
+					}
 				}
-			}
+			});
 
 			ImGui.endTable();
 		}
