@@ -294,7 +294,7 @@ class ParameterCreation extends ViewState {
 	private Button cancel = new Button("Cancel");
 	private Button record = new Button("Record");
 	private Modal confirm = new Modal("Parameter recording", "Do you want to record this new parameter?");
-	private Modal discard = new Modal("WARNING", "Are you shure you want to discard your work?");
+	private Modal discard = new Modal("WARNING", "Are you sure you want to discard your work?");
 	private int[] score = new int[] { 1 };
 	private Text textLabel = new Text("Notes (max 256 characters)");
 	private InputTextMultiline notes = new InputTextMultiline(null, "", "", 256);
