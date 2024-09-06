@@ -205,10 +205,17 @@ class ClientLayer extends Layer {
 			Handler.getView().setCurrentState(ViewType.SETTINGS);
 		ImGui.popStyleColor(3);
 
-		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION)
+		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION) {
+
 			ping = Long.MAX_VALUE;
-		else
+			resetPing = true;
+		}
+
+		else if (resetPing) {
+
 			ping = 0;
+			resetPing = false;
+		}
 
 		if (ping != Long.MAX_VALUE) {
 
@@ -255,4 +262,5 @@ class ClientLayer extends Layer {
 	private Result<Long> pingResult;
 	long time = 0;
 	long ping = Long.MAX_VALUE;
+	boolean resetPing = true;
 }
