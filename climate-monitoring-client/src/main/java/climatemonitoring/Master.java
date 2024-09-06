@@ -11,8 +11,10 @@ package climatemonitoring;
 
 import imgui.ImGui;
 import climatemonitoring.core.Application;
+import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Panel;
@@ -77,10 +79,8 @@ class Master extends ViewState {
 			optionsButton.setOriginX(optionsButton.getWidth());
 			optionsButton.setPositionX(Application.getWidth() - 10.0f);
 
-			if (optionsButton.render()) {
-
+			if (optionsButton.render())
 				optionsPopup.open();
-			}
 
 			int currentItem = optionsPopup.render();
 			if (currentItem != -1) {
@@ -91,7 +91,7 @@ class Master extends ViewState {
 						setCurrentState(ViewType.EDIT_PROFILE);
 						break;
 					case "Center info":
-						setCurrentState(ViewType.CENTER_INFO);
+						getCenterResult = Handler.getProxyServerMT().getCenter(Handler.getLoggedOperator().getCenterID());
 						break;
 					case "Logout":
 						optionsButton = null;
@@ -119,6 +119,29 @@ class Master extends ViewState {
 		if (SearchArea.isAnyAreaSelected())
 			setCurrentState(ViewType.AREA_INFO);
 		panel.end();
+
+		try {
+
+			if (getCenterResult != null && getCenterResult.ready()) {
+
+				CenterInfo ci = (CenterInfo) getView().getState(ViewType.CENTER_INFO);
+				ci.center = getCenterResult.get();
+				setCurrentState(ViewType.CENTER_INFO);
+				getCenterResult = null;
+			}
+		}
+
+		catch (ConnectionLostException e) {
+
+			resetStateData(new Master());
+			setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (Exception e) {
+
+			e.printStackTrace();
+			Application.close();
+		}
 	}
 
 	private Panel panel = new Panel();
@@ -126,4 +149,5 @@ class Master extends ViewState {
 	private Button optionsButton = null;
 	private String[] options = new String[] { "Edit profile", "Center info", "Logout" };
 	private Popup optionsPopup = new Popup("Options", options);
+	private Result<Center> getCenterResult;
 }
