@@ -117,8 +117,8 @@ public class ApplicationGUI extends Application {
 		for (Layer layer : m_layers)
 			layer.onDetach();
 
-		m_imGuiGl3.dispose();
-		m_imGuiGlfw.dispose();
+		m_imGuiGl3.shutdown();
+		m_imGuiGlfw.shutdown();
 		disposeImGui();
 		m_window.shutdown();
 	}
@@ -173,7 +173,6 @@ public class ApplicationGUI extends Application {
 
 			ImFontConfig config = new ImFontConfig();
 			config.setSizePixels(15.0f);
-			config.setGlyphRanges(fonts.getGlyphRangesDefault());
 			fonts.addFontDefault(config);
 		}
 	}
@@ -191,6 +190,7 @@ public class ApplicationGUI extends Application {
 	 */
 	private void startFrame() {
 
+		m_imGuiGl3.newFrame();
 		m_imGuiGlfw.newFrame();
 		ImGui.newFrame();
 	}

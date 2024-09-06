@@ -240,7 +240,7 @@ public class InputText extends Widget {
 
 		if (m_enterReturnsTrue) {
 
-			boolean b = m_active && !ImGui.isItemActive() && ImGui.isKeyPressed(ImGui.getIO().getKeyMap(ImGuiKey.Enter));
+			boolean b = m_active && !ImGui.isItemActive() && ImGui.isKeyPressed(ImGuiKey.Enter);
 			if (b)
 				m_active = false;
 
