@@ -9,10 +9,16 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
 
 import imgui.ImGui;
+import imgui.extension.implot.ImPlot;
+import imgui.extension.implot.flag.ImPlotAxis;
+import imgui.extension.implot.flag.ImPlotAxisFlags;
+import imgui.extension.implot.flag.ImPlotCond;
+import imgui.extension.implot.flag.ImPlotMarker;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
@@ -259,6 +265,12 @@ public class ParameterInfo {
 			tablePanelLabel.setOriginX(tablePanelLabel.getWidth() / 2.0f);
 			tablePanelLabel.setPositionX(tablePanel.getPositionX() + tablePanel.getWidth() / 2.0f);
 			tablePanelLabel.render();
+			ImGui.sameLine();
+			if (changeView.render()) {
+
+				changeView = showGraph ? changeView = new Button("show graph") : new Button("show table");
+				showGraph = !showGraph;
+			}
 
 			if (Handler.isOperatorLoggedIn()) {
 
@@ -276,7 +288,12 @@ public class ParameterInfo {
 			}
 
 			tablePanel.begin(null);
-			table.render();
+
+			if (showGraph)
+				showGraph();
+			else
+				table.render();
+
 			tablePanel.end();
 		}
 	}
@@ -523,11 +540,32 @@ public class ParameterInfo {
 	private void setUpParametersData() {
 
 		table = new Table("Parameters", new String[] { "Date", "Time", "Operator", "Score", "Notes" });
+		dates = new long[parameters.length];
+		scores = new long[parameters.length];
 
+		int i = 0;
 		for (Parameter parameter : parameters) {
 
-			;
 			table.addRow(new String[] { DateTimeFormatter.ofPattern("d MMM uuuu").format(parameter.getTimestamp()), DateTimeFormatter.ofPattern("HH:mm:ss").format(parameter.getTimestamp()), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
+			dates[i] = parameter.getTimestamp().toEpochSecond(ZoneOffset.UTC);
+			scores[i] = parameter.getScore();
+			i++;
+		}
+	}
+
+	private void showGraph() {
+
+		if (ImPlot.beginPlot("##Recordings", -1, -1)) {
+
+			ImPlot.setupAxisLimits(ImPlotAxis.X1, dates[0], dates[dates.length - 1], ImPlotCond.Once);
+			ImPlot.setupAxisLimits(ImPlotAxis.Y1, 0, 6, ImPlotCond.Always);
+			ImPlot.setupAxes("##Time", "Scores", ImPlotAxisFlags.Time, 0);
+			ImPlot.setupAxisFormat(ImPlotAxis.X1, "HH-mm-ss");
+
+			ImPlot.setNextMarkerStyle(ImPlotMarker.Circle);
+			ImPlot.plotLine("Trend", dates, scores, parameters.length);
+
+			ImPlot.endPlot();
 		}
 	}
 
@@ -566,4 +604,8 @@ public class ParameterInfo {
 	private Panel tablePanel = new Panel();
 	private Text tablePanelLabel = new Text("Recordings");
 	private Button add = new Button(" + ");
+	private Button changeView = new Button("show graph");
+	private boolean showGraph = false;
+	private long[] dates;
+	private long[] scores;
 }
