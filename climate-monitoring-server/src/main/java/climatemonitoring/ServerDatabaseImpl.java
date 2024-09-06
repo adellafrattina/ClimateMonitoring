@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
@@ -724,17 +725,13 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 				int geonameID = query.getInt("geoname_id");
 				String centerID = query.getString("center_id");
-				String timestamp = query.getString("rec_timestamp");
+				Timestamp timestamp = query.getTimestamp("rec_timestamp");
 				String categoryID = query.getString("category_id");
 				String userID = query.getString("user_id");
 				int score = query.getInt("score");
 				String notes = query.getString("notes");
 
-				String[] parts = timestamp.split(" ");
-				String date = parts[0];
-				String time = parts[1];
-
-				result[query.getRow() - 1] = new Parameter(geonameID, centerID, userID, categoryID, date, time, score, notes);
+				result[query.getRow() - 1] = new Parameter(geonameID, centerID, userID, categoryID, timestamp.toLocalDateTime(), score, notes);
 			}
 
 			return result;
@@ -951,9 +948,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			int geonameID = parameter.getGeonameID();
 			String centerID = parameter.getCenterID();
-			String time = parameter.getTime();
-			String date = parameter.getDate();
-			String timestamp = date + " " + time;
+			Timestamp timestamp = Timestamp.valueOf(parameter.getTimestamp());
 			String categoryID = parameter.getCategory();
 			String userID = parameter.getUserID();
 			int score = parameter.getScore();

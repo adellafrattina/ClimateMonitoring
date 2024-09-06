@@ -9,8 +9,7 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
@@ -153,8 +152,7 @@ class ParameterCreation extends ViewState {
 				Handler.getLoggedOperator().getCenterID(),
 				Handler.getLoggedOperator().getUserID(),
 				m_category,
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-				new SimpleDateFormat("hh:mm:ss").format(new Date()),
+				LocalDateTime.now(),
 				m_score,
 				m_notes);
 
@@ -276,8 +274,7 @@ class ParameterCreation extends ViewState {
 				ParameterInfo.getSelectedCenter().getCenterID(),
 				Handler.getLoggedOperator().getUserID(),
 				ParameterInfo.getSelectedCategory().getCategory(),
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-				new SimpleDateFormat("hh:mm:ss").format(new Date()),
+				LocalDateTime.now(),
 				score[0],
 				notes.getString());
 

@@ -10,6 +10,7 @@ Dariia Sniezhko 753057 VA
 package climatemonitoring.core;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Encapsulates all the properties of a parameter
@@ -27,19 +28,17 @@ public class Parameter implements Serializable {
 	 * @param center_id The center that registered the parameter
 	 * @param user_id The operator's userid that registered the parameter
 	 * @param category The parameter's category
-	 * @param date The recording date of the parameter
-	 * @param time The recording time of the parameter
+	 * @param timestamp The recording date and time of the parameter
 	 * @param score The score given to the parameter
 	 * @param notes The operator's notes about the parameter
 	 */
-	public Parameter(int geoname_id, String center_id, String user_id, String category, String date, String time, int score, String notes) {
+	public Parameter(int geoname_id, String center_id, String user_id, String category, LocalDateTime timestamp, int score, String notes) {
 
 		m_geonameID = geoname_id;
 		m_centerID = center_id;
 		m_userID = user_id;
 		m_category = category;
-		m_date = date;
-		m_time = time;
+		m_timestamp = timestamp;
 		m_score = score;
 		m_notes = notes;
 	}
@@ -82,20 +81,11 @@ public class Parameter implements Serializable {
 
 	/**
 	 * 
-	 * @return The recording date of the parameter
+	 * @return The recording date and time of the parameter
 	 */
-	public String getDate() {
+	public LocalDateTime getTimestamp() {
 	
-		return m_date;
-	}
-
-	/**
-	 * 
-	 * @return The recording time of the parameter
-	 */
-	public String getTime() {
-	
-		return m_time;
+		return m_timestamp;
 	}
 
 	/**
@@ -120,8 +110,7 @@ public class Parameter implements Serializable {
 	private String m_centerID;
 	private String m_userID;
 	private String m_category;
-	private String m_date;
-	private String m_time;
+	private LocalDateTime m_timestamp;
 	private int m_score;
 	private String m_notes;
 }

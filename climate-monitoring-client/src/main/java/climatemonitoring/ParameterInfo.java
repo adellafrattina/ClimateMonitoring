@@ -9,6 +9,7 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
 
 import imgui.ImGui;
@@ -143,7 +144,7 @@ public class ParameterInfo {
 
 			// Show parameters
 			for (Parameter parameter : get().parameters)
-				Console.write("[" + parameter.getDate() + " " + parameter.getTime() + "] [by " + parameter.getUserID() + "] --- " + parameter.getScore() + " (" + parameter.getNotes() + ")");
+				Console.write("[" + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(parameter.getTimestamp()) + " " + DateTimeFormatter.ofPattern("HH:mm:ss").format(parameter.getTimestamp()) + "] [by " + parameter.getUserID() + "] --- " + parameter.getScore() + " (" + parameter.getNotes() + ")");
 		}
 
 		catch (NumberFormatException e) {
@@ -523,8 +524,11 @@ public class ParameterInfo {
 
 		table = new Table("Parameters", new String[] { "Date", "Time", "Operator", "Score", "Notes" });
 
-		for (Parameter parameter : parameters)
-			table.addRow(new String[] { parameter.getDate(), parameter.getTime(), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
+		for (Parameter parameter : parameters) {
+
+			;
+			table.addRow(new String[] { DateTimeFormatter.ofPattern("d MMM uuuu").format(parameter.getTimestamp()), DateTimeFormatter.ofPattern("HH:mm:ss").format(parameter.getTimestamp()), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
+		}
 	}
 
 	private static ParameterInfo s_instance = new ParameterInfo();
