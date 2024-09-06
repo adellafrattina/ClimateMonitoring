@@ -172,6 +172,8 @@ public class ParameterInfo {
 			return;
 		}
 
+		get().selectedArea = SearchArea.getSelectedArea();
+
 		try {
 
 			get().render();
