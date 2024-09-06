@@ -35,7 +35,11 @@ public class Text extends Widget {
 	public void render() {
 
 		ImGui.setCursorPos(getPositionX() - getOriginX(), getPositionY() - getOriginY());
-		ImGui.textColored(color[0], color[1], color[2], color[3], m_str);
+
+		if (color[0] == -1 || color[1] == -1 || color[2] == -1 || color[3] == -1)
+			ImGui.text(m_str);
+		else
+			ImGui.textColored(color[0], color[1], color[2], color[3], m_str);
 	}
 
 	/**
@@ -84,5 +88,5 @@ public class Text extends Widget {
 	}
 
 	private String m_str;
-	private final int[] color = { 255, 255, 255, 255 };
+	private final int[] color = { -1, -1, -1, -1 };
 }
