@@ -222,7 +222,9 @@ class SearchArea {
 
 	public static synchronized void resetData() {
 
+		Area tmp = get().m_selectedArea; // This is done because the selected area is the only parameter that should not be reset
 		s_instance = new SearchArea();
+		get().m_selectedArea = tmp;
 	}
 
 	public static synchronized Area[] getFoundAreas() {
