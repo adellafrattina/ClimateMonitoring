@@ -64,23 +64,23 @@ class AreaInfo extends ViewState {
 	@Override
 	public void onGUIRender() {
 
-		if (SearchArea.getSelectedArea() == null) {
+		if (Master.getSearchArea().getSelectedArea() == null) {
 
 			Console.error("The selected area should not be null");
 			returnToPreviousState();
 			return;
 		}
 
-		else if (selectedArea != SearchArea.getSelectedArea()) {
+		else if (selectedArea != Master.getSearchArea().getSelectedArea()) {
 
-			selectedArea = SearchArea.getSelectedArea();
+			selectedArea = Master.getSearchArea().getSelectedArea();
 			ParameterInfo.resetData();
 		}
 
 		panel.setSize(Application.getWidth() / 1.2f, cancel.getPositionY() - ImGui.getCursorPosY() - 50);
 		panel.setOriginX(panel.getWidth() / 2.0f);
 		panel.setPositionX(Application.getWidth() / 2.0f);
-		panel.begin(SearchArea.getSelectedArea().getName() + ", " + SearchArea.getSelectedArea().getCountryCode());
+		panel.begin(selectedArea.getName() + ", " + selectedArea.getCountryCode());
 		ImGui.text("Geoname ID: " + selectedArea.getGeonameID());
 		ImGui.text("Country: " + selectedArea.getCountryName() + " (" + selectedArea.getCountryCode() + ")");
 		ImGui.text("Coordinates: (" + selectedArea.getLatitude() + ", " + selectedArea.getLongitude() + ")");
@@ -124,13 +124,13 @@ class AreaInfo extends ViewState {
 
 			int index = Integer.parseInt(c.getArgs().trim());
 
-			if (SearchArea.getFoundAreas() == null) {
+			if (Master.getSearchArea().getFoundAreas() == null) {
 
 				Console.write("Before calling this command, you should call 'search area [name, country, coords]' to get a list of selectable areas");
 				return;
 			}
 
-			Area area = SearchArea.getFoundAreas()[index];
+			Area area = Master.getSearchArea().getFoundAreas()[index];
 
 			printAreaInfo(area);
 		}

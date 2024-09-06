@@ -42,7 +42,7 @@ class Master extends ViewState {
 
 				case "area":
 					c = new Command(c.getArgs());
-					SearchArea.onHeadlessRender(c.getCmd(), c.getArgs());
+					getSearchArea().onHeadlessRender(c.getCmd(), c.getArgs());
 					break;
 				case "center":
 					c = new Command(c.getArgs());
@@ -115,8 +115,8 @@ class Master extends ViewState {
 		panel.setOriginX(panel.getWidth() / 2.0f);
 		panel.setPositionX(Application.getWidth() / 2.0f);
 		panel.begin(null);
-		SearchArea.onGUIRender();
-		if (SearchArea.isAnyAreaSelected())
+		getSearchArea().onGUIRender();
+		if (getSearchArea().isAnyAreaSelected())
 			setCurrentState(ViewType.AREA_INFO);
 		panel.end();
 
@@ -143,6 +143,13 @@ class Master extends ViewState {
 			Application.close();
 		}
 	}
+
+	public static SearchArea getSearchArea() {
+
+		return searchArea;
+	}
+
+	private static SearchArea searchArea = new SearchArea();
 
 	private Panel panel = new Panel();
 	private Button loginButton = new Button(" Login ");

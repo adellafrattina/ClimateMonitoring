@@ -95,7 +95,7 @@ class CenterInfo extends ViewState {
 			if(centerarea == null && arearesult == null){
 
 				arearesult = Handler.getProxyServerMT().getArea(center.getCity());
-				SearchArea.resetData();
+				searchArea = new SearchArea();
 				if (Handler.isOperatorLoggedIn() && Handler.getLoggedOperator().getCenterID().equals(center.getCenterID())) {
 
 					cancel.setOriginX(0);
@@ -155,11 +155,11 @@ class CenterInfo extends ViewState {
 				panelinfo.setHeight(ImGui.getWindowHeight() / 2.0f);
 
 				paneladd.begin("Search for the new area");
-				SearchArea.onGUIRender();
+				searchArea.onGUIRender();
 
-				if(SearchArea.isAnyAreaSelected()){
+				if(searchArea.isAnyAreaSelected()){
 
-					inclusionresult = Handler.getProxyServerMT().includeAreaToCenter(SearchArea.getSelectedArea().getGeonameID(), center.getCenterID());
+					inclusionresult = Handler.getProxyServerMT().includeAreaToCenter(searchArea.getSelectedArea().getGeonameID(), center.getCenterID());
 				}
 				
 				if(inclusionresult != null && inclusionresult.ready()){
@@ -167,7 +167,6 @@ class CenterInfo extends ViewState {
 					addingmode = false;
 					inclusionresult = null;
 					requestdata = true;
-					SearchArea.resetData();
 					panelinfo.setHeight(Widget.DEFAULT_HEIGHT);
 				}
 				paneladd.end();
@@ -180,7 +179,6 @@ class CenterInfo extends ViewState {
 				if (addingmode) {
 
 					addingmode = false;
-					SearchArea.resetData();
 					panelinfo.setHeight(Widget.DEFAULT_HEIGHT);
 				}
 
@@ -241,6 +239,7 @@ class CenterInfo extends ViewState {
 		Console.write("\n");
 	}
 
+	private SearchArea searchArea = new SearchArea();
 	private Panel panel = new Panel();
 	Center center;
 	private Result <Area> arearesult;

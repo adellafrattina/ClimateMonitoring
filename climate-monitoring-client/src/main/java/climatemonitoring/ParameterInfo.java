@@ -165,14 +165,14 @@ public class ParameterInfo {
 
 	public static void onGUIRender() {
 
-		if (SearchArea.getSelectedArea() == null) {
+		if (Master.getSearchArea().getSelectedArea() == null) {
 
 			Console.error("The selected area should not be null");
 			Handler.getView().returnToPreviousState();
 			return;
 		}
 
-		get().selectedArea = SearchArea.getSelectedArea();
+		get().selectedArea = Master.getSearchArea().getSelectedArea();
 
 		try {
 
@@ -328,7 +328,7 @@ public class ParameterInfo {
 
 		if (requestInitialData) {
 
-			selectedArea = SearchArea.getSelectedArea();
+			selectedArea = Master.getSearchArea().getSelectedArea();
 			associatedCentersResult = Handler.getProxyServerMT().getAssociatedCenters(selectedArea.getGeonameID());
 			latestCenterResult = Handler.getProxyServerMT().getLatestCenter(selectedArea.getGeonameID());
 			categoriesResult = Handler.getProxyServerMT().getCategories();
