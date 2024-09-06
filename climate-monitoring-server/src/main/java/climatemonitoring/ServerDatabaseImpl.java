@@ -381,7 +381,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT A.* FROM area A JOIN monitors M on A.geoname_id = M.geoname_id WHERE center_id = '" + center_id + "';");
+			ResultSet query = execute("SELECT A.* FROM area A JOIN monitors M on A.geoname_id = M.geoname_id WHERE LOWER(center_id) = LOWER('" + center_id + "');");
 			Area[] result = new Area[getRowCount(query)];
 
 			while (query.next()) {
@@ -493,7 +493,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND street = '" + street + "' AND house_number = " + house_number + ";");
+			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND LOWER(street) = LOWER('" + street + "') AND house_number = " + house_number + ";");
 			Center result = null;
 
 			if (query.next()) {
@@ -569,7 +569,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			ResultSet query = execute("SELECT C.* FROM monitors M JOIN center C on M.center_id = C.center_id WHERE geoname_id = "+ geoname_id + ";");
 			Center[] result = new Center[getRowCount(query)];
 
-			if (query.next()) {
+			while (query.next()) {
 
 				String centerID = query.getString("center_id");
 				int centerCity = query.getInt("city");
@@ -717,7 +717,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "' AND category_id = '" + category + "';");
+			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND LOWER(center_id) = LOWER('" + center_id + "') AND LOWER(category_id) = LOWER('" + category + "');");
 			Parameter[] result = new Parameter[getRowCount(query)];
 
 			while (query.next()) {
@@ -762,10 +762,10 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT AVG(score) FROM parameter WHERE geoname_id = " + geoname_id + " AND center_id = '" + center_id + "' AND category_id = '" + category + "';");
+			ResultSet query = execute("SELECT AVG(score) FROM parameter WHERE geoname_id = " + geoname_id + " AND LOWER(center_id) = LOWER('" + center_id + "') AND LOWER(category_id) = LOWER('" + category + "');");
 			double result = 0.0;
 
-			if (getRowCount(query) == 1)
+			if (query.next())
 				result = query.getDouble("avg");
 
 			return result;
@@ -823,7 +823,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM parameter P JOIN category C on C.category_id = P.category_id WHERE P.geoname_id = " + geoname_id + " AND P.center_id = '" + center_id + "' ORDER BY P.rec_timestamp DESC LIMIT 1;");
+			ResultSet query = execute("SELECT * FROM parameter P JOIN category C on C.category_id = P.category_id WHERE P.geoname_id = " + geoname_id + " AND LOWER(P.center_id) = LOWER('" + center_id + "') ORDER BY P.rec_timestamp DESC LIMIT 1;");
 			Category result = null;
 		
 			if (query.next()) {
@@ -894,8 +894,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int postalCode = center.getPostalCode();
 			String district = center.getDistrict();
 
-			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES ('" + centerID + "', " + city + ", '" + street + "', " + houseNumber + ", " + postalCode + ", " + (district == null ? "null" : "'" + district + "'") + ");");
-			execute("INSERT INTO monitors (center_id, geoname_id) VALUES ('" + centerID + "', " + city + ");");
+			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (LOWER('" + centerID + "'), " + city + ", LOWER('" + street + "'), " + houseNumber + ", " + postalCode + ", " + (district == null ? "null" : "'" + district + "'") + ");");
+			execute("INSERT INTO monitors (center_id, geoname_id) VALUES (LOWER('" + centerID + "'), " + city + ");");
 			return true;
 		}
 
@@ -926,7 +926,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES ('"+ userID + "', '" + SSID + "', '" + operatorSurname + "', '" + operatorName + "', '" + email + "', '" + password + "', '" + centerID + "');");
+			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES ('"+ userID + "', '" + SSID + "', '" + operatorSurname + "', '" + operatorName + "', '" + email + "', '" + password + "', LOWER('" + centerID + "'));");
 			return true;
 		}
 
@@ -959,7 +959,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int score = parameter.getScore();
 			String notes = parameter.getNotes();
 
-			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", '" + centerID + "', '" + timestamp + "', '" + categoryID + "', '" + userID + "', " + score + ", '" + notes + "');");
+			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", LOWER('" + centerID + "'), '" + timestamp + "', '" + categoryID + "', '" + userID + "', " + score + ", '" + notes + "');");
 			return true;
 		}
 
@@ -991,7 +991,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("UPDATE operator SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = '" + centerID + "' WHERE user_id = '" + user_id + "';");
+			execute("UPDATE operator SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = LOWER('" + centerID + "') WHERE user_id = '" + user_id + "';");
 			return true;
 		}
 
@@ -1014,7 +1014,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			execute("INSERT INTO monitors (center_id, geoname_id) VALUES ('" + center_id + "', " + geoname_id + ");");
+			execute("INSERT INTO monitors (center_id, geoname_id) VALUES (LOWER('" + center_id + "'), " + geoname_id + ");");
 			return true;
 		}
 
@@ -1037,7 +1037,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM monitors WHERE center_id = '" + center_id + "' AND geoname_id = " + geoname_id + ";");
+			ResultSet query = execute("SELECT * FROM monitors WHERE LOWER(center_id) = LOWER('" + center_id + "') AND geoname_id = " + geoname_id + ";");
 
 			if (getRowCount(query) == 1) return true;
 			else return false;
@@ -1062,7 +1062,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE C.center_id = '" + center_id + " AND O.user_id = " + user_id + ";");
+			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE LOWER(C.center_id) = LOWER('" + center_id + "') AND O.user_id = " + user_id + ";");
 
 			if (getRowCount(query) == 1) return true;
 			else return false;

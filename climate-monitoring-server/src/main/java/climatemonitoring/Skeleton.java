@@ -344,6 +344,8 @@ class Skeleton extends Thread {
 							m_out.writeObject(e);
 							Console.error("Error on request " + request + ": " + e.getMessage());
 						}
+
+						break;
 					}
 
 					case GET_OPERATOR: {

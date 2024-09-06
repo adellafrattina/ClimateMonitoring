@@ -114,6 +114,7 @@ public class View {
 			return false;
 
 		m_states.put(state.getClass().getSimpleName(), state);
+		state.setView(this);
 
 		return true;
 	}
