@@ -169,15 +169,7 @@ public class ParameterInfo {
 
 			Console.error("The selected area should not be null");
 			Handler.getView().returnToPreviousState();
-		}
-
-		else if (get().selectedArea != null) {
-
-			if (get().selectedArea.getGeonameID() != SearchArea.getSelectedArea().getGeonameID()) {
-
-				resetData();
-				return;
-			}
+			return;
 		}
 
 		try {
@@ -213,7 +205,13 @@ public class ParameterInfo {
 
 		int currentCenterIndex = get().selectCenter.render();
 		ImGui.sameLine();
-		ImGui.button("view");
+		if (ImGui.button("view")) {
+
+			CenterInfo ci = (CenterInfo) Handler.getView().getState(ViewType.CENTER_INFO);
+			ci.center = selectedCenter;
+			Handler.getView().setCurrentState(ViewType.CENTER_INFO);
+		}
+
 		int currentCategoryIndex = get().selectCategory.render();
 		ImGui.sameLine();
 		ImGui.text("(" + get().selectedCategory.getExplanation() + ")");
