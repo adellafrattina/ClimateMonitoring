@@ -74,6 +74,10 @@ class Login extends ViewState {
 	@Override
 	public void onGUIRender() {
 
+		boolean enterPressed = false;
+		userid.setEnterReturnsTrue(true);
+		password.setEnterReturnsTrue(true);
+
 		panel.setSize(Application.getWidth() / 2.0f, Application.getHeight() / 2.0f);
 		panel.setOrigin(panel.getWidth() / 2.0f, panel.getHeight() / 2.0f);
 		panel.setPosition(Application.getWidth() / 2.0f, Application.getHeight() / 2.0f);
@@ -86,13 +90,13 @@ class Login extends ViewState {
 		userid.setOriginX(userid.getWidth() / 2.0f);
 		userid.setPositionX(panel.getWidth() / 2.0f);
 		ImGui.newLine();
-		userid.render();
+		enterPressed = userid.render() || enterPressed;
 
 		password.setWidth(panel.getWidth() / 2.0f);
 		password.setOriginX(password.getWidth() / 2.0f);
 		password.setPositionX(panel.getWidth() / 2.0f);
 		ImGui.newLine();
-		password.render();
+		enterPressed = password.render() || enterPressed;
 
 		password.setPassword(showpassword);
 		if(password.isButtonPressed()){
@@ -129,7 +133,9 @@ class Login extends ViewState {
 		ImGui.sameLine();
 		confirm.setOriginX(confirm.getWidth());
 		confirm.setPositionX(panel.getPositionX() + panel.getWidth() / 2.0f);
-		if(confirm.render()){
+		if(confirm.render() || enterPressed){
+
+			enterPressed = false;
 
 			try {
 				String msgerror = null;
