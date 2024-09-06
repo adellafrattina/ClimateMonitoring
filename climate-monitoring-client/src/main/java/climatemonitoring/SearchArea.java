@@ -33,12 +33,7 @@ import climatemonitoring.core.headless.Console;
  */
 class SearchArea {
 
-	public synchronized static void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
-
-		get().onHeadlessRenderImpl(by, args);
-	}
-
-	private void onHeadlessRenderImpl(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 
@@ -80,12 +75,7 @@ class SearchArea {
 		}
 	}
 
-	public synchronized static void onGUIRender() {
-
-		get().onGUIRenderImpl();
-	}
-
-	private void onGUIRenderImpl() {
+	public synchronized void onGUIRender() {
 
 		try {
 
@@ -220,34 +210,20 @@ class SearchArea {
 		}
 	}
 
-	public static synchronized void resetData() {
+	public synchronized Area[] getFoundAreas() {
 
-		Area tmp = get().m_selectedArea; // This is done because the selected area is the only parameter that should not be reset
-		s_instance = new SearchArea();
-		get().m_selectedArea = tmp;
+		return m_foundAreas;
 	}
 
-	public static synchronized Area[] getFoundAreas() {
+	public synchronized boolean isAnyAreaSelected() {
 
-		return get().m_foundAreas;
+		return resultBox.isAnyItemSelected();
 	}
 
-	public static synchronized boolean isAnyAreaSelected() {
+	public synchronized Area getSelectedArea() {
 
-		return get().resultBox.isAnyItemSelected();
+		return m_selectedArea;
 	}
-
-	public static synchronized Area getSelectedArea() {
-
-		return get().m_selectedArea;
-	}
-
-	private static SearchArea get() {
-
-		return s_instance;
-	}
-
-	private static SearchArea s_instance = new SearchArea();
 
 	private int currentSearchMethod = 0;
 	private Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
