@@ -11,6 +11,8 @@ package climatemonitoring;
 
 import java.util.StringTokenizer;
 
+import imgui.ImGui;
+
 import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Category;
@@ -26,7 +28,6 @@ import climatemonitoring.core.gui.Table;
 import climatemonitoring.core.gui.Text;
 import climatemonitoring.core.gui.Widget;
 import climatemonitoring.core.headless.Console;
-import imgui.ImGui;
 
 /**
  * To show all the parameters based on an area. This is not a typical view state, because it behaves differenty in GUI and Headless mode
@@ -315,6 +316,14 @@ public class ParameterInfo {
 		return get().selectedCategory;
 	}
 
+	/**
+	 * Reset the ParameterInfo view data
+	 */
+	public static void resetData() {
+
+		s_instance = new ParameterInfo();
+	}
+
 	private void loadInitialData() throws ConnectionLostException, Exception {
 
 		if (requestInitialData) {
@@ -347,20 +356,30 @@ public class ParameterInfo {
 			if (latestCenterResult != null && latestCenterResult.ready()) {
 
 				String[] centerIDs = new String[centers.length];
-
 				int index = 0;
-				for (int i = 0; i < centerIDs.length; i++) {
 
-					centerIDs[i] = centers[i].getCenterID();
-					if (centerIDs[i].equals(latestCenterResult.get().getCenterID()))
-						index = i;
+				if (latestCenterResult.get() == null) {
+
+					index = 0;
+					for (int i = 0; i < centerIDs.length; i++)
+						centerIDs[i] = centers[i].getCenterID();
+				}
+
+				else {
+
+					for (int i = 0; i < centerIDs.length; i++) {
+
+						centerIDs[i] = centers[i].getCenterID();
+						if (centerIDs[i].equals(latestCenterResult.get().getCenterID()))
+							index = i;
+					}
 				}
 
 				selectCenter = new Dropdown("Select center:	  ", centerIDs);
 				selectCenter.setCurrentItem(index);
 				selectedCenter = centers[index];
 
-				latestCategoryResult = Handler.getProxyServerMT().getLatestCategory(selectedArea.getGeonameID(), latestCenterResult.get().getCenterID());
+				latestCategoryResult = Handler.getProxyServerMT().getLatestCategory(selectedArea.getGeonameID(), selectedCenter.getCenterID());
 				latestCenterResult = null;
 			}
 
@@ -371,13 +390,23 @@ public class ParameterInfo {
 
 					Category[] categories = categoriesResult.get();
 					String[] categoriesName = new String[categories.length];
-
 					int index = 0;
-					for (int i = 0; i < categoriesName.length; i++) {
-		
-						categoriesName[i] = categories[i].getCategory();
-						if (categoriesName[i].equals(latestCategoryResult.get().getCategory()))
-							index = i;
+
+					if (latestCategoryResult.get() == null) {
+
+						index = 0;
+						for (int i = 0; i < categoriesName.length; i++)
+							categoriesName[i] = categories[i].getCategory();
+					}
+
+					else {
+
+						for (int i = 0; i < categoriesName.length; i++) {
+
+							categoriesName[i] = categories[i].getCategory();
+							if (categoriesName[i].equals(latestCategoryResult.get().getCategory()))
+								index = i;
+						}
 					}
 
 					selectCategory = new Dropdown("Select category: ", categoriesName);
@@ -398,6 +427,13 @@ public class ParameterInfo {
 						if (parameters != null && parameters.length != 0)
 							averageResult = Handler.getProxyServerMT().getParametersAverage(selectedArea.getGeonameID(), selectedCenter.getCenterID(), selectedCategory.getCategory());
 
+						else {
+
+							dataNotFound = true;
+							loadInitialData = false;
+							requestInitialData = true;
+						}
+
 						parametersResult = null;
 					}
 
@@ -407,7 +443,7 @@ public class ParameterInfo {
 						if (averageResult != null && averageResult.ready()) {
 
 							average = averageResult.get();
-							setUpTable();
+							setUpParametersData();
 							averageResult = null;
 						}
 
@@ -475,7 +511,7 @@ public class ParameterInfo {
 
 				// Parameters average
 				average = averageResult.get();
-				setUpTable();
+				setUpParametersData();
 				loadNewData = false;
 				requestNewData = true;
 				averageResult = null;
@@ -483,17 +519,12 @@ public class ParameterInfo {
 		}
 	}
 
-	private void setUpTable() {
+	private void setUpParametersData() {
 
 		table = new Table("Parameters", new String[] { "Date", "Time", "Operator", "Score", "Notes" });
 
 		for (Parameter parameter : parameters)
 			table.addRow(new String[] { parameter.getDate(), parameter.getTime(), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
-	}
-
-	public static void resetData() {
-
-		s_instance = new ParameterInfo();
 	}
 
 	private static ParameterInfo s_instance = new ParameterInfo();
