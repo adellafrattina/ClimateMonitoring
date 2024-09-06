@@ -19,6 +19,7 @@ import imgui.ImFontConfig;
 import imgui.ImFontGlyphRangesBuilder;
 import imgui.ImGui;
 import imgui.ImGuiIO;
+import imgui.extension.implot.ImPlot;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
@@ -147,6 +148,7 @@ public class ApplicationGUI extends Application {
 	private void initImGui() {
 
 		ImGui.createContext();
+		ImPlot.createContext();
 
 		// Disable imgui.ini file
 		ImGui.getIO().setIniFilename(null);
@@ -182,6 +184,7 @@ public class ApplicationGUI extends Application {
 	 */
 	private void disposeImGui() {
 
+		ImPlot.destroyContext();
 		ImGui.destroyContext();
 	}
 
