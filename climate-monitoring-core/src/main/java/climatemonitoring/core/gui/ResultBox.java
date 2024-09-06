@@ -57,6 +57,12 @@ public class ResultBox extends Widget {
 
 		if (ImGui.beginListBox("##" + m_label, getWidth(), getHeight())) {
 
+			if (m_oldListPtr != m_list) {
+
+				ImGui.setScrollHereY(0.0f);
+				m_oldListPtr = m_list;
+			}
+
 			ImGuiListClipper.forEach(m_list.length, new ImListClipperCallback() {
 
 				@Override
@@ -116,6 +122,7 @@ public class ResultBox extends Widget {
 
 	private String m_label;
 	private String[] m_list;
+	private String[] m_oldListPtr;
 	private int m_currentItem = -1;
 	private boolean m_isAnyItemSelected = false;
 }
