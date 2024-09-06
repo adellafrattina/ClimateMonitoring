@@ -18,6 +18,7 @@ import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Panel;
+import climatemonitoring.core.gui.Widget;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 import imgui.ImGui;
@@ -86,18 +87,43 @@ class CenterInfo extends ViewState {
 
 		try {
 
-			if(centerarea == null){
-
-				centerarea = Handler.getProxyServer().getArea(center.getCity());
-			}
-			
 			panel.setSize(Application.getWidth() / 1.2f, cancel.getPositionY() - ImGui.getCursorPosY() - 50);
 			panel.setOriginX(panel.getWidth() / 2.0f);
 			panel.setPositionX(Application.getWidth() / 2.0f);
 			panel.begin(center.getCenterID());
 
+			if(centerarea == null && arearesult == null){
+
+				arearesult = Handler.getProxyServerMT().getArea(center.getCity());
+				SearchArea.resetData();
+				if (Handler.isOperatorLoggedIn() && Handler.getLoggedOperator().getCenterID().equals(center.getCenterID())) {
+
+					cancel.setOriginX(0);
+					cancel.setPositionX(panel.getPositionX() - panel.getWidth() / 2.0f);
+				}
+
+				else {
+
+					cancel.setOriginX(cancel.getWidth() / 2.0f);
+					cancel.setPositionX(panel.getPositionX());
+				}
+			}
+
+			else if (centerarea == null && arearesult != null && arearesult.ready()) {
+
+				centerarea = arearesult.get();
+				arearesult = null;
+			}
+
 			panelinfo.begin(null);
-			ImGui.text("Location: " + centerarea.getName() + ", " + center.getStreet() + ", " + center.getHouseNumber() + (center.getDistrict() == null ? "": ", " + center.getDistrict()));
+			ImGui.newLine();
+			if (centerarea != null)
+				ImGui.text("Location: " + centerarea.getName() + ", " + center.getStreet() + ", " + center.getHouseNumber() + (center.getDistrict() == null ? "": ", " + center.getDistrict()));
+			else
+				ImGui.text("Loading info...");
+			ImGui.newLine();
+			ImGui.separator();
+			ImGui.newLine();
 			ImGui.text("Monitored areas:");
 			if(requestdata == true){
 
@@ -110,7 +136,7 @@ class CenterInfo extends ViewState {
 				monitoredareas = monitoredareasresult.get();
 			}else if(monitoredareasresult != null){
 
-				ImGui.text("Loading...");
+				ImGui.text("Loading monitored areas...");
 			}
 
 			if(monitoredareas != null){
@@ -133,7 +159,7 @@ class CenterInfo extends ViewState {
 
 				if(SearchArea.isAnyAreaSelected()){
 
-					inclusionresult = Handler.getProxyServerMT().includeAreaToCenter(SearchArea.getSelectedArea().getGeonameID(), Handler.getLoggedOperator().getCenterID());
+					inclusionresult = Handler.getProxyServerMT().includeAreaToCenter(SearchArea.getSelectedArea().getGeonameID(), center.getCenterID());
 				}
 				
 				if(inclusionresult != null && inclusionresult.ready()){
@@ -141,28 +167,49 @@ class CenterInfo extends ViewState {
 					addingmode = false;
 					inclusionresult = null;
 					requestdata = true;
+					SearchArea.resetData();
+					panelinfo.setHeight(Widget.DEFAULT_HEIGHT);
 				}
 				paneladd.end();
 			}
 			
 			panel.end();
 
-			cancel.setOriginX(0);
-			cancel.setPositionX(panel.getPositionX() - panel.getWidth() / 2.0f);
-			
 			if(cancel.render()){
-				
-				resetStateData(new CenterInfo());
-				returnToPreviousState();
+	
+				if (addingmode) {
+
+					addingmode = false;
+					SearchArea.resetData();
+					panelinfo.setHeight(Widget.DEFAULT_HEIGHT);
+				}
+
+				else {
+
+					resetStateData(new CenterInfo());
+					returnToPreviousState();
+				}
 			}
-			
-			ImGui.sameLine();
-			add.setOriginX(add.getWidth());
-			add.setPositionX(panel.getPositionX() + panel.getWidth() / 2.0f);
 
-			if(add.render()){
+			if (Handler.isOperatorLoggedIn() && Handler.getLoggedOperator().getCenterID().equals(center.getCenterID())) {
 
-				addingmode = true;
+				cancel.setOriginX(0);
+				cancel.setPositionX(panel.getPositionX() - panel.getWidth() / 2.0f);
+
+				ImGui.sameLine();
+				add.setOriginX(add.getWidth());
+				add.setPositionX(panel.getPositionX() + panel.getWidth() / 2.0f);
+	
+				if(add.render()){
+	
+					addingmode = true;
+				}
+			}
+
+			else {
+
+				cancel.setOriginX(cancel.getWidth() / 2.0f);
+				cancel.setPositionX(panel.getPositionX());
 			}
 
 
@@ -196,6 +243,7 @@ class CenterInfo extends ViewState {
 
 	private Panel panel = new Panel();
 	Center center;
+	private Result <Area> arearesult;
 	private Result <Area[]> monitoredareasresult;
 	private Area[] monitoredareas;
 	private Area centerarea;
