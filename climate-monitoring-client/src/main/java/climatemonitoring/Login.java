@@ -137,9 +137,41 @@ class Login extends ViewState {
 
 			enterPressed = false;
 
+			String errorMsgUserID = null;
+			if ((errorMsgUserID = Check.isEmpty(userid.getString())) != null) {
+
+				userid.setErrorMsg(errorMsgUserID);
+				userid.showErrorMsg(true);
+			}
+
+			else {
+
+				userid.showErrorMsg(false);
+			}
+
+			String errorMsgPassword = null;
+			if ((errorMsgPassword = Check.isEmpty(password.getString())) != null) {
+
+				password.setErrorMsg(errorMsgPassword);
+				password.showErrorMsg(true);
+			}
+
+			else {
+
+				password.showErrorMsg(false);
+			}
+
+			if (errorMsgUserID == null && errorMsgPassword == null)
+				logincheckresult = CheckMT.login(userid.getString(), password.getString());
+			else
+				error.setString("");
+		}
+
+		if (logincheckresult != null && logincheckresult.ready()) {
+
 			try {
 				String msgerror = null;
-				if((msgerror = Check.login(userid.getString(), password.getString())) == null){
+				if((msgerror = logincheckresult.get()) == null){
 
 					operatorresult =  Handler.getProxyServerMT().validateCredentials(userid.getString(), password.getString());
 					error.setString("");
@@ -151,6 +183,21 @@ class Login extends ViewState {
 
 				setCurrentState(ViewType.CONNECTION);
 			}
+
+			catch (Exception e) {
+
+				e.printStackTrace();
+				Application.close();
+			}
+
+			logincheckresult = null;
+		}
+
+		else if (logincheckresult != null) {
+
+			loadingtext.setOriginX(loadingtext.getWidth() / 2.0f);
+			loadingtext.setPositionX(panel.getPositionX());
+			loadingtext.render();
 		}
 		
 		if(operatorresult == null){
@@ -187,4 +234,6 @@ class Login extends ViewState {
 	private Button registration = new Button(" Create new account ");
 	private Result <Operator> operatorresult;
 	private Text error = new Text("");
+	private Result<String> logincheckresult;
+	private Text loadingtext = new Text("Loading...");
 }
