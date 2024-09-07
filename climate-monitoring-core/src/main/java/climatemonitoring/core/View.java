@@ -96,7 +96,11 @@ public class View {
 	 */
 	public synchronized String getPreviousStateIndex() {
 
-		String index = m_stateHistory.get(m_stateHistory.size() - 2);
+		String index = null;
+		if (m_stateHistory.size() > 1)
+			index = m_stateHistory.get(m_stateHistory.size() - 2);
+		else
+			index = m_stateHistory.get(m_stateHistory.size() - 1);
 
 		return index;
 	}

@@ -28,7 +28,7 @@ class Check {
 	/**
 	 * Checks if the geoname id is already taken
 	 * @param geoname_id The geoname id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String geonameID(int geoname_id) throws ConnectionLostException {
@@ -61,9 +61,6 @@ class Check {
 		if ((msg = isEmpty(n)) != null)
 			return msg;
 
-		if ((msg = noDashes(n)) != null)
-			return msg;
-
 		return msg;
 	}
 
@@ -77,9 +74,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(ascii_name)) != null)
-			return msg;
-
-		if ((msg = noDashes(ascii_name)) != null)
 			return msg;
 
 		if (!Charset.forName("US-ASCII").newEncoder().canEncode(ascii_name))
@@ -98,9 +92,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(country_code)) != null)
-			return msg;
-
-		if ((msg = noDashes(country_code)) != null)
 			return msg;
 
 		if (country_code.length() != 2)
@@ -152,7 +143,7 @@ class Check {
 	/**
 	 * Checks if the center id is already taken or is empty or has contiguous dashes
 	 * @param center_id The center id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String creationCenterID(String center_id) throws ConnectionLostException {
@@ -160,9 +151,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(center_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(center_id)) != null)
 			return msg;
 
 		try {
@@ -182,7 +170,7 @@ class Check {
 	/**
 	 * Checks if the center id is present or is empty or has contiguous dashes
 	 * @param center_id The center id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is not present, null if it exists
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String registrationCenterID(String center_id) throws ConnectionLostException {
@@ -191,9 +179,6 @@ class Check {
 
 		if (isEmpty(center_id) != null)
 			return null;
-
-		if ((msg = noDashes(center_id)) != null)
-			return msg;
 
 		try {
 
@@ -214,27 +199,17 @@ class Check {
 	 * @param city The geoname id of the center's city
 	 * @param street The address' street
 	 * @param house_number The address' house number
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String address(int city, String street, int house_number) {
+	public static String address(int city, String street, int house_number) throws ConnectionLostException {
 
 		String msg = null;
-
-		if ((msg = isEmpty(street)) != null)
-			return msg;
-
-		if ((msg = noDashes(street)) != null)
-			return msg;
 
 		try {
 
 			if (Handler.getProxyServer().getCenterByAddress(city, street, house_number) != null)
 				msg = "There is already another center in the same place";
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException e) {
@@ -258,7 +233,7 @@ class Check {
 	/**
 	 * Checks if the user id is already taken or is empty or has contiguous dashes
 	 * @param user_id The user id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String userID(String user_id)  throws ConnectionLostException {
@@ -266,9 +241,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(user_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(user_id)) != null)
 			return msg;
 
 		try {
@@ -288,7 +260,7 @@ class Check {
 	/**
 	 * Checks if the SSID is already present in the database or is empty or has contiguous dashes or does not have 16 characters
 	 * @param s The SSID
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String ssid(String s) throws ConnectionLostException {
@@ -296,9 +268,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(s)) != null)
-			return msg;
-
-		if ((msg = noDashes(s)) != null)
 			return msg;
 
 		if (s.length() != 16)
@@ -331,7 +300,7 @@ class Check {
 	/**
 	 * Checks if the email is already taken or is empty or has contiguous dashes or is not a valid email
 	 * @param e The email
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String email(String e) throws ConnectionLostException {
@@ -339,9 +308,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(e)) != null)
-			return msg;
-
-		if ((msg = noDashes(e)) != null)
 			return msg;
 
 		if (!Pattern.compile("^(.+)@(.+)$").matcher(e).matches())
@@ -373,9 +339,6 @@ class Check {
 		if ((msg = isEmpty(p)) != null)
 			return msg;
 
-		if ((msg = noDashes(p)) != null)
-			return msg;
-
 		if (p.split(" ").length > 2)
 			return "The value must not have spaces";
 
@@ -386,21 +349,15 @@ class Check {
 	 * Checks if the operator's credentials
 	 * @param user_id The user id
 	 * @param password The user's password
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameters are not valid, null if they are correct
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String login(String user_id, String password) throws ConnectionLostException {
 
 		String msg = null;
 
-		if ((msg = isEmpty(user_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(user_id)) != null)
-			return msg;
-
-		if ((msg = password(password)) != null)
-			return msg;
+		if (password.split(" ").length > 2)
+			return "The value must not have spaces";
 
 		try {
 
@@ -420,18 +377,12 @@ class Check {
 	 * Checks if the specified center monitors the specified area
 	 * @param center_id The center id
 	 * @param geoname_id The area's geoname id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the center does not monitor the area, null if it does
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String monitors(String center_id, int geoname_id) throws ConnectionLostException {
 
 		String msg = null;
-
-		if ((msg = isEmpty(center_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(center_id)) != null)
-			return msg;
 
 		try {
 
@@ -451,24 +402,12 @@ class Check {
 	 * Checks if the specified center employs the specified operator
 	 * @param center_id The center id
 	 * @param user_id The operator's user id
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the center does not employ the operator, null if does
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String employs(String center_id, String user_id) throws ConnectionLostException {
 
 		String msg = null;
-
-		if ((msg = isEmpty(center_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(center_id)) != null)
-			return msg;
-
-		if ((msg = isEmpty(user_id)) != null)
-			return msg;
-
-		if ((msg = noDashes(user_id)) != null)
-			return msg;
 
 		try {
 
@@ -487,7 +426,7 @@ class Check {
 	/**
 	 * Checks if the category exists
 	 * @param c The category to be checked
-	 * @return Null if the parameter is valid, an error message as string if not
+	 * @return An error message as string if the parameter is not found, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String category(String c) throws ConnectionLostException {
@@ -495,9 +434,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(c)) != null)
-			return msg;
-
-		if ((msg = noDashes(c)) != null)
 			return msg;
 
 			try {
@@ -545,9 +481,6 @@ class Check {
 		String msg = null;
 
 		if ((msg = isEmpty(n)) != null)
-			return msg;
-
-		if ((msg = noDashes(n)) != null)
 			return msg;
 
 		if (n.length() > 256)

@@ -9,10 +9,13 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import imgui.ImGui;
+
 import climatemonitoring.core.Application;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.ViewState;
-import climatemonitoring.core.gui.Modal;
+import climatemonitoring.core.gui.Button;
+import climatemonitoring.core.gui.Panel;
 import climatemonitoring.core.gui.Text;
 import climatemonitoring.core.headless.Console;
 
@@ -63,7 +66,7 @@ class Connection extends ViewState {
 				m_startConnection = true;
 				returnToPreviousState();
 			}catch(Exception e){
-				m_retryModal.open();
+				m_failedToConnect = true;
 			}
 		}
 		else{
@@ -71,12 +74,45 @@ class Connection extends ViewState {
 			m_connectingText.setPosition((float)Application.getWidth()/2.0f, (float)Application.getHeight()/2.0f);
 			m_connectingText.render();
 		}
-		int result = m_retryModal.render();
-		if(result == Modal.CANCEL) Application.close();
-		else if(result == Modal.OK) m_startConnection = true;
+
+		if (m_failedToConnect) {
+
+			m_panel.setSize(Application.getWidth() / 4.0f, 75.0f);
+			m_panel.setOrigin(m_panel.getWidth() / 2.0f, m_panel.getHeight() / 2.0f);
+			m_panel.setPosition(Application.getWidth() / 2.0f, Application.getHeight() / 2.0f);
+			m_panel.begin("Failed to connect to server");
+			//ImGui.newLine();
+			m_question.setOriginX(m_question.getWidth() / 2.0f);
+			m_question.setPositionX(m_panel.getWidth() / 2.0f);
+			m_question.render();
+			ImGui.separator();
+			m_no.setWidth(ImGui.getWindowWidth() / 2.0f - ImGui.getStyle().getWindowPaddingX() - 10.0f);
+			m_no.setOriginX(m_no.getWidth() / 2.0f);
+			m_no.setPositionX(m_panel.getWidth() / 4.0f);
+			if (m_no.render()) {
+
+				m_failedToConnect = false;
+				Application.close();
+			}
+			ImGui.sameLine();
+			m_yes.setWidth(ImGui.getWindowWidth() / 2.0f - ImGui.getStyle().getWindowPaddingX() - 10.0f);
+			m_yes.setOriginX(m_yes.getWidth() / 2.0f);
+			m_yes.setPositionX(m_panel.getWidth() * 3.0f / 4.0f);
+			if (m_yes.render()) {
+
+				m_startConnection = true;
+				m_failedToConnect = false;
+			}
+
+			m_panel.end();
+		}
 	}
 
 	private boolean m_startConnection = true;
 	private Text m_connectingText = new Text("Connecting...");
-	private Modal m_retryModal = new Modal("Failed to connect to server", "Do you want to connect again?");
+	private Panel m_panel = new Panel();
+	private boolean m_failedToConnect = false;
+	private Text m_question = new Text("Select an option");
+	private Button m_no = new Button("Quit");
+	private Button m_yes = new Button("Retry");
 }

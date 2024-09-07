@@ -176,8 +176,25 @@ class ServerDatabaseImpl implements ServerDatabase {
 	public synchronized Area[] searchAreasByName(String str) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
+
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM area
+				WHERE LOWER(area_name)
+				LIKE ?
+				ORDER BY CASE
+				WHEN LOWER(area_name) LIKE ? THEN 0
+				ELSE 1
+				END,
+				POSITION(? IN LOWER(area_name)), area_name;
+			"""
+			);
+
+			pst.setString(1, "%" + str + "%");
+			pst.setString(2, str + "%");
+			pst.setString(3, str);
 			
-			ResultSet query = execute("SELECT * FROM area WHERE LOWER(area_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(area_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(area_name)), area_name;");
+			ResultSet query = pst.executeQuery();
 			Area[] result = new Area[getRowCount(query)];
 
 			while (query.next()) {
@@ -216,7 +233,23 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 			
-			ResultSet query = execute("SELECT * FROM area WHERE LOWER(country_name) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(country_name) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(country_name)), country_name;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM area
+				WHERE LOWER(country_name)
+				LIKE ?
+				ORDER BY CASE
+				WHEN LOWER(country_name) LIKE ? THEN 0
+				ELSE 1
+				END,
+				POSITION(? IN LOWER(country_name)), country_name;
+			""");
+
+			pst.setString(1, "%" + str + "%");
+			pst.setString(2, str + "%");
+			pst.setString(3, str);
+			
+			ResultSet query = pst.executeQuery();
 			Area[] result = new Area[getRowCount(query)];
 
 			while (query.next()) {
@@ -258,7 +291,24 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM area WHERE latitude BETWEEN " + (latitude - 0.5) + " AND " + (latitude + 0.5) + " AND longitude BETWEEN " + (longitude - 0.5) + " AND " + (longitude + 0.5) + " ORDER BY area_name;");
+			PreparedStatement pst = prepareStatement("""
+					SELECT *
+					FROM area
+					WHERE latitude
+					BETWEEN ?
+					AND ?
+					AND longitude
+					BETWEEN ?
+					AND ?
+					ORDER BY area_name;
+			""");
+
+			pst.setDouble(1, latitude - 0.5);
+			pst.setDouble(2, latitude + 0.5);
+			pst.setDouble(3, longitude - 0.5);
+			pst.setDouble(4, longitude + 0.5);
+
+			ResultSet query = pst.executeQuery();
 			Area[] result = new Area[getRowCount(query)];
 
 			while (query.next()) {
@@ -307,7 +357,23 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) LIKE '%" + str + "%' ORDER BY CASE WHEN LOWER(center_id) LIKE '" + str + "%' THEN 0 ELSE 1 END, POSITION('" + str + "' IN LOWER(center_id)), center_id;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM center
+				WHERE LOWER(center_id)
+				LIKE ?
+				ORDER BY CASE
+				WHEN LOWER(center_id) LIKE ? THEN 0
+				ELSE 1
+				END,
+				POSITION(? IN LOWER(center_id)), center_id;
+			""");
+
+			pst.setString(1, "%" + str + "%");
+			pst.setString(2, str + "%");
+			pst.setString(3, str);
+
+			ResultSet query = pst.executeQuery();
 			Center[] result = new Center[getRowCount(query)];
 
 			while (query.next()) {
@@ -344,7 +410,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM area WHERE geoname_id = " + geoname_id + ";");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM area
+				WHERE geoname_id = ?;
+			""");
+
+			pst.setInt(1, geoname_id);
+
+			ResultSet query = pst.executeQuery();
 			Area result = null;
 
 			if (query.next()) {
@@ -382,7 +456,17 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT A.* FROM area A JOIN monitors M on A.geoname_id = M.geoname_id WHERE LOWER(center_id) = LOWER('" + center_id + "');");
+			PreparedStatement pst = prepareStatement("""
+				SELECT A.*
+				FROM area A
+				JOIN monitors M
+				ON A.geoname_id = M.geoname_id
+				WHERE LOWER(center_id) = LOWER(?);
+			""");
+
+			pst.setString(1, center_id);
+
+			ResultSet query = pst.executeQuery();
 			Area[] result = new Area[getRowCount(query)];
 
 			while (query.next()) {
@@ -420,7 +504,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE LOWER(center_id) = LOWER('" + center_id + "');");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM center
+				WHERE LOWER(center_id) = LOWER(?);
+			""");
+
+			pst.setString(1, center_id);
+
+			ResultSet query = pst.executeQuery();
 			Center result = null;
 
 			if (query.next()) {
@@ -456,7 +548,12 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM center;
+			""");
+
+			ResultSet query = pst.executeQuery();
 			Center[] result = new Center[getRowCount(query)];
 
 			while (query.next()) {
@@ -494,7 +591,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center WHERE city = " + city + " AND LOWER(street) = LOWER('" + street + "') AND house_number = " + house_number + ";");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM center
+				WHERE city = ?
+				AND LOWER(street) = LOWER(?)
+				AND house_number = ?;
+			""");
+
+			pst.setInt(1, city);
+			pst.setString(2, street);
+			pst.setInt(3, house_number);
+
+			ResultSet query = pst.executeQuery();
 			Center result = null;
 
 			if (query.next()) {
@@ -531,7 +640,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT C.* FROM center C JOIN parameter P ON C.center_id = P.center_id WHERE P.geoname_id = " + geoname_id + " ORDER BY P.rec_timestamp DESC LIMIT 1;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT C.*
+				FROM center C
+				JOIN parameter P
+				ON C.center_id = P.center_id
+				WHERE P.geoname_id = ?
+				ORDER BY P.rec_timestamp DESC
+				LIMIT 1;
+			""");
+
+			pst.setInt(1, geoname_id);
+			
+			ResultSet query = pst.executeQuery();
 			Center result = null;
 
 			if (query.next()) {
@@ -567,7 +688,17 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT C.* FROM monitors M JOIN center C on M.center_id = C.center_id WHERE geoname_id = "+ geoname_id + ";");
+			PreparedStatement pst = prepareStatement("""
+				SELECT C.*
+				FROM monitors M
+				JOIN center C
+				ON M.center_id = C.center_id
+				WHERE geoname_id = ?;
+			""");
+
+			pst.setInt(1, geoname_id);
+			
+			ResultSet query = pst.executeQuery();
 			Center[] result = new Center[getRowCount(query)];
 
 			while (query.next()) {
@@ -603,7 +734,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE user_id = '" + user_id + "';");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM operator
+				WHERE user_id = ?;
+			""");
+
+			pst.setString(1, user_id);
+
+			ResultSet query = pst.executeQuery();
 			Operator result = null;
 
 			if (query.next()) {
@@ -640,7 +779,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE ssid = '" + ssid + "';");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM operator
+				WHERE ssid = ?;
+			""");
+
+			pst.setString(1, ssid);
+
+			ResultSet query = pst.executeQuery();
 			Operator result = null;
 
 			if (query.next()) {
@@ -677,7 +824,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE email = '" + email + "';");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM operator
+				WHERE email = ?;
+			""");
+
+			pst.setString(1, email);
+
+			ResultSet query = pst.executeQuery();
 			Operator result = null;
 
 			if (query.next()) {
@@ -718,7 +873,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM parameter WHERE geoname_id = " + geoname_id + " AND LOWER(center_id) = LOWER('" + center_id + "') AND LOWER(category_id) = LOWER('" + category + "');");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM parameter
+				WHERE geoname_id = ?
+				AND LOWER(center_id) = LOWER(?)
+				AND LOWER(category_id) = LOWER(?);
+			""");
+
+			pst.setInt(1, geoname_id);
+			pst.setString(2, center_id);
+			pst.setString(3, category);
+			
+			ResultSet query = pst.executeQuery();
 			Parameter[] result = new Parameter[getRowCount(query)];
 
 			while (query.next()) {
@@ -759,7 +926,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT AVG(score) FROM parameter WHERE geoname_id = " + geoname_id + " AND LOWER(center_id) = LOWER('" + center_id + "') AND LOWER(category_id) = LOWER('" + category + "');");
+			PreparedStatement pst = prepareStatement("""
+				SELECT AVG(score)
+				FROM parameter
+				WHERE geoname_id = ?
+				AND LOWER(center_id) = LOWER(?)
+				AND LOWER(category_id) = LOWER(?);
+			""");
+
+			pst.setInt(1, geoname_id);
+			pst.setString(2, center_id);
+			pst.setString(3, category);
+			
+			ResultSet query = pst.executeQuery();
 			double result = 0.0;
 
 			if (query.next())
@@ -786,7 +965,12 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM category;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM category;
+			""");
+			
+			ResultSet query = pst.executeQuery();
 			Category[] result = new Category[getRowCount(query)];
 		
 			while (query.next()) {
@@ -820,7 +1004,21 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM parameter P JOIN category C on C.category_id = P.category_id WHERE P.geoname_id = " + geoname_id + " AND LOWER(P.center_id) = LOWER('" + center_id + "') ORDER BY P.rec_timestamp DESC LIMIT 1;");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM parameter P
+				JOIN category C
+				ON C.category_id = P.category_id
+				WHERE P.geoname_id = ?
+				AND LOWER(P.center_id) = LOWER(?)
+				ORDER BY P.rec_timestamp DESC
+				LIMIT 1;
+			""");
+
+			pst.setInt(1, geoname_id);
+			pst.setString(2, center_id);
+			
+			ResultSet query = pst.executeQuery();
 			Category result = null;
 		
 			if (query.next()) {
@@ -861,7 +1059,20 @@ class ServerDatabaseImpl implements ServerDatabase {
 			double latitude = area.getLatitude();
 			double longitude = area.getLongitude();
 
-			execute("INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude) VALUES (" + geonameID + ", '" + areaName + "', '" + areaAsciiName + "', '" + countryCode + "', '" + countryName + "', " + latitude + ", " + longitude + ");");
+			PreparedStatement pst = prepareStatement("""
+				INSERT INTO area (geoname_id, area_name, area_ascii_name, country_code, country_name, latitude, longitude)
+				VALUES (?, ?, ?, ?, ?, ?, ?);
+			""");
+
+			pst.setInt(1, geonameID);
+			pst.setString(2, areaName);
+			pst.setString(3, areaAsciiName);
+			pst.setString(4, countryCode);
+			pst.setString(5, countryName);
+			pst.setDouble(6, latitude);
+			pst.setDouble(7, longitude);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -891,8 +1102,31 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int postalCode = center.getPostalCode();
 			String district = center.getDistrict();
 
-			execute("INSERT INTO center (center_id, city, street, house_number, postal_code, district) VALUES (LOWER('" + centerID + "'), " + city + ", LOWER('" + street + "'), " + houseNumber + ", " + postalCode + ", " + (district == null ? "null" : "'" + district + "'") + ");");
-			execute("INSERT INTO monitors (center_id, geoname_id) VALUES (LOWER('" + centerID + "'), " + city + ");");
+			PreparedStatement pst = null;
+
+			pst = prepareStatement("""
+				INSERT INTO center (center_id, city, street, house_number, postal_code, district)
+				VALUES (LOWER(?), ?, LOWER(?), ?, ?, ?);
+			""");
+
+			pst.setString(1, centerID);
+			pst.setInt(2, city);
+			pst.setString(3, street);
+			pst.setInt(4, houseNumber);
+			pst.setInt(5, postalCode);
+			pst.setString(6, district == null ? "null" : district);
+
+			pst.executeQuery();
+
+			pst = prepareStatement("""
+				INSERT INTO monitors (center_id, geoname_id)
+				VALUES (LOWER(?), ?);
+			""");
+
+			pst.setString(1, centerID);
+			pst.setInt(2, city);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -923,7 +1157,20 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id) VALUES ('"+ userID + "', '" + SSID + "', '" + operatorSurname + "', '" + operatorName + "', '" + email + "', '" + password + "', LOWER('" + centerID + "'));");
+			PreparedStatement pst = prepareStatement("""
+				INSERT INTO operator (user_id, ssid, operator_surname, operator_name, email, password, center_id)
+				VALUES (?, ?, ?, ?, ?, ?, LOWER(?));
+			""");
+
+			pst.setString(1, userID);
+			pst.setString(2, SSID);
+			pst.setString(3, operatorSurname);
+			pst.setString(4, operatorName);
+			pst.setString(5, email);
+			pst.setString(6, password);
+			pst.setString(7, centerID);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -954,7 +1201,20 @@ class ServerDatabaseImpl implements ServerDatabase {
 			int score = parameter.getScore();
 			String notes = parameter.getNotes();
 
-			execute("INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes) VALUES (" + geonameID + ", LOWER('" + centerID + "'), '" + timestamp + "', '" + categoryID + "', '" + userID + "', " + score + ", '" + notes + "');");
+			PreparedStatement pst = prepareStatement("""
+				INSERT INTO parameter (geoname_id, center_id, rec_timestamp, category_id, user_id, score, notes)
+				VALUES (?, LOWER(?), ?, ?, ?, ?, ?);
+			""");
+
+			pst.setInt(1, geonameID);
+			pst.setString(2, centerID);
+			pst.setTimestamp(3, timestamp);
+			pst.setString(4, categoryID);
+			pst.setString(5, userID);
+			pst.setInt(6, score);
+			pst.setString(7, notes);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -986,7 +1246,26 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String password = operator.getPassword();
 			String centerID = operator.getCenterID();
 
-			execute("UPDATE operator SET ssid = '" + SSID + "', operator_surname = '" + operatorSurname + "', operator_name = '" + operatorName + "', email = '" + email + "', password = '" + password + "', center_id = LOWER('" + centerID + "') WHERE user_id = '" + user_id + "';");
+			PreparedStatement pst = prepareStatement("""
+				UPDATE operator
+				SET ssid = ?,
+				operator_surname = ?,
+				operator_name = ?,
+				email = ?,
+				password = ?,
+				center_id = LOWER(?)
+				WHERE user_id = ?;
+			""");
+
+			pst.setString(1, SSID);
+			pst.setString(2, operatorSurname);
+			pst.setString(3, operatorName);
+			pst.setString(4, email);
+			pst.setString(5, password);
+			pst.setString(6, centerID);
+			pst.setString(7, user_id);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -1009,7 +1288,15 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			execute("INSERT INTO monitors (center_id, geoname_id) VALUES (LOWER('" + center_id + "'), " + geoname_id + ");");
+			PreparedStatement pst = prepareStatement("""
+				INSERT INTO monitors (center_id, geoname_id)
+				VALUES (LOWER(?), ?);
+			""");
+
+			pst.setString(1, center_id);
+			pst.setInt(2, geoname_id);
+
+			pst.executeQuery();
 			return true;
 		}
 
@@ -1032,7 +1319,17 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM monitors WHERE LOWER(center_id) = LOWER('" + center_id + "') AND geoname_id = " + geoname_id + ";");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM monitors
+				WHERE LOWER(center_id) = LOWER(?)
+				AND geoname_id = ?;
+			""");
+
+			pst.setString(1, center_id);
+			pst.setInt(2, geoname_id);
+
+			ResultSet query = pst.executeQuery();
 
 			if (getRowCount(query) == 1) return true;
 			else return false;
@@ -1057,7 +1354,19 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM center C JOIN operator O ON C.center_id = O.center_id WHERE LOWER(C.center_id) = LOWER('" + center_id + "') AND O.user_id = " + user_id + ";");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM center C
+				JOIN operator O
+				ON C.center_id = O.center_id
+				WHERE LOWER(C.center_id) = LOWER(?)
+				AND O.user_id = ?;
+			""");
+
+			pst.setString(1, center_id);
+			pst.setString(2, user_id);
+
+			ResultSet query = pst.executeQuery();
 
 			if (getRowCount(query) == 1) return true;
 			else return false;
@@ -1085,7 +1394,17 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 		try {
 
-			ResultSet query = execute("SELECT * FROM operator WHERE user_id = '" + user_id + "' AND password = '" + password + "';");
+			PreparedStatement pst = prepareStatement("""
+				SELECT *
+				FROM operator
+				WHERE user_id = ?
+				AND password = ?;
+			""");
+
+			pst.setString(1, user_id);
+			pst.setString(2, password);
+			
+			ResultSet query = pst.executeQuery();
 			Operator result = null;
 
 			if (query.next()) {
@@ -1121,6 +1440,11 @@ class ServerDatabaseImpl implements ServerDatabase {
 		}
 
 		return rows;
+	}
+
+	private synchronized PreparedStatement prepareStatement(String statement) throws SQLException {
+
+		return m_connection.prepareStatement(statement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 	}
 
 	/**
