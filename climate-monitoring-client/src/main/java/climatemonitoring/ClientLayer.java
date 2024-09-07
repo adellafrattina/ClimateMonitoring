@@ -202,11 +202,17 @@ class ClientLayer extends Layer {
 		ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 0.0f);
 		ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 0.5f);
 		ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.2f, 0.8f);
-		if (settingsButton.render())
+		if (settingsButton.render()) {
+
 			Handler.getView().setCurrentState(ViewType.SETTINGS);
+		}
 		ImGui.popStyleColor(3);
 
-		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION) {
+		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION ||
+			(Handler.getView().getPreviousStateIndex() == ViewType.CONNECTION &&
+			Handler.getView().getCurrentStateIndex() == ViewType.SETTINGS))
+
+		{
 
 			ping = Long.MAX_VALUE;
 			resetPing = true;
