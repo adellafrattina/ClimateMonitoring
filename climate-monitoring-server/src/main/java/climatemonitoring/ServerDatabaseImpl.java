@@ -1208,7 +1208,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 
 			pst.setInt(1, geonameID);
 			pst.setString(2, centerID);
-			//pst.setTimestamp(3, timestamp); // TODO: FIX TIMESTAMP
+			pst.setTimestamp(3, timestamp);
 			pst.setString(4, categoryID);
 			pst.setString(5, userID);
 			pst.setInt(6, score);
@@ -1293,8 +1293,8 @@ class ServerDatabaseImpl implements ServerDatabase {
 				VALUES (LOWER(?), ?);
 			""");
 
-			pst.setInt(1, geoname_id);
-			pst.setString(2, center_id);
+			pst.setString(1, center_id);
+			pst.setInt(2, geoname_id);
 
 			pst.executeQuery();
 			return true;
@@ -1402,7 +1402,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			""");
 
 			pst.setString(1, user_id);
-			pst.setString(1, password);
+			pst.setString(2, password);
 			
 			ResultSet query = pst.executeQuery();
 			Operator result = null;
