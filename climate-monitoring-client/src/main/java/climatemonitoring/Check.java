@@ -206,9 +206,6 @@ class Check {
 
 		String msg = null;
 
-		if ((msg = isEmpty(street)) != null)
-			return msg;
-
 		try {
 
 			if (Handler.getProxyServer().getCenterByAddress(city, street, house_number) != null)
@@ -359,11 +356,8 @@ class Check {
 
 		String msg = null;
 
-		if ((msg = isEmpty(user_id)) != null)
-			return msg;
-
-		if ((msg = password(password)) != null)
-			return msg;
+		if (password.split(" ").length > 2)
+			return "The value must not have spaces";
 
 		try {
 
@@ -390,9 +384,6 @@ class Check {
 
 		String msg = null;
 
-		if ((msg = isEmpty(center_id)) != null)
-			return msg;
-
 		try {
 
 			if (!Handler.getProxyServer().monitors(center_id, geoname_id))
@@ -417,12 +408,6 @@ class Check {
 	public static String employs(String center_id, String user_id) throws ConnectionLostException {
 
 		String msg = null;
-
-		if ((msg = isEmpty(center_id)) != null)
-			return msg;
-
-		if ((msg = isEmpty(user_id)) != null)
-			return msg;
 
 		try {
 
