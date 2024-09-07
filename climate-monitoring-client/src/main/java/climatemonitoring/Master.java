@@ -11,8 +11,10 @@ package climatemonitoring;
 
 import imgui.ImGui;
 import climatemonitoring.core.Application;
+import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.Panel;
@@ -40,7 +42,7 @@ class Master extends ViewState {
 
 				case "area":
 					c = new Command(c.getArgs());
-					SearchArea.onHeadlessRender(c.getCmd(), c.getArgs());
+					getSearchArea().onHeadlessRender(c.getCmd(), c.getArgs());
 					break;
 				case "center":
 					c = new Command(c.getArgs());
@@ -77,10 +79,8 @@ class Master extends ViewState {
 			optionsButton.setOriginX(optionsButton.getWidth());
 			optionsButton.setPositionX(Application.getWidth() - 10.0f);
 
-			if (optionsButton.render()) {
-
+			if (optionsButton.render())
 				optionsPopup.open();
-			}
 
 			int currentItem = optionsPopup.render();
 			if (currentItem != -1) {
@@ -91,7 +91,7 @@ class Master extends ViewState {
 						setCurrentState(ViewType.EDIT_PROFILE);
 						break;
 					case "Center info":
-						setCurrentState(ViewType.CENTER_INFO);
+						getCenterResult = Handler.getProxyServerMT().getCenter(Handler.getLoggedOperator().getCenterID());
 						break;
 					case "Logout":
 						optionsButton = null;
@@ -115,15 +115,46 @@ class Master extends ViewState {
 		panel.setOriginX(panel.getWidth() / 2.0f);
 		panel.setPositionX(Application.getWidth() / 2.0f);
 		panel.begin(null);
-		SearchArea.onGUIRender();
-		if (SearchArea.isAnyAreaSelected())
+		getSearchArea().onGUIRender();
+		if (getSearchArea().isAnyAreaSelected())
 			setCurrentState(ViewType.AREA_INFO);
 		panel.end();
+
+		try {
+
+			if (getCenterResult != null && getCenterResult.ready()) {
+
+				CenterInfo ci = (CenterInfo) getView().getState(ViewType.CENTER_INFO);
+				ci.center = getCenterResult.get();
+				setCurrentState(ViewType.CENTER_INFO);
+				getCenterResult = null;
+			}
+		}
+
+		catch (ConnectionLostException e) {
+
+			resetStateData(new Master());
+			setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (Exception e) {
+
+			e.printStackTrace();
+			Application.close();
+		}
 	}
+
+	public static SearchArea getSearchArea() {
+
+		return searchArea;
+	}
+
+	private static SearchArea searchArea = new SearchArea();
 
 	private Panel panel = new Panel();
 	private Button loginButton = new Button(" Login ");
 	private Button optionsButton = null;
 	private String[] options = new String[] { "Edit profile", "Center info", "Logout" };
 	private Popup optionsPopup = new Popup("Options", options);
+	private Result<Center> getCenterResult;
 }

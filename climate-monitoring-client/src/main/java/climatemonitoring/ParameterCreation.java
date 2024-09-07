@@ -9,8 +9,7 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
@@ -153,8 +152,7 @@ class ParameterCreation extends ViewState {
 				Handler.getLoggedOperator().getCenterID(),
 				Handler.getLoggedOperator().getUserID(),
 				m_category,
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-				new SimpleDateFormat("hh:mm:ss").format(new Date()),
+				LocalDateTime.now(),
 				m_score,
 				m_notes);
 
@@ -229,7 +227,7 @@ class ParameterCreation extends ViewState {
 		ImGui.text("Slide to set the score: ");
 		ImGui.sameLine(m_geonameID);
 		ImGui.pushItemWidth(200);
-		ImGui.sliderInt("##slider", score, 0, 5);
+		ImGui.sliderInt("##slider", score, 1, 5);
 		ImGui.popItemWidth();
 		ImGui.newLine();
 		textLabel.setOriginX(textLabel.getWidth() / 2.0f);
@@ -237,15 +235,11 @@ class ParameterCreation extends ViewState {
 		textLabel.render();
 		if (notes.render()) {
 
-			if (notes.getString().length() > 0) {
-
+			if (notes.getString().length() > 0)
 				textLabel.setString("(" + notes.getString().length() + "/" + notes.getMaxCharacters() + ")");
-			}
 
-			else {
-
+			else
 				textLabel.setString("Notes (max 256 characters)");
-			}
 		}
 
 		panel.end();
@@ -280,8 +274,7 @@ class ParameterCreation extends ViewState {
 				ParameterInfo.getSelectedCenter().getCenterID(),
 				Handler.getLoggedOperator().getUserID(),
 				ParameterInfo.getSelectedCategory().getCategory(),
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-				new SimpleDateFormat("hh:mm:ss").format(new Date()),
+				LocalDateTime.now(),
 				score[0],
 				notes.getString());
 
@@ -298,8 +291,8 @@ class ParameterCreation extends ViewState {
 	private Button cancel = new Button("Cancel");
 	private Button record = new Button("Record");
 	private Modal confirm = new Modal("Parameter recording", "Do you want to record this new parameter?");
-	private Modal discard = new Modal("WARNING", "Are you shure you want to discard your work?");
-	private int[] score = new int[1];
+	private Modal discard = new Modal("WARNING", "Are you sure you want to discard your work?");
+	private int[] score = new int[] { 1 };
 	private Text textLabel = new Text("Notes (max 256 characters)");
 	private InputTextMultiline notes = new InputTextMultiline(null, "", "", 256);
 	private Result<Boolean> addResult;

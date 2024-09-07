@@ -19,6 +19,7 @@ import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.Layer;
 import climatemonitoring.core.Result;
 import climatemonitoring.core.gui.Button;
+import climatemonitoring.core.gui.Tooltip;
 import climatemonitoring.core.headless.Console;
 import climatemonitoring.core.utility.Command;
 
@@ -205,10 +206,20 @@ class ClientLayer extends Layer {
 			Handler.getView().setCurrentState(ViewType.SETTINGS);
 		ImGui.popStyleColor(3);
 
-		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION)
+		if (Handler.getView().getCurrentStateIndex() == ViewType.CONNECTION) {
+
 			ping = Long.MAX_VALUE;
-		else
+			resetPing = true;
+		}
+
+		else if (resetPing) {
+
 			ping = 0;
+			resetPing = false;
+		}
+
+		ImGui.sameLine();
+		pingHint.render();
 
 		if (ping != Long.MAX_VALUE) {
 
@@ -219,14 +230,9 @@ class ClientLayer extends Layer {
 					pingResult = Handler.getProxyServerMT().ping();
 					time = System.currentTimeMillis();
 				}
-	
-				if (pingResult != null) {
-	
-					if (pingResult.ready()) {
-	
+
+				if (pingResult != null && pingResult.ready())
 						ping = pingResult.get();
-					}
-				}
 			}
 	
 			catch (ConnectionLostException e) {
@@ -241,7 +247,14 @@ class ClientLayer extends Layer {
 			}
 
 			ImGui.sameLine();
-			ImGui.text("ping: " + ping + "ms");
+			if (ping == 0)
+				ImGui.textColored(53, 119, 206, 255, "ping: " + ping + "ms");
+			else if (ping <= 50)
+				ImGui.textColored(35, 165, 89, 255, "ping: " + ping + "ms");
+			else if (ping <= 100)
+				ImGui.textColored(191, 134, 28, 255, "ping: " + ping + "ms");
+			else
+				ImGui.textColored(242, 63, 66, 255, "ping: " + ping + "ms");
 		}
 
 		else {
@@ -255,4 +268,12 @@ class ClientLayer extends Layer {
 	private Result<Long> pingResult;
 	long time = 0;
 	long ping = Long.MAX_VALUE;
+	boolean resetPing = true;
+	private Tooltip pingHint = new Tooltip("(?)",
+	"""
+		Ping (latency is the technically more correct term)
+		refers the time it takes for a small data set to be transmitted
+		from your device to a server on the Internet (or locally) and back to your device again.
+		Ping is measured in milliseconds (ms)
+	""");
 }

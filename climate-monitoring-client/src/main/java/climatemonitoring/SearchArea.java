@@ -33,7 +33,7 @@ import climatemonitoring.core.headless.Console;
  */
 class SearchArea {
 
-	public synchronized static void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
 
 		try {
 
@@ -75,7 +75,7 @@ class SearchArea {
 		}
 	}
 
-	public synchronized static void onGUIRender() {
+	public synchronized void onGUIRender() {
 
 		try {
 
@@ -210,35 +210,35 @@ class SearchArea {
 		}
 	}
 
-	public static synchronized Area[] getFoundAreas() {
+	public synchronized Area[] getFoundAreas() {
 
 		return m_foundAreas;
 	}
 
-	public static synchronized boolean isAnyAreaSelected() {
+	public synchronized boolean isAnyAreaSelected() {
 
 		return resultBox.isAnyItemSelected();
 	}
 
-	public static synchronized Area getSelectedArea() {
+	public synchronized Area getSelectedArea() {
 
 		return m_selectedArea;
 	}
 
-	private static int currentSearchMethod = 0;
-	private static Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
-	private static InputTextButton searchBar = new InputTextButton(null, "", "No matching areas", 300, "Search");
-	private static Text loadingText = new Text("Loading...");
-	private static boolean createResultBox = false;
-	private static ResultBox resultBox = new ResultBox("##");
-	private static Result<Area[]> foundAreasResult;
-	private static Text latitudeLabel = new Text("Latitude");
-	private static Text longitudeLabel = new Text("Longitude");
-	private static ImDouble latitude = new ImDouble();
-	private static ImDouble longitude = new ImDouble();
-	private static Button searchCoords = new Button("Search");
-	private static Text errorText = new Text("No matching areas");
+	private int currentSearchMethod = 0;
+	private Dropdown selectSearchMethod = new Dropdown("Search area by ", new String[] { "name", "country", "coords" });
+	private InputTextButton searchBar = new InputTextButton(null, "", "No matching areas", 300, "Search");
+	private Text loadingText = new Text("Loading...");
+	private boolean createResultBox = false;
+	private ResultBox resultBox = new ResultBox("##");
+	private Result<Area[]> foundAreasResult;
+	private Text latitudeLabel = new Text("Latitude");
+	private Text longitudeLabel = new Text("Longitude");
+	private ImDouble latitude = new ImDouble();
+	private ImDouble longitude = new ImDouble();
+	private Button searchCoords = new Button("Search");
+	private Text errorText = new Text("No matching areas");
 
-	private static Area[] m_foundAreas;
-	private static Area m_selectedArea;
+	private Area[] m_foundAreas;
+	private Area m_selectedArea;
 }
