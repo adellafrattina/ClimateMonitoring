@@ -557,7 +557,7 @@ public class ParameterInfo {
 
 		if (ImPlot.beginPlot("##Recordings", -1, -1)) {
 
-			ImPlot.setupAxisLimits(ImPlotAxis.X1, dates[0], dates[dates.length - 1], ImPlotCond.Once);
+			ImPlot.setupAxisLimits(ImPlotAxis.X1, dates[0] - 666, dates[dates.length - 1] + 666, ImPlotCond.Once);
 			ImPlot.setupAxisLimits(ImPlotAxis.Y1, 0, 6, ImPlotCond.Always);
 			ImPlot.setupAxes("##Time", "Scores", ImPlotAxisFlags.Time, 0);
 			ImPlot.setupAxisFormat(ImPlotAxis.X1, "HH-mm-ss");
