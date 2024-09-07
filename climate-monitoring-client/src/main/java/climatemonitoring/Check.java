@@ -200,8 +200,9 @@ class Check {
 	 * @param street The address' street
 	 * @param house_number The address' house number
 	 * @return An error message as string if the parameter is already taken, null if it is unique
+	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String address(int city, String street, int house_number) {
+	public static String address(int city, String street, int house_number) throws ConnectionLostException {
 
 		String msg = null;
 
@@ -212,11 +213,6 @@ class Check {
 
 			if (Handler.getProxyServer().getCenterByAddress(city, street, house_number) != null)
 				msg = "There is already another center in the same place";
-		}
-
-		catch (ConnectionLostException e) {
-
-			Handler.getView().setCurrentState(ViewType.CONNECTION);
 		}
 
 		catch (DatabaseRequestException e) {
