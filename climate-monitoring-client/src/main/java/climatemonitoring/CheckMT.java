@@ -97,7 +97,7 @@ class CheckMT {
 	 * @param user_id The user id
 	 * @return A result that contains an error message as string if the parameter is already taken, null if it is unique
 	 */
-	public static Result<String> userID(String user_id) throws ConnectionLostException {
+	public static Result<String> userID(String user_id) {
 
 		return new Result<String>() {
 
@@ -114,7 +114,7 @@ class CheckMT {
 	 * @param s The SSID
 	 * @return A result that contains an error message as string if the parameter is already taken, null if it is unique
 	 */
-	public static Result<String> ssid(String s) throws ConnectionLostException {
+	public static Result<String> ssid(String s) {
 
 		return new Result<String>() {
 
@@ -131,7 +131,7 @@ class CheckMT {
 	 * @param e The email
 	 * @return A result that contains an error message as string if the parameter is already taken / is not valid, null if it is unique
 	 */
-	public static Result<String> email(String e) throws ConnectionLostException {
+	public static Result<String> email(String e) {
 
 		return new Result<String>() {
 
@@ -149,7 +149,7 @@ class CheckMT {
 	 * @param password The user's password
 	 * @return A result that contains an error message as string if the parameters are not valid, null if they are corrent
 	 */
-	public static Result<String> login(String user_id, String password) throws ConnectionLostException {
+	public static Result<String> login(String user_id, String password) {
 
 		return new Result<String>() {
 
@@ -167,7 +167,7 @@ class CheckMT {
 	 * @param geoname_id The area's geoname id
 	 * @return A result that contains an error message as string if the center does not monitor the area, null if it does
 	 */
-	public static Result<String> monitors(String center_id, int geoname_id) throws ConnectionLostException {
+	public static Result<String> monitors(String center_id, int geoname_id) {
 
 		return new Result<String>() {
 
@@ -185,7 +185,7 @@ class CheckMT {
 	 * @param user_id The operator's user id
 	 * @return A result that contains an error message as string if the center does not employ the operator, null if does
 	 */
-	public static Result<String> employs(String center_id, String user_id) throws ConnectionLostException {
+	public static Result<String> employs(String center_id, String user_id) {
 
 		return new Result<String>() {
 
@@ -202,7 +202,7 @@ class CheckMT {
 	 * @param c The category to be checked
 	 * @return A result that contains an error message as string if the parameter is not found, null if it is unique
 	 */
-	public static Result<String> category(String c) throws ConnectionLostException {
+	public static Result<String> category(String c) {
 
 		return new Result<String>() {
 
