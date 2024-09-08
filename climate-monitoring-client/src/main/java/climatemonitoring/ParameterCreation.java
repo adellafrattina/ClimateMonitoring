@@ -62,19 +62,13 @@ class ParameterCreation extends ViewState {
 
 				errorMsg = null;
 
-				try {
-
-					m_geonameID = Integer.parseInt(Console.read("Area's geoname ID > ").trim());
-					errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID);
-				}
-
-				catch (NumberFormatException e) {
-
-					errorMsg ="The value must be a number";
-				}
+				String geonameID = Console.read("Area's geoname ID > ").trim();
+				errorMsg = Check.monitors(Handler.getLoggedOperator().getCenterID(), geonameID);
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
+				else
+					m_geonameID = Integer.parseInt(geonameID.trim());
 
 			} while (errorMsg != null);
 
@@ -118,19 +112,13 @@ class ParameterCreation extends ViewState {
 
 				errorMsg = null;
 
-				try {
-
-					m_score = Integer.parseInt(Console.read("Score (between 1 and 5) > ").trim());
-					errorMsg = Check.score(m_score);
-				}
-
-				catch (NumberFormatException e) {
-
-					errorMsg ="The value must be a number";
-				}
+				String score = Console.read("Score (between 1 and 5) > ").trim();
+				errorMsg = Check.score(score);
 
 				if (errorMsg != null)
 					Console.write(errorMsg);
+				else
+					m_score = Integer.parseInt(score);
 
 			} while (errorMsg != null);
 
