@@ -44,13 +44,14 @@ public class AreaInclude {
 			}
 
 			geonameID = st.nextToken().trim();
-			m_geonameID = Integer.parseInt(geonameID);
 
-			if (Check.geonameID(m_geonameID) == null) {
+			if (Check.geonameID(geonameID) == null) {
 
 				Console.write("The specified area's geoname ID does not exist");
 				return;
 			}
+
+			m_geonameID = Integer.parseInt(geonameID);
 
 			if (Handler.getProxyServer().monitors(Handler.getLoggedOperator().getCenterID(), m_geonameID)) {
 

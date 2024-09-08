@@ -55,7 +55,6 @@ public class ParameterInfo {
 			}
 
 			geonameID = st.nextToken().trim();
-			m_geonameID = Integer.parseInt(geonameID);
 
 			if (Handler.getProxyServer().getLatestCenter(m_geonameID) == null) {
 
@@ -85,10 +84,15 @@ public class ParameterInfo {
 					continue;
 				}
 
-				if ((errorMsg = Check.monitors(centerID, m_geonameID)) != null) {
+				if ((errorMsg = Check.monitors(centerID, geonameID)) != null) {
 
 					Console.write(errorMsg);
 					continue;
+				}
+
+				else {
+
+					m_geonameID = Integer.parseInt(geonameID);
 				}
 
 				if (errorMsg == null)
@@ -145,11 +149,6 @@ public class ParameterInfo {
 			// Show parameters
 			for (Parameter parameter : get().parameters)
 				Console.write("[" + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(parameter.getTimestamp()) + " " + DateTimeFormatter.ofPattern("HH:mm:ss").format(parameter.getTimestamp()) + "] [by " + parameter.getUserID() + "] --- " + parameter.getScore() + " (" + parameter.getNotes() + ")");
-		}
-
-		catch (NumberFormatException e) {
-
-			Console.write("Incorrect command syntax --> '" + geonameID + "'. Geoname ID should be a number");
 		}
 
 		catch (DatabaseRequestException e) {
