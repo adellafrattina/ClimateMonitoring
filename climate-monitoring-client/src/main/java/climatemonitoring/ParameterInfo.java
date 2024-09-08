@@ -556,7 +556,12 @@ public class ParameterInfo {
 
 		if (ImPlot.beginPlot("##Recordings", -1, -1)) {
 
-			ImPlot.setupAxisLimits(ImPlotAxis.X1, dates[0] - 666, dates[dates.length - 1] + 666, ImPlotCond.Once);
+			if (oldDatesPtr != dates) {
+
+				ImPlot.setupAxisLimits(ImPlotAxis.X1, dates[0] - 666, dates[dates.length - 1] + 666, ImPlotCond.Always);
+				oldDatesPtr = dates;
+			}
+
 			ImPlot.setupAxisLimits(ImPlotAxis.Y1, 0, 6, ImPlotCond.Always);
 			ImPlot.setupAxes("##Time", "Scores", ImPlotAxisFlags.Time, 0);
 			ImPlot.setupAxisFormat(ImPlotAxis.X1, "HH-mm-ss");
@@ -606,5 +611,6 @@ public class ParameterInfo {
 	private Button changeView = new Button("show graph");
 	private boolean showGraph = false;
 	private long[] dates;
+	private long[] oldDatesPtr;
 	private long[] scores;
 }
