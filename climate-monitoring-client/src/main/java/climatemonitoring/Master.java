@@ -46,7 +46,7 @@ class Master extends ViewState {
 					break;
 				case "center":
 					c = new Command(c.getArgs());
-					SearchCenter.onHeadlessRender(c.getCmd(), c.getArgs());
+					searchCenter.onHeadlessRender(c.getCmd(), c.getArgs());
 					break;
 				default:
 					Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [area, center]");
@@ -92,6 +92,12 @@ class Master extends ViewState {
 						break;
 					case "Center info":
 						getCenterResult = Handler.getProxyServerMT().getCenter(Handler.getLoggedOperator().getCenterID());
+						break;
+					case "Create new center":
+						setCurrentState(ViewType.CENTER_CREATION);
+						break;
+					case "Create new area":
+						setCurrentState(ViewType.AREA_CREATION);
 						break;
 					case "Logout":
 						optionsButton = null;
@@ -149,12 +155,18 @@ class Master extends ViewState {
 		return searchArea;
 	}
 
+	public static SearchCenter getSearchCenter() {
+
+		return searchCenter;
+	}
+
 	private static SearchArea searchArea = new SearchArea();
+	private static SearchCenter searchCenter = new SearchCenter();
 
 	private Panel panel = new Panel();
 	private Button loginButton = new Button(" Login ");
 	private Button optionsButton = null;
-	private String[] options = new String[] { "Edit profile", "Center info", "Logout" };
+	private String[] options = new String[] { "Edit profile", "Center info", "Create new center", "Create new area", "Logout" };
 	private Popup optionsPopup = new Popup("Options", options);
 	private Result<Center> getCenterResult;
 }

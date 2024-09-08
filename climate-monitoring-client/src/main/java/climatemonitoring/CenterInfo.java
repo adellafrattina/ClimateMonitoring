@@ -56,7 +56,7 @@ class CenterInfo extends ViewState {
 
 				int index = Integer.parseInt(c.getArgs());
 
-				Center[] centers = SearchCenter.getFoundCenters();
+				Center[] centers = searchCenter.getFoundCenters();
 				Center center = centers[index];
 				
 				if (center != null) {
@@ -240,6 +240,7 @@ class CenterInfo extends ViewState {
 	}
 
 	private SearchArea searchArea = new SearchArea();
+	private SearchCenter searchCenter = new SearchCenter();
 	private Panel panel = new Panel();
 	Center center;
 	private Result <Area> arearesult;

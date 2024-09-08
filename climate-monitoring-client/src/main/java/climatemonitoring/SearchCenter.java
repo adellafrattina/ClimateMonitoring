@@ -9,10 +9,16 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import climatemonitoring.core.Application;
 import climatemonitoring.core.Area;
 import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Result;
+import climatemonitoring.core.gui.Dropdown;
+import climatemonitoring.core.gui.InputTextButton;
+import climatemonitoring.core.gui.ResultBox;
+import climatemonitoring.core.gui.Text;
 import climatemonitoring.core.headless.Console;
 
 /**
@@ -23,7 +29,7 @@ import climatemonitoring.core.headless.Console;
  */
 class SearchCenter {
 
-	public synchronized static void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
+	public synchronized void onHeadlessRender(final String by, final String args) throws ConnectionLostException, DatabaseRequestException {
 
 		m_foundCenters = null;
 
@@ -52,21 +58,115 @@ class SearchCenter {
 			Console.write("No matching centers");
 	}
 
-	public synchronized static void onGUIRender() {
+	public synchronized void onGUIRender() {
 
-		throw new UnsupportedOperationException("Unimplemented method 'onGUIRender'");
+		try {
+
+			selectSearchMethod.setWidth(100);
+			selectSearchMethod.setOriginX(selectSearchMethod.getWidth() / 2.0f);
+			selectSearchMethod.setPositionX(searchBar.getPositionX() + searchBar.getWidth() / 2.0f);
+
+			int searchMethod = selectSearchMethod.render();
+
+			if (currentSearchMethod != searchMethod) {
+
+				searchBar.setString("");
+				foundCentersResult = null;
+				resultBox.setList(null);
+				resultBox.setCurrentItem(-1);
+				currentSearchMethod = searchMethod;
+			}
+
+			switch (selectSearchMethod.getList()[currentSearchMethod]) {
+
+				case "name":
+
+					searchBar.setEnterReturnsTrue(true);
+					if (searchBar.render() || searchBar.isButtonPressed()) {
+		
+						foundCentersResult = Handler.getProxyServerMT().searchCentersByName(searchBar.getString());
+						createResultBox = true;
+						resultBox.setList(null);
+						resultBox.setCurrentItem(-1);
+					}
+
+					break;
+			}
+
+			if (foundCentersResult == null)
+				return;
+
+			if (foundCentersResult.ready()) {
+
+				if (createResultBox) {
+
+					m_foundCenters = foundCentersResult.get();
+					String[] tmp = new String[m_foundCenters.length];
+
+					for (int i = 0; i < tmp.length; i++)
+						tmp[i] = m_foundCenters[i].getCenterID() + " (" + m_foundCenters[i].getStreet() + ", " + m_foundCenters[i].getHouseNumber() + ")";
+
+					resultBox.setList(tmp);
+					createResultBox = false;
+				}
+
+				if (m_foundCenters != null && m_foundCenters.length > 0) {
+
+					resultBox.setWidth(searchBar.getWidth());
+					resultBox.setPositionX(searchBar.getPositionX());
+					resultBox.render();
+					if (resultBox.getCurrentItem() != -1)
+						m_selectedCenter = m_foundCenters[resultBox.getCurrentItem()];
+				}
+
+				else {
+
+					errorText.setColor(255, 0, 0, 255);
+					errorText.setOriginX(errorText.getWidth() / 2.0f);
+					errorText.setPositionX(searchBar.getPositionX() + searchBar.getWidth() / 2.0f);
+					errorText.render();
+				}
+			}
+
+			else {
+
+				loadingText.setOriginX(loadingText.getWidth() / 2.0f);
+				loadingText.setPositionX(searchBar.getPositionX() + searchBar.getWidth() / 2.0f);
+				loadingText.render();
+			}
+		}
+
+		catch (ConnectionLostException e) {
+
+			Handler.getView().setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (Exception e) {
+
+			e.printStackTrace();
+			Application.close();
+		}
 	}
 
-	public static synchronized Center[] getFoundCenters() {
+	public synchronized Center[] getFoundCenters() {
 
 		return m_foundCenters;
 	}
 
-	public static synchronized Center getSelectedCenter() {
+	public synchronized Center getSelectedCenter() {
 
 		return m_selectedCenter;
 	}
 
-	private static Center[] m_foundCenters;
-	private static Center m_selectedCenter;
+	private int currentSearchMethod = 0;
+	private Dropdown selectSearchMethod = new Dropdown("Search center by ", new String[] { "name" });
+	private InputTextButton searchBar = new InputTextButton(null, "", "No matching centers", 300, "Search");
+	private Text loadingText = new Text("Loading...");
+	private boolean createResultBox = false;
+	private ResultBox resultBox = new ResultBox("##");
+	private Result<Center[]> foundCentersResult;
+	private Text errorText = new Text("No matching centers");
+
+	private Center[] m_foundCenters;
+	private Center m_selectedCenter;
 }
