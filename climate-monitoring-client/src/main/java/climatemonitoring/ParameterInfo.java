@@ -54,7 +54,16 @@ public class ParameterInfo {
 				return;
 			}
 
+			String errorMsg = null;
+
 			geonameID = st.nextToken().trim();
+			if ((errorMsg = Check.isValidInteger(geonameID)) != null) {
+
+				Console.write(errorMsg);
+				return;
+			}
+
+			m_geonameID = Integer.parseInt(geonameID);
 
 			if (Handler.getProxyServer().getLatestCenter(m_geonameID) == null) {
 
@@ -63,8 +72,6 @@ public class ParameterInfo {
 			}
 
 			Console.write("(You can leave blank to get the latest parameters)");
-
-			String errorMsg = null;
 
 			// Center ID
 			do {
