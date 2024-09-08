@@ -13,6 +13,8 @@ import climatemonitoring.core.Application;
 import climatemonitoring.core.Center;
 import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.DatabaseRequestException;
+import climatemonitoring.core.Operator;
+import climatemonitoring.core.Result;
 import climatemonitoring.core.ViewState;
 import climatemonitoring.core.gui.Button;
 import climatemonitoring.core.gui.InputText;
@@ -117,87 +119,267 @@ class CenterCreation extends ViewState {
 	@Override
 	public void onGUIRender() {
 
-		m_panel.setSize(Application.getWidth() / 2.0f, m_cancelButton.getPositionY() - ImGui.getCursorPosY() - 50);
-		m_panel.setOriginX(m_panel.getWidth() / 2.0f);
-		m_panel.setPositionX(Application.getWidth() / 2.0f);
+		try {
 
-		m_panel.begin("Center Creation");
+			m_panel.setSize(Application.getWidth() / 2.0f, m_cancelButton.getPositionY() - ImGui.getCursorPosY() - 50);
+			m_panel.setOriginX(m_panel.getWidth() / 2.0f);
+			m_panel.setPositionX(Application.getWidth() / 2.0f);
+	
+			m_panel.begin("Center Creation");
+	
+			ImGui.newLine();
+	
+			// Center ID
+			m_centerIDInputText.setWidth(m_panel.getWidth() / 2.0f);
+			m_centerIDInputText.setOriginX(m_centerIDInputText.getWidth() / 2.0f);
+			m_centerIDInputText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_centerIDInputText.render();
+	
+			ImGui.newLine();
+	
+			// Street
+			m_streetInputText.setWidth(m_panel.getWidth() / 2.0f);
+			m_streetInputText.setOriginX(m_streetInputText.getWidth() / 2.0f);
+			m_streetInputText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_streetInputText.render();
+	
+			ImGui.newLine();
+	
+			// House number
+			m_houseNumberInputText.setWidth(m_panel.getWidth() / 2.0f);
+			m_houseNumberInputText.setOriginX(m_houseNumberInputText.getWidth() / 2.0f);
+			m_houseNumberInputText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_houseNumberInputText.setNumbersOnly(true);
+			m_houseNumberInputText.setNoSpaces(true);
+			m_houseNumberInputText.render();
+	
+			ImGui.newLine();
+	
+			// Postal code
+			m_postalCodeInputText.setWidth(m_panel.getWidth() / 2.0f);
+			m_postalCodeInputText.setOriginX(m_postalCodeInputText.getWidth() / 2.0f);
+			m_postalCodeInputText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_postalCodeInputText.setNumbersOnly(true);
+			m_postalCodeInputText.setNoSpaces(true);
+			m_postalCodeInputText.render();
+	
+			ImGui.newLine();
+	
+			// City
+			m_cityText.setWidth(m_panel.getWidth() / 2.0f);
+			m_cityText.setOriginX(m_cityText.getWidth() / 2.0f);
+			m_cityText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_cityText.render();
+	
+			if (!m_showSearchBox && !m_citySelection.getString().isEmpty()) {
+	
+				m_citySelection.setWidth(ImGui.calcTextSizeX(m_citySelection.getString()) + 8.0f);
+				m_citySelection.setOriginX(m_citySelection.getWidth() / 2.0f);
+				m_citySelection.setPositionX(m_panel.getWidth() / 2.0f);
+				m_citySelection.setReadOnly(true);
+				m_citySelection.render();
+			}
+	
+			m_showCityButton.setOriginX(m_showCityButton.getWidth() / 2.0f);
+			m_showCityButton.setPositionX(m_panel.getWidth() / 2.0f);
+			if (!m_showSearchBox && m_showCityButton.render())
+				m_showSearchBox = true;
+	
+			else if (m_showSearchBox) {
+	
+				m_searchArea.onGUIRender();
+	
+				if (m_searchArea.isAnyAreaSelected()) {
 
-		ImGui.newLine();
+					m_showErrorMessage = false;
+					m_showSearchBox = false;
+					m_citySelection.setString(m_searchArea.getSelectedArea().getAsciiName() + ", " + 
+												m_searchArea.getSelectedArea().getCountryCode());
+				}
+			}
 
-		m_centerIDInputText.setWidth(m_panel.getWidth() / 2.0f);
-		m_centerIDInputText.setOriginX(m_centerIDInputText.getWidth() / 2.0f);
-		m_centerIDInputText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_centerIDInputText.render();
+			if (m_showErrorMessage) {
 
-		ImGui.newLine();
+				m_noSelectedAreas.setOriginX(m_noSelectedAreas.getWidth() / 2.0f);
+				m_noSelectedAreas.setPositionX(m_panel.getWidth() / 2.0f);
+				m_noSelectedAreas.render();
+			}
+	
+			ImGui.newLine();
+	
+			// District
+			m_districtInputText.setWidth(m_panel.getWidth() / 2.0f);
+			m_districtInputText.setOriginX(m_districtInputText.getWidth() / 2.0f);
+			m_districtInputText.setPositionX(m_panel.getWidth() / 2.0f);
+			m_districtInputText.render();
+	
+			m_panel.end();
+	
+			m_cancelButton.setOriginX(m_cancelButton.getWidth() / 2.0f);
+			m_cancelButton.setPositionX(m_panel.getPositionX());
+			if (m_cancelButton.render())
+				returnToPreviousState();
 
-		m_streetInputText.setWidth(m_panel.getWidth() / 2.0f);
-		m_streetInputText.setOriginX(m_streetInputText.getWidth() / 2.0f);
-		m_streetInputText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_streetInputText.render();
+			ImGui.sameLine();
+	
+			m_createCenterButton.setOriginX(m_createCenterButton.getWidth() / 2.0f);
+			m_createCenterButton.setPositionX(m_panel.getPositionX() + m_panel.getWidth() / 2.0f);
+			if (m_createCenterButton.render()) {
+	
+				String area = "";
+				if (m_searchArea.getSelectedArea() != null) {
 
-		ImGui.newLine();
+					area = m_searchArea.getSelectedArea().getGeonameID() + "";
+				}
 
-		m_houseNumberInputText.setWidth(m_panel.getWidth() / 2.0f);
-		m_houseNumberInputText.setOriginX(m_houseNumberInputText.getWidth() / 2.0f);
-		m_houseNumberInputText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_houseNumberInputText.render();
+				else
+					m_showErrorMessage = true;
 
-		ImGui.newLine();
+				m_centerIDResult = CheckMT.creationCenterID(m_centerIDInputText.getString());
+				m_addressResult = CheckMT.address(area, m_streetInputText.getString(), m_houseNumberInputText.getString());
 
-		m_postalCodeInputText.setWidth(m_panel.getWidth() / 2.0f);
-		m_postalCodeInputText.setOriginX(m_postalCodeInputText.getWidth() / 2.0f);
-		m_postalCodeInputText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_postalCodeInputText.render();
+				m_checkData = true;
+			}
+	
+			if (m_checkData) {
+	
+				int failures = checkData();
+	
+				if (failures == 0) {
+	
+					m_checkData = false;
+	
+					newCenter = new Center(m_centerID, m_street, m_houseNumber, m_postalCode, m_city, m_district);
+					if (getPreviousStateIndex() != ViewType.REGISTRATION) {
 
-		ImGui.newLine();
+						m_addCenterResult = Handler.getProxyServerMT().addCenter(newCenter);
+						Operator operator = Handler.getLoggedOperator();
+						Operator newOperator = new Operator(operator.getUserID(), operator.getSSID(), operator.getSurname(), operator.getName(), operator.getEmail(), operator.getPassword(), newCenter.getCenterID());
+						m_editOperatorResult = Handler.getProxyServerMT().editOperator(newOperator.getUserID(), newOperator);
+					}
+				}
+	
+				else if (failures > 0)
+					m_checkData = false;
+			}
 
-		m_cityText.setWidth(m_panel.getWidth() / 2.0f);
-		m_cityText.setOriginX(m_cityText.getWidth() / 2.0f);
-		m_cityText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_cityText.render();
+			if (m_addCenterResult != null && m_addCenterResult.ready() &&
+				m_editOperatorResult != null && m_editOperatorResult.ready()) {
 
-		if (!m_showSearchBox && !m_citySelection.getString().isEmpty()) {
+				m_addCenterResult.get();
+				m_editOperatorResult.get();
 
-			m_citySelection.setWidth(ImGui.calcTextSizeX(m_citySelection.getString()) + 8.0f);
-			m_citySelection.setOriginX(m_citySelection.getWidth() / 2.0f);
-			m_citySelection.setPositionX(m_panel.getWidth() / 2.0f);
-			m_citySelection.setReadOnly(true);
-			m_citySelection.render();
-		}
+				resetStateData(new CenterCreation());
+				returnToPreviousState();
 
-		m_showCityButton.setOriginX(m_showCityButton.getWidth() / 2.0f);
-		m_showCityButton.setPositionX(m_panel.getWidth() / 2.0f);
-		if (!m_showSearchBox && m_showCityButton.render())
-			m_showSearchBox = true;
+				m_addCenterResult = null;
+				m_editOperatorResult = null;
+			}
 
-		else if (m_showSearchBox) {
+			else if (m_addCenterResult != null && m_editOperatorResult != null) {
 
-			m_searchArea.onGUIRender();
-
-			if (m_searchArea.isAnyAreaSelected()) {
-
-				m_showSearchBox = false;
-				m_citySelection.setString(m_searchArea.getSelectedArea().getAsciiName() + ", " + 
-											m_searchArea.getSelectedArea().getCountryCode());
+				m_loadingText.setOriginX(m_loadingText.getWidth() / 2.0f);
+				m_loadingText.setPositionX(m_panel.getPositionX());
+				m_loadingText.setPositionY(m_cancelButton.getPositionY());
 			}
 		}
 
+		catch (ConnectionLostException e) {
 
-		ImGui.newLine();
+			setCurrentState(ViewType.CONNECTION);
+		}
 
-		m_districtInputText.setWidth(m_panel.getWidth() / 2.0f);
-		m_districtInputText.setOriginX(m_districtInputText.getWidth() / 2.0f);
-		m_districtInputText.setPositionX(m_panel.getWidth() / 2.0f);
-		m_districtInputText.render();
+		catch (Exception e) {
 
-		m_panel.end();
+			e.printStackTrace();
+			Application.close();
+		}
+	}
 
-		m_cancelButton.setOriginX(m_cancelButton.getWidth() / 2.0f);
-		m_cancelButton.setPositionX(m_panel.getPositionX());
-		if (m_cancelButton.render())
-			returnToPreviousState();
+	private int checkData() throws ConnectionLostException, Exception {
+
+		int failures = -1;
+
+		if (m_centerIDResult != null && m_centerIDResult.ready() &&
+			m_addressResult != null  && m_addressResult.ready()) {
+
+			failures = 0;
+			m_checkData = false;
+
+			String errorMsg = null;
+			String[] addressErrorMsg = null;
+
+			// Center ID
+			errorMsg = m_centerIDResult.get();
+			m_centerIDResult = null;
+			if (errorMsg == null) {
+
+				m_centerID = m_centerIDInputText.getString();
+				m_centerIDInputText.showErrorMsg(false);
+			}
+
+			else {
+
+				m_centerIDInputText.setErrorMsg(errorMsg);
+				m_centerIDInputText.showErrorMsg(true);
+
+				failures++;
+			}
+
+			// Address
+			addressErrorMsg = m_addressResult.get();
+			m_addressResult = null;
+			if (addressErrorMsg[0] == null && addressErrorMsg[1] == null &&
+				addressErrorMsg[2] == null && addressErrorMsg[3] == null) {
+
+				m_city = m_searchArea.getSelectedArea().getGeonameID();
+				m_street = m_streetInputText.getString();
+				m_houseNumber = Integer.parseInt(m_houseNumberInputText.getString());
+			}
+
+			if (addressErrorMsg[1] != null) {
+
+				m_houseNumberInputText.setErrorMsg(addressErrorMsg[1]);
+				m_houseNumberInputText.showErrorMsg(true);
+
+				failures++;
+			}
+
+			else {
+
+				m_houseNumberInputText.showErrorMsg(false);
+			}
+
+			if (addressErrorMsg[2] != null) {
+
+				m_houseNumberInputText.setErrorMsg(addressErrorMsg[2]);
+				m_houseNumberInputText.showErrorMsg(true);
+				m_citySelection.setErrorMsg(addressErrorMsg[2]);
+				m_citySelection.showErrorMsg(true);
+				m_streetInputText.setErrorMsg(addressErrorMsg[2]);
+				m_streetInputText.showErrorMsg(true);
+
+				failures++;
+			}
+
+			else if (addressErrorMsg[1] == null && addressErrorMsg[0] == null) {
+
+				m_houseNumberInputText.showErrorMsg(false);
+				m_citySelection.showErrorMsg(false);
+				m_streetInputText.showErrorMsg(false);
+			}
+
+			if (addressErrorMsg[3] != null) {
+
+				failures++;
+
+				throw new DatabaseRequestException(addressErrorMsg[3]);
+			}
+
+			m_district = m_districtInputText.getString();
+		}
+
+		return failures;
 	}
 
 	Center newCenter;
@@ -225,4 +407,14 @@ class CenterCreation extends ViewState {
 	private Button m_createCenterButton = new Button(" Create center ");
 
 	private SearchArea m_searchArea = new SearchArea();
+
+	private boolean m_checkData = false;
+	private Result<String> m_centerIDResult;
+	private Result<String[]> m_addressResult;
+	private Result<Boolean> m_addCenterResult;
+	private Result<Boolean> m_editOperatorResult;
+
+	private Text m_loadingText = new Text("Loading...");
+	private Text m_noSelectedAreas = new Text("You must select an area");
+	private boolean m_showErrorMessage = false;
 }
