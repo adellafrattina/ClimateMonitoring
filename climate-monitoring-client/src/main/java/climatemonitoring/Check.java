@@ -31,13 +31,17 @@ class Check {
 	 * @return An error message as string if the parameter is already taken, null if it is unique
 	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String geonameID(int geoname_id) throws ConnectionLostException {
+	public static String geonameID(String geoname_id) throws ConnectionLostException {
 
 		String msg = null;
 
+		if ((msg = isValidInteger(geoname_id)) != null)
+			return msg;
+
 		try {
 
-			if (Handler.getProxyServer().getArea(geoname_id) != null)
+			int geonameID = Integer.valueOf(geoname_id.trim());
+			if (Handler.getProxyServer().getArea(geonameID) != null)
 				msg = "There is already another area with the same geoname id";
 		}
 
@@ -95,7 +99,7 @@ class Check {
 			return msg;
 
 		if (country_code.length() != 2)
-			return "The value must be only 2 characters";
+			return "The value must be 2 characters long";
 
 		for (int i = 0; i < country_code.length(); i++)
 			if (!Character.isAlphabetic(country_code.charAt(i)))
@@ -119,9 +123,14 @@ class Check {
 	 * @param l The latitude
 	 * @return Null if the parameter is valid, an error message as string if not
 	 */
-	public static String latitude(double l) {
+	public static String latitude(String l) {
 
-		if (l > 90 || l < -90)
+		String msg = null;
+		if ((msg = isValidDouble(l)) != null)
+			return msg;
+
+		double lat = Double.valueOf(l);
+		if (lat > 90 || lat < -90)
 			return "The value must be around -90 and 90";
 
 		return null;
@@ -132,9 +141,14 @@ class Check {
 	 * @param l The longitude
 	 * @return Null if the parameter is valid, an error message as string if not
 	 */
-	public static String longitude(double l) {
+	public static String longitude(String l) {
 
-		if (l > 180 || l < -180)
+		String msg = null;
+		if ((msg = isValidDouble(l)) != null)
+			return msg;
+
+		double lon = Double.valueOf(l);
+		if (lon > 180 || lon < -180)
 			return "The value must be around -180 and 180";
 
 		return null;
@@ -199,25 +213,49 @@ class Check {
 	 * @param city The geoname id of the center's city
 	 * @param street The address' street
 	 * @param house_number The address' house number
-	 * @return An error message as string if the parameter is already taken, null if it is unique
+	 * @return An array of strings that is the place-holder for the error messages. The array is guaranteed to be not null with a length of 4.
+	 * At index 0 is saved the possible error message for city geoname ID.
+	 * At index 1 is saved the possible error message for house number.
+	 * At index 2 is saved the possible error message for the general address.
+	 * At index 3 is saved the possible error message from the database.
 	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String address(int city, String street, int house_number) throws ConnectionLostException {
+	public static String[] address(String city, String street, String house_number) throws ConnectionLostException {
 
-		String msg = null;
+		String[] msgs = new String[4];
 
 		try {
 
-			if (Handler.getProxyServer().getCenterByAddress(city, street, house_number) != null)
-				msg = "There is already another center in the same place";
+			String msgC = null;
+			int valueC = 0;
+			if ((msgC = isValidInteger(city)) != null)
+				msgs[0] = msgC;
+			else
+				valueC = Integer.parseInt(city.trim());
+
+			String msgH = null;
+			int valueH = 0;
+			if ((msgH = isValidInteger(house_number)) != null)
+				msgs[1] = msgH;
+			else
+				valueH = Integer.parseInt(house_number.trim());
+
+			if (msgC != null || msgH != null)
+				return msgs;
+
+			String msgA = null;
+			if (Handler.getProxyServer().getCenterByAddress(valueC, street, valueH) != null)
+				msgA = "There is already another center in the same place";
+
+			msgs[2] = msgA;
 		}
 
 		catch (DatabaseRequestException e) {
 
-			msg = e.getMessage();
+			msgs[3] = e.getMessage();
 		}
 
-		return msg;
+		return msgs;
 	}
 
 	/**
@@ -380,13 +418,18 @@ class Check {
 	 * @return An error message as string if the center does not monitor the area, null if it does
 	 * @throws ConnectionLostException When the connection is lost
 	 */
-	public static String monitors(String center_id, int geoname_id) throws ConnectionLostException {
+	public static String monitors(String center_id, String geoname_id) throws ConnectionLostException {
 
 		String msg = null;
 
 		try {
 
-			if (!Handler.getProxyServer().monitors(center_id, geoname_id))
+			if ((msg = isValidInteger(geoname_id)) != null)
+				return msg;
+
+			int geonameID = Integer.parseInt(geoname_id.trim());
+
+			if (!Handler.getProxyServer().monitors(center_id, geonameID))
 				msg = "The center does not monitor the specified area";
 		}
 
@@ -463,9 +506,15 @@ class Check {
 	 * @param s The score
 	 * @return Null if the parameter is valid, an error message as string if not
 	 */
-	public static String score(int s) {
+	public static String score(String s) {
 
-		if (s > 5 || s < 1)
+		String msg = null;
+		if ((msg = isValidInteger(s)) != null)
+			return msg;
+
+		int sc = Integer.parseInt(s.trim());
+
+		if (sc > 5 || sc < 1)
 			return "The value must be between 1 and 5";
 
 		return null;
@@ -497,6 +546,52 @@ class Check {
 	public static String isEmpty(String str) {
 
 		return str == null || str.isEmpty() || str.isBlank() ? "This box must not be left blank" : null;
+	}
+
+	/**
+	 * Checks if the string is a valid integer
+	 * @param str The string to check
+	 * @return An error message as string if the parameter is not an integer, null if it is
+	 */
+	public static String isValidInteger(String str) {
+
+		try {
+
+			if (str.length() > 9)
+				return "The value is too big";
+
+			Integer.parseInt(str.trim());
+		}
+		
+		catch (NumberFormatException e) {
+			
+			return "The value must be a number";
+		}
+
+		return null;
+	}
+
+	/**
+	 * Checks if the string is a valid double
+	 * @param str The string to check
+	 * @return An error message as string if the parameter is not an double, null if it is
+	 */
+	public static String isValidDouble(String str) {
+
+		try {
+
+			if (str.length() > 9)
+				return "The value is too big";
+
+			Double.parseDouble(str.trim());
+		}
+
+		catch (NumberFormatException e) {
+
+			return "The value must be a number";
+		}
+
+		return null;
 	}
 
 	/**

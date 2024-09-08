@@ -27,7 +27,7 @@ class CheckMT {
 	 * @param geoname_id The geoname id
 	 * @return A result that contains an error message as string if the parameter is already taken, null if it is unique
 	 */
-	public static Result<String> geonameID(int geoname_id) {
+	public static Result<String> geonameID(String geoname_id) {
 
 		return new Result<String>() {
 
@@ -78,14 +78,18 @@ class CheckMT {
 	 * @param city The geoname id of the center's city
 	 * @param street The address' street
 	 * @param house_number The address' house number
-	 * @return A result that contains an error message as string if the parameter is already taken, null if it is unique
+	 * @return A result that contains an array of strings that is the place-holder for the error messages. The array is guaranteed to be not null with a length of 4.
+	 * At index 0 is saved the possible error message for city geoname ID.
+	 * At index 1 is saved the possible error message for house number.
+	 * At index 2 is saved the possible error message for the general address.
+	 * At index 3 is saved the possible error message from the database.
 	 */
-	public static Result<String> address(int city, String street, int house_number) {
+	public static Result<String[]> address(String city, String street, String house_number) {
 
-		return new Result<String>() {
+		return new Result<String[]>() {
 
 			@Override
-			public String exec() throws ConnectionLostException {
+			public String[] exec() throws ConnectionLostException {
 
 				return Check.address(city, street, house_number);
 			}
@@ -167,7 +171,7 @@ class CheckMT {
 	 * @param geoname_id The area's geoname id
 	 * @return A result that contains an error message as string if the center does not monitor the area, null if it does
 	 */
-	public static Result<String> monitors(String center_id, int geoname_id) {
+	public static Result<String> monitors(String center_id, String geoname_id) {
 
 		return new Result<String>() {
 

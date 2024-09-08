@@ -187,8 +187,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 				ELSE 1
 				END,
 				POSITION(? IN LOWER(area_name)), area_name;
-			"""
-			);
+			""");
 
 			pst.setString(1, "%" + str + "%");
 			pst.setString(2, str + "%");
@@ -1072,7 +1071,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setDouble(6, latitude);
 			pst.setDouble(7, longitude);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
@@ -1116,7 +1115,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setInt(5, postalCode);
 			pst.setString(6, district == null ? "null" : district);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 
 			pst = prepareStatement("""
 				INSERT INTO monitors (center_id, geoname_id)
@@ -1126,7 +1125,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setString(1, centerID);
 			pst.setInt(2, city);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
@@ -1170,7 +1169,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setString(6, password);
 			pst.setString(7, centerID);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
@@ -1214,7 +1213,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setInt(6, score);
 			pst.setString(7, notes);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
@@ -1265,7 +1264,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setString(6, centerID);
 			pst.setString(7, user_id);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
@@ -1296,7 +1295,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			pst.setString(1, center_id);
 			pst.setInt(2, geoname_id);
 
-			pst.executeQuery();
+			pst.executeUpdate();
 			return true;
 		}
 
