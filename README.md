@@ -3,6 +3,7 @@ A climate parameter monitoring system provided by monitoring centers that can ma
 
 ## Download instructions
 - To clone the repository use the following git command: `git clone https://github.com/adellafrattina/ClimateMonitoring.git`
+- To download a clean copy of the database with the areas already loaded in ([Click!](https://files.catbox.moe/5sv68u.zip))
 
 ## Build instructions
 ### Windows
