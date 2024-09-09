@@ -11,7 +11,6 @@ package server;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.ApplicationSpecification;
-import climatemonitoring.core.gui.ApplicationGUI;
 import climatemonitoring.core.headless.ApplicationHeadless;
 
 /**
@@ -26,12 +25,7 @@ public class ServerApp {
 
 		Application serverApp = null;
 		ApplicationSpecification serverSpec = new ApplicationSpecification();
-		
-		if (args == null || args.length == 0 || !args[0].equals("nogui"))
-			serverApp = new ApplicationGUI(serverSpec);
-
-		else
-			serverApp = new ApplicationHeadless(serverSpec);
+		serverApp = new ApplicationHeadless(serverSpec);
 
 		serverApp.pushLayer(new ServerLayer());
 		serverApp.run();
