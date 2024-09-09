@@ -1,4 +1,8 @@
-# Climate Monitoring
+<p align="center">
+  <img width="500" src="https://files.catbox.moe/9gez28.png" alt="i lov u lorees <3">
+</p>
+
+
 A climate parameter monitoring system provided by monitoring centers that can make data on their area of interest available to environmental operators and ordinary citizens
 
 ## Download instructions
