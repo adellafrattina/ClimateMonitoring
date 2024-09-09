@@ -9,6 +9,9 @@ Dariia Sniezhko 753057 VA
 
 package climatemonitoring;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -1153,7 +1156,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String operatorSurname = operator.getSurname();
 			String operatorName = operator.getName();
 			String email = operator.getEmail();
-			String password = operator.getPassword();
+			String password = hashPassword(operator.getPassword());
 			String centerID = operator.getCenterID();
 
 			PreparedStatement pst = prepareStatement("""
@@ -1242,7 +1245,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			String operatorSurname = operator.getSurname();
 			String operatorName = operator.getName();
 			String email = operator.getEmail();
-			String password = operator.getPassword();
+			String password = hashPassword(operator.getPassword());
 			String centerID = operator.getCenterID();
 
 			PreparedStatement pst = prepareStatement("""
@@ -1401,7 +1404,7 @@ class ServerDatabaseImpl implements ServerDatabase {
 			""");
 
 			pst.setString(1, user_id);
-			pst.setString(2, password);
+			pst.setString(2, hashPassword(password));
 			
 			ResultSet query = pst.executeQuery();
 			Operator result = null;
@@ -1413,10 +1416,9 @@ class ServerDatabaseImpl implements ServerDatabase {
 				String operatorSurname = query.getString("operator_surname");
 				String operatorName = query.getString("operator_name");
 				String email = query.getString("email");
-				String pwd = query.getString("password");
 				String centerID = query.getString("center_id");
 
-				result = new Operator(userID, SSID, operatorSurname, operatorName, email, pwd, centerID);
+				result = new Operator(userID, SSID, operatorSurname, operatorName, email, password, centerID);
 			}
 
 			return result;
@@ -1444,6 +1446,32 @@ class ServerDatabaseImpl implements ServerDatabase {
 	private synchronized PreparedStatement prepareStatement(String statement) throws SQLException {
 
 		return m_connection.prepareStatement(statement, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	}
+
+	private static String hashPassword(String password) {
+
+		try {
+
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hashedBytes = digest.digest(password.getBytes());
+
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : hashedBytes) {
+
+				String hex = Integer.toHexString(0xff & b);
+				if (hex.length() == 1)
+					hexString.append('0');
+
+				hexString.append(hex);
+			}
+
+			return hexString.toString();
+		}
+
+		catch (NoSuchAlgorithmException e) {
+
+			throw new RuntimeException("Cannot find hashing algorithm", e);
+		}
 	}
 
 	/**
