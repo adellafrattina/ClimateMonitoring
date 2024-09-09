@@ -12,6 +12,8 @@ package climatemonitoring.core.gui;
 import java.io.InputStream;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowPosCallbackI;
+import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
 import org.lwjgl.opengl.GL32;
 
 import imgui.ImFontAtlas;
@@ -59,6 +61,24 @@ public class ApplicationGUI extends Application {
 
 		m_window = new Window(windowSpec);
 		GLFW.glfwSetWindowSizeLimits(m_window.getHandle(), 800, 600, GLFW.GLFW_DONT_CARE, GLFW.GLFW_DONT_CARE);
+		m_thread = Thread.currentThread();
+		GLFW.glfwSetWindowSizeCallback(m_window.getHandle(), new GLFWWindowSizeCallbackI() {
+
+			@Override
+			public void invoke(long window, int width, int height) {
+
+				m_thread.interrupt();
+			}
+		});
+
+		GLFW.glfwSetWindowPosCallback(m_window.getHandle(), new GLFWWindowPosCallbackI() {
+
+			@Override
+			public void invoke(long window, int xpos, int ypos) {
+
+				m_thread.interrupt();
+			}
+		});
 
 		initImGui();
 		m_imGuiGlfw.init(m_window.getHandle(), true);
@@ -101,10 +121,7 @@ public class ApplicationGUI extends Application {
 				Thread.sleep(Math.abs((long)(1000.0/(double)m_fps) - elapsedTime / 1000000l));
 			}
 
-			catch (InterruptedException e) {
-
-				e.printStackTrace();
-			}
+			catch (InterruptedException e) {}
 		}
 	}
 
@@ -215,4 +232,5 @@ public class ApplicationGUI extends Application {
 	private int m_fps = 60;
 	private final ImGuiImplGlfw m_imGuiGlfw = new ImGuiImplGlfw();
 	private final ImGuiImplGl3 m_imGuiGl3 = new ImGuiImplGl3();
+	private Thread m_thread;
 }
