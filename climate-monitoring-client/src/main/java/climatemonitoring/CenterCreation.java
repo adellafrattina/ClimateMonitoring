@@ -257,6 +257,11 @@ class CenterCreation extends ViewState {
 						Operator newOperator = new Operator(operator.getUserID(), operator.getSSID(), operator.getSurname(), operator.getName(), operator.getEmail(), operator.getPassword(), newCenter.getCenterID());
 						m_editOperatorResult = Handler.getProxyServerMT().editOperator(newOperator.getUserID(), newOperator);
 					}
+
+					else {
+
+						returnToPreviousState();
+					}
 				}
 	
 				else if (failures > 0)

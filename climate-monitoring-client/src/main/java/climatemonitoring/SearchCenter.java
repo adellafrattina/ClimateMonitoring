@@ -153,6 +153,11 @@ class SearchCenter {
 		return m_foundCenters;
 	}
 
+	public synchronized boolean isAnyCenterSelected() {
+
+		return resultBox.isAnyItemSelected();
+	}
+
 	public synchronized Center getSelectedCenter() {
 
 		return m_selectedCenter;
