@@ -552,7 +552,7 @@ public class ParameterInfo {
 		int i = 0;
 		for (Parameter parameter : parameters) {
 
-			table.addRow(new String[] { DateTimeFormatter.ofPattern("d MMM uuuu").format(parameter.getTimestamp()), DateTimeFormatter.ofPattern("HH:mm:ss").format(parameter.getTimestamp()), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
+			table.addRow(new String[] { DateTimeFormatter.ofPattern("d MMM uuuu").format(parameter.getTimestamp()), DateTimeFormatter.ofPattern("hh:mm:ss a").format(parameter.getTimestamp()), parameter.getUserID(), "" + parameter.getScore(), parameter.getNotes() });
 			dates[i] = parameter.getTimestamp().toEpochSecond(ZoneOffset.UTC);
 			scores[i] = parameter.getScore();
 			i++;
