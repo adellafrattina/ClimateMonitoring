@@ -45,10 +45,22 @@ class Connection extends ViewState {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			onHeadlessRender(args);
+			String answer = Console.read("Do you want to retry? [Y/n] > ").trim().toLowerCase();
+
+			if (answer.equals("y"))
+				onHeadlessRender(args);
+			else if (answer.equals("n")) {
+
+				String address = Console.read("Insert a new address (format: [ip:port]) > ");
+				setCurrentState(ViewType.SETTINGS);
+				Settings s = (Settings)getView().getState(ViewType.SETTINGS);
+				s.onHeadlessRender("address " + address);
+				onHeadlessRender(args);
+			}
+
 		}
 		catch(Exception e){
-			Console.write("Unexpected error in Connection view (this should not have happened). Stack trace:");
+			Console.error("Unexpected error in Connection view (this should not have happened). Stack trace:");
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -60,7 +72,7 @@ class Connection extends ViewState {
 			Handler.connect();
 			m_startConnection = false;
 		}
-		if(Handler.getConnectionResult().ready()==true){
+		if(Handler.getConnectionResult() != null && Handler.getConnectionResult().ready()==true){
 			try{
 				Handler.getConnectionResult().get();
 				m_startConnection = true;
@@ -69,7 +81,7 @@ class Connection extends ViewState {
 				m_failedToConnect = true;
 			}
 		}
-		else{
+		else if (Handler.getConnectionResult() != null) {
 			m_connectingText.setOrigin(m_connectingText.getWidth()/2.0f, m_connectingText.getHeight()/2.0f);
 			m_connectingText.setPosition((float)Application.getWidth()/2.0f, (float)Application.getHeight()/2.0f);
 			m_connectingText.render();

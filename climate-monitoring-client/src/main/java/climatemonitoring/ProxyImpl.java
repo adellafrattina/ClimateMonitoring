@@ -50,7 +50,7 @@ class ProxyImpl implements Proxy{
 			in = new ObjectInputStream(s.getInputStream());
 
 			return true;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new ConnectionLostException();
 		}
 
@@ -77,6 +77,26 @@ class ProxyImpl implements Proxy{
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	/**
+	 * Forces the disconnection between the socket and the server
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 */
+	@Override
+	public void forceClose() {
+
+		if(s != null){
+
+			try {
+				s.close();
+				s = null;
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+			System.out.println("Connection closed");
 		}
 	}
 

@@ -25,18 +25,25 @@ interface Proxy extends Database{
 	 * @return True if the connection was succesfull, false if not
 	 * @param address the address the user wants to connect to
 	 * @param port the port the user wants to connect to
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 */
 	public boolean connect(String address, short port) throws ConnectionLostException;
 
 	/**
 	 * Sends a ping request. 
 	 * @return The time (in milliseconds) elapsed between sending the ping packet and receiving it from the server
+	 * @throws ConnectionLostException If the client loses connection during the operation
 	 */
 	public long ping() throws ConnectionLostException;
 
 	/**
-	 * Close the connection between the socket and the server
+	 * Closes the connection between the socket and the server
 	 */
 	public void close() throws ConnectionLostException;
-	
+
+	/**
+	 * Forces the disconnection between the socket and the server
+	 * @throws ConnectionLostException If the client loses connection during the operation
+	 */
+	public void forceClose() throws ConnectionLostException;
 }

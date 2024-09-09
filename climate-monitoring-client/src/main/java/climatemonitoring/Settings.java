@@ -11,9 +11,9 @@ package climatemonitoring;
 
 import imgui.ImGui;
 
-//import java.net.Inet4Address;
-//import java.net.InetAddress;
-//import java.net.UnknownHostException;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import climatemonitoring.core.Application;
 import climatemonitoring.core.ViewState;
@@ -22,11 +22,13 @@ import climatemonitoring.core.gui.Dropdown;
 import climatemonitoring.core.gui.InputTextButton;
 import climatemonitoring.core.gui.Panel;
 import climatemonitoring.core.gui.Text;
+import climatemonitoring.core.headless.Console;
+import climatemonitoring.core.utility.Command;
 
 /**
  * To change the application settings
  * 
- * @author ccapiferri
+ * @author adellafrattina
  * @version 1.0-SNAPSHOT
  */
 class Settings extends ViewState {
@@ -34,7 +36,24 @@ class Settings extends ViewState {
 	@Override
 	public void onHeadlessRender(String args) {
 
-		
+		Command c = new Command(args);
+		switch (c.getCmd()) {
+
+			case "address":
+				try {
+
+					setNewServerAddress(c.getArgs().trim());
+				}
+
+				catch (Exception e) {
+
+					Console.write(e.getMessage());
+				}
+				break;
+			default:
+				Console.write("Incorrect command syntax -->'" + c.getCmd() + "', expected [address]");
+					return;
+		}
 	}
 
 	@Override
@@ -83,31 +102,15 @@ class Settings extends ViewState {
 		if (inputAddress.isButtonPressed()) {
 
 			inputAddress.showErrorMsg(false);
-			String[] address = inputAddress.getString().split(":");
-			if (address.length >= 2) {
 
-				/*try {
+			try {
 
-					InetAddress ip = InetAddress.getByName(address[0]);
-					long portL = Long.valueOf(address[1]);
-				}
-
-				catch (UnknownHostException e) {
-
-					inputAddress.setErrorMsg("Unknown host");
-					inputAddress.showErrorMsg(true);
-				}
-
-				catch (NumberFormatException e) {
-
-					inputAddress.setErrorMsg("Port must be a number");
-					inputAddress.showErrorMsg(true);
-				}*/
+				setNewServerAddress(inputAddress.getString());
 			}
 
-			else {
+			catch (Exception e) {
 
-				inputAddress.setErrorMsg("Wrong format");
+				inputAddress.setErrorMsg(e.getMessage());
 				inputAddress.showErrorMsg(true);
 			}
 		}
@@ -118,6 +121,37 @@ class Settings extends ViewState {
 		cancel.setPositionX(panel.getPositionX());
 		if (cancel.render())
 			returnToPreviousState();
+	}
+
+	private void setNewServerAddress(String address) throws UnknownHostException, NumberFormatException, IOException {
+
+		String[] ip_port = address.split(":");
+
+		if (ip_port.length < 2)
+			throw new IOException("Wrong format");
+
+		try {
+
+			InetAddress ip = InetAddress.getByName(ip_port[0]);
+			int port = 0;
+			if (ip_port[1].trim().length() < 6)
+				port = Integer.valueOf(ip_port[1]);
+	
+			Handler.setNewServerAddress(ip, (short)port);
+			resetStateData(new Connection());
+			setCurrentState(ViewType.MASTER);
+			setCurrentState(ViewType.CONNECTION);
+		}
+
+		catch (UnknownHostException e) {
+
+			throw new UnknownHostException("Unknown host");
+		}
+
+		catch (NumberFormatException e) {
+
+			throw new NumberFormatException("Port must be a number");
+		}
 	}
 
 	private Panel panel = new Panel();

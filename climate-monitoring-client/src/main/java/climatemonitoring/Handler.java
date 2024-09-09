@@ -11,6 +11,12 @@ package climatemonitoring;
 
 import climatemonitoring.core.Result;
 import climatemonitoring.core.View;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import climatemonitoring.core.Application;
+import climatemonitoring.core.ConnectionLostException;
 import climatemonitoring.core.Operator;
 
 /**
@@ -39,11 +45,54 @@ class Handler {
 	}
 
 	/**
+	 * To set the new server address and port. It is required to call the {@link #connect()} method
+	 * @param address A valid server address
+	 * @param port The server's port
+	 */
+	public synchronized static void setNewServerAddress(InetAddress address, short port) {
+
+		try {
+
+			if (!get().m_connectionResult.ready()) {
+
+				Handler.getProxyServer().forceClose();
+				get().m_connectionResult.interrupt();
+				get().m_connectionResult = null;
+			}
+			else
+				Handler.getProxyServer().close();
+		}
+
+		catch (ConnectionLostException e) {}
+
+		get().m_address = address;
+		get().m_port = port;
+	}
+
+	/**
+	 * 
+	 * @return The current server's address
+	 */
+	public synchronized static InetAddress getServerAddress() {
+
+		return get().m_address;
+	}
+
+	/**
+	 * 
+	 * @return The current server's port
+	 */
+	public synchronized static short getServerPort() {
+
+		return get().m_port;
+	}
+
+	/**
 	 * Starts connecting to a server. The operation result can be retrieved with the {@link #getConnectionResult()} method
 	 */
 	public synchronized static void connect() {
 
-		get().m_connectionResult = get().m_proxyMT.connect("localhost", (short)25565);
+		get().m_connectionResult = get().m_proxyMT.connect(get().m_address.getHostName(), get().m_port);
 	}
 
 	/**
@@ -131,6 +180,19 @@ class Handler {
 	 */
 	private Handler() {
 
+		try {
+
+			m_address = InetAddress.getLocalHost();
+			m_port = 25565;
+		}
+
+		catch (UnknownHostException e) {
+
+			e.printStackTrace();
+			Application.close();
+			return;
+		}
+
 		m_proxy = new ProxyImpl();
 		m_proxyMT = new ProxyMTImpl(m_proxy);
 		m_view = new View();
@@ -160,4 +222,6 @@ class Handler {
 	private Result<Boolean> m_connectionResult;
 	private View m_view;
 	private Operator m_loggedOperator;
+	private InetAddress m_address;
+	private short m_port;
 }
