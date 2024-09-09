@@ -84,6 +84,23 @@ public abstract class Result<T> {
 	}
 
 	/**
+	 * To interrupt the thread
+	 */
+	public void interrupt() {
+
+		m_thread.interrupt();
+	}
+
+	/**
+	 * 
+	 * @return True if the thread was interrupted
+	 */
+	public boolean interrupted() {
+
+		return m_thread.isInterrupted();
+	}
+
+	/**
 	 * Keeps track of the returned data after the working thread has finished
 	 * its execution
 	 * 

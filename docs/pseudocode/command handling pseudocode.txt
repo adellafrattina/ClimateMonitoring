@@ -36,8 +36,8 @@ include <what> <args>
 
 SETTINGS
 settings <setting> <args>
-<setting>: [theme]
-<args>: <classic, light, dark>
+<setting>: [address]
+<args>: <ip:port>
 
 PING
 ping
