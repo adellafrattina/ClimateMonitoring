@@ -563,7 +563,7 @@ class Registration extends ViewState {
 	private Button confirm = new Button("Create new account");
 	private InputText userIDInputText = new InputText("User ID (cannot be changed in the future)");
 	private InputText emailInputText = new InputText("E-mail");
-	private InputTextButton passwordInputText = new InputTextButton("Password");
+	private InputTextButton passwordInputText = new InputTextButton("Password", "", "", 64, "show");
 	private boolean showPassword = false;
 	private InputText ssidInputText = new InputText("SSID", "", "", 16);
 	private InputText surnameInputText = new InputText("Surname");

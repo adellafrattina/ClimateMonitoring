@@ -213,16 +213,17 @@ class Check {
 	 * @param city The geoname id of the center's city
 	 * @param street The address' street
 	 * @param house_number The address' house number
-	 * @return An array of strings that is the place-holder for the error messages. The array is guaranteed to be not null with a length of 4.
+	 * @return An array of strings that is the place-holder for the error messages. The array is guaranteed to be not null with a length of 5.
 	 * At index 0 is saved the possible error message for city geoname ID.
 	 * At index 1 is saved the possible error message for house number.
-	 * At index 2 is saved the possible error message for the general address.
-	 * At index 3 is saved the possible error message from the database.
+	 * At index 2 is saved the possible error message for street.
+	 * At index 3 is saved the possible error message for the general address.
+	 * At index 4 is saved the possible error message from the database.
 	 * @throws ConnectionLostException When the connection is lost
 	 */
 	public static String[] address(String city, String street, String house_number) throws ConnectionLostException {
 
-		String[] msgs = new String[4];
+		String[] msgs = new String[5];
 
 		try {
 
@@ -240,19 +241,23 @@ class Check {
 			else
 				valueH = Integer.parseInt(house_number.trim());
 
-			if (msgC != null || msgH != null)
+			String msgS = null;
+			if ((msgS = isEmpty(street)) != null)
+				msgs[2] = msgS;
+
+			if (msgC != null || msgH != null || msgS != null)
 				return msgs;
 
 			String msgA = null;
 			if (Handler.getProxyServer().getCenterByAddress(valueC, street, valueH) != null)
 				msgA = "There is already another center in the same place";
 
-			msgs[2] = msgA;
+			msgs[3] = msgA;
 		}
 
 		catch (DatabaseRequestException e) {
 
-			msgs[3] = e.getMessage();
+			msgs[4] = e.getMessage();
 		}
 
 		return msgs;

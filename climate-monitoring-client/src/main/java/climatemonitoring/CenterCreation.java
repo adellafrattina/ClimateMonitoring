@@ -202,6 +202,7 @@ class CenterCreation extends ViewState {
 
 				m_noSelectedAreas.setOriginX(m_noSelectedAreas.getWidth() / 2.0f);
 				m_noSelectedAreas.setPositionX(m_panel.getWidth() / 2.0f);
+				m_noSelectedAreas.setColor(255, 0, 0, 255);
 				m_noSelectedAreas.render();
 			}
 	
@@ -215,14 +216,27 @@ class CenterCreation extends ViewState {
 	
 			m_panel.end();
 	
-			m_cancelButton.setOriginX(m_cancelButton.getWidth() / 2.0f);
-			m_cancelButton.setPositionX(m_panel.getPositionX());
-			if (m_cancelButton.render())
-				returnToPreviousState();
+			// Cancel
+			m_cancelButton.setOriginX(0);
+			m_cancelButton.setPositionX(m_panel.getPositionX() - m_panel.getWidth() / 2.0f);
+			if (m_cancelButton.render()) {
+
+				if (m_showSearchBox) {
+
+					m_showSearchBox = false;
+				}
+
+				else {
+
+					resetStateData(new CenterCreation());
+					returnToPreviousState();
+				}
+			}
 
 			ImGui.sameLine();
 	
-			m_createCenterButton.setOriginX(m_createCenterButton.getWidth() / 2.0f);
+			// Create center
+			m_createCenterButton.setOriginX(m_createCenterButton.getWidth());
 			m_createCenterButton.setPositionX(m_panel.getPositionX() + m_panel.getWidth() / 2.0f);
 			if (m_createCenterButton.render()) {
 	
@@ -236,7 +250,7 @@ class CenterCreation extends ViewState {
 					m_showErrorMessage = true;
 
 				m_centerIDResult = CheckMT.creationCenterID(m_centerIDInputText.getString());
-				m_addressResult = CheckMT.address(area, m_streetInputText.getString(), m_houseNumberInputText.getString());
+				m_addressResult = CheckMT.address(area.trim(), m_streetInputText.getString().trim(), m_houseNumberInputText.getString().trim());
 
 				m_checkData = true;
 			}
@@ -335,11 +349,22 @@ class CenterCreation extends ViewState {
 			addressErrorMsg = m_addressResult.get();
 			m_addressResult = null;
 			if (addressErrorMsg[0] == null && addressErrorMsg[1] == null &&
-				addressErrorMsg[2] == null && addressErrorMsg[3] == null) {
+				addressErrorMsg[2] == null && addressErrorMsg[3] == null &&
+				addressErrorMsg[4] == null) {
 
 				m_city = m_searchArea.getSelectedArea().getGeonameID();
 				m_street = m_streetInputText.getString();
 				m_houseNumber = Integer.parseInt(m_houseNumberInputText.getString());
+			}
+
+			if (addressErrorMsg[0] != null) {
+
+				failures++;
+			}
+
+			else {
+
+				m_showErrorMessage = false;
 			}
 
 			if (addressErrorMsg[1] != null) {
@@ -357,28 +382,55 @@ class CenterCreation extends ViewState {
 
 			if (addressErrorMsg[2] != null) {
 
-				m_houseNumberInputText.setErrorMsg(addressErrorMsg[2]);
-				m_houseNumberInputText.showErrorMsg(true);
-				m_citySelection.setErrorMsg(addressErrorMsg[2]);
-				m_citySelection.showErrorMsg(true);
 				m_streetInputText.setErrorMsg(addressErrorMsg[2]);
 				m_streetInputText.showErrorMsg(true);
 
 				failures++;
 			}
 
-			else if (addressErrorMsg[1] == null && addressErrorMsg[0] == null) {
+			else {
+
+				m_streetInputText.showErrorMsg(false);
+			}
+
+			if (addressErrorMsg[3] != null) {
+
+				m_houseNumberInputText.setErrorMsg(addressErrorMsg[3]);
+				m_houseNumberInputText.showErrorMsg(true);
+				m_citySelection.setErrorMsg(addressErrorMsg[3]);
+				m_citySelection.showErrorMsg(true);
+				m_streetInputText.setErrorMsg(addressErrorMsg[3]);
+				m_streetInputText.showErrorMsg(true);
+
+				failures++;
+			}
+
+			else if (addressErrorMsg[0] == null && addressErrorMsg[1] == null && addressErrorMsg[2] == null) {
 
 				m_houseNumberInputText.showErrorMsg(false);
 				m_citySelection.showErrorMsg(false);
 				m_streetInputText.showErrorMsg(false);
 			}
 
-			if (addressErrorMsg[3] != null) {
+			if (addressErrorMsg[4] != null) {
 
 				failures++;
 
-				throw new DatabaseRequestException(addressErrorMsg[3]);
+				throw new DatabaseRequestException(addressErrorMsg[4]);
+			}
+
+			errorMsg = null;
+			if ((errorMsg = Check.isValidInteger(m_postalCodeInputText.getString())) != null) {
+
+				m_postalCodeInputText.setErrorMsg(errorMsg);
+				m_postalCodeInputText.showErrorMsg(true);
+				failures++;
+			}
+
+			else {
+
+				m_postalCodeInputText.showErrorMsg(false);
+				m_postalCode = Integer.parseInt(m_postalCodeInputText.getString());
 			}
 
 			m_district = m_districtInputText.getString();

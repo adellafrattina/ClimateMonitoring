@@ -227,7 +227,7 @@ class Login extends ViewState {
 
 	private Panel panel = new Panel();
 	private InputText userid = new InputText("User ID");
-	private InputTextButton password = new InputTextButton("Password");
+	private InputTextButton password = new InputTextButton("Password", "", "", 64, "show");
 	private boolean showpassword = true;
 	private Button confirm = new Button("    Confirm Login    ");
 	private Button cancel = new Button(" Cancel ");

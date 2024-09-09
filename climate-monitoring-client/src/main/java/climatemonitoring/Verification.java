@@ -41,9 +41,8 @@ public class Verification {
 		start = System.nanoTime();
 		Console.write("An email with the verification code has been sent to " + operator.getEmail() + "\nIt will expire in 2 minutes");
 		int codeReceived = Integer.parseInt(Console.read("Your verification code > "));
-		end = System.nanoTime();
 
-		if (end - start >= 120000000000L)
+		if (System.nanoTime() - start >= 120000000000L)
 			errorMsg = "Time to enter verification code expired";
 
 		if (codeReceived != codeGiven)
@@ -75,8 +74,6 @@ public class Verification {
 			try {
 
 				emailSentResult.get();
-				end = System.nanoTime();
-				verificationText.setString("An email with the verification code has been sent to " + operator.getEmail() + "\nIt will expire in 2 minutes");
 				emailSentResult = null;
 			}
 
@@ -125,7 +122,7 @@ public class Verification {
 
 			if (!verificationInputText.getString().isEmpty()) {
 
-				if (end - start >= 120000000000L)
+				if (System.nanoTime() - start >= 120000000000L)
 					errorMsg = "Time to enter verification code expired";
 
 				if (Integer.parseInt(verificationInputText.getString()) != code)
@@ -180,7 +177,6 @@ public class Verification {
 	private Panel verificationPanel = new Panel();
 	private int code = 0;
 	private long start = 0;
-	private long end = 0;
 	private Text text = new Text("Loading...");
 	private boolean clicked = false;
 	private Button cancel = new Button("Cancel");

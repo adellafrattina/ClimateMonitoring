@@ -202,7 +202,7 @@ class ClientLayer extends Layer {
 		ImGui.pushStyleColor(ImGuiCol.Button, 0.0f, 0.0f, 0.0f, 0.0f);
 		ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0.2f, 0.2f, 0.2f, 0.5f);
 		ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0.2f, 0.2f, 0.2f, 0.8f);
-		if (settingsButton.render()) {
+		if ((Handler.getView().getCurrentStateIndex() != ViewType.SETTINGS) & settingsButton.render()) {
 
 			Handler.getView().setCurrentState(ViewType.SETTINGS);
 		}
